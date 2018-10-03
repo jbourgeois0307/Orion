@@ -40,6 +40,10 @@ class Planete():
         self.x=x
         self.y=y
         self.taille=random.randrange(4,6)
+		self.metal=(random.randrange(1000,2000)*self.taille) 
+		self.gaz=(random.randrange(1000,2000)*self.taille)
+		self.espace = 6*self.taille
+		self.hp = 5000
 
 class Joueur():
     def __init__(self,parent,nom,planetemere,couleur):
