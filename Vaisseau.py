@@ -106,3 +106,8 @@ class DeathStar(Vaisseau):
 		self.viewdistance = 125
 		self.range = 999999999
 		self.cible=None
+		
+	def destroyPlanet(self):
+		
+		if self.cible in jeu.planetes:
+			self.cible.remove
