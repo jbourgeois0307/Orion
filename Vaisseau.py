@@ -4,14 +4,20 @@ from helper import Helper as hlp
 
 class Vaisseau():
     def __init__(self,nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.cargo=0
-        self.energie=100
-        self.vitesse=2
-        self.cible=None 
+	
+        self.id
+        self.proprietaire
+        self.x
+        self.y
+        self.inventaire
+        self.vitesse
+        self.cible
+		self.hp
+		self.damage
+		self.attackspeed
+		self.viewdistance
+		self.range
+		
         
     def avancer(self):
         if self.cible:
@@ -41,3 +47,68 @@ class Vaisseau():
                 self.y+=self.vitesse
             if abs(self.x-x)<(2*self.cible.taille) and abs(self.y-y)<(2*self.cible.taille):
                 self.cible=None
+				
+class VaisseauGuerre(Vaisseau):
+	def __init__(self, nom,x,y):
+	    self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=0
+        self.vitesse=2.5
+		self.hp = 350
+		self.damage = 40
+		self.attackspeed = 0.5
+		self.viewdistance = 100
+		self.range = 75
+		self.cible=None
+		
+class VaisseauTransport(Vaisseau):
+	def __init__(self, nom,x,y):
+	    self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=20
+        self.vitesse=1.8
+		self.hp = 500
+		self.damage = 0
+		self.attackspeed = 0
+		self.viewdistance = 100
+		self.range = 0
+		self.cible=None
+		
+	def load():
+		pass
+	def unload():
+		pass
+		
+class Sonde(Vaisseau):
+	def __init__(self, nom,x,y):
+	    self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=0
+        self.vitesse=3
+		self.hp = 60
+		self.damage = 0
+		self.attackspeed = 0
+		self.viewdistance = 125
+		self.range = 0
+		self.cible=None
+
+class DeathStar(Vaisseau):
+	def __init__(self, nom,x,y):
+	    self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x+30
+        self.y=y+30
+        self.inventaire=0
+        self.vitesse=0
+		self.hp = 800
+		self.damage = 99999
+		self.attackspeed = 0.1
+		self.viewdistance = 125
+		self.range = 999999999
+		self.cible=None
