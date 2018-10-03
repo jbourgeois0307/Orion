@@ -52,17 +52,45 @@ class Planete():
         self.proprietaire="inconnu"
         self.x=x
         self.y=y
+		self.colon=0
+		self.colonMetal=0
+		self.colonGaz=0
+		self.colonBouffe=0
         self.taille=random.randrange(4,6)
 		self.metal=(random.randrange(1000,2000)*self.taille) 
 		self.gaz=(random.randrange(1000,2000)*self.taille)
 		self.espace = 6*self.taille
 		self.hp = 5000
-
+	
+	def recolte(self):
+		if self.metal > 0:
+			if self.metal -5*self.colonMetal > 0:
+				self.metal -= 5*self.colonMetal
+				self.proprietaire.metal+= 5*self.colonMetal
+			else:
+				self.proprietaire.metal+= self.metal
+				self.metal = 0
+				
+		if self.gaz > 0:
+			if self.gaz -5*self.colonGaz > 0:
+				self.gaz -= 5*self.colonGaz
+				self.proprietaire.gaz+= 5*self.colonGaz
+			else:
+				self.proprietaire.gaz+= self.gaz
+				self.gaz = 0
+				if self.gaz > 0:
+				
+		self.proprietaire.bouffe+= 10*self.colonBouffe
+		
 class Joueur():
     def __init__(self,parent,nom,planetemere,couleur):
         self.id=Id.prochainid()
         self.parent=parent
         self.nom=nom
+		self.metal=100
+		self.gaz=100
+		self.bouffe=100
+		self.artefact=0
         self.planetemere=planetemere
         self.planetemere.proprietaire=self.nom
         self.couleur=couleur
