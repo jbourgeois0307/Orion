@@ -30,21 +30,6 @@ class Vaisseau():
         else:
             print("PAS DE CIBLE")
     
-    def avancer1(self):
-        if self.cible:
-            x=self.cible.x
-            if self.x>x:
-                self.x-=self.vitesse
-            elif self.x<x:
-                self.x+=self.vitesse
-            
-            y=self.cible.y
-            if self.y>y:
-                self.y-=self.vitesse
-            elif self.y<y:
-                self.y+=self.vitesse
-            if abs(self.x-x)<(2*self.cible.taille) and abs(self.y-y)<(2*self.cible.taille):
-                self.cible=None
 
 class Planete():
     def __init__(self,x,y):
