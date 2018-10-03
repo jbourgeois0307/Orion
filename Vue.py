@@ -98,8 +98,8 @@ class Vue():
 		self.cadrejeu=Frame(self.cadrepartie)
 		self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
 		self.canevas.pack(side=LEFT)
-		self.canevas.bind("<Button-1>",self.cliquecosmos)
-		self.canevas.bind("<Button-3>",self.cliquecosmos2)
+		self.canevas.bind("<Button-1>",self.cliqueDroitCosmos)
+		self.canevas.bind("<Button-3>",self.cliqueGaucheCosmos)
 		self.cadreinfo=Frame(self.cadrepartie,width=200,height=200,bg="darkgrey")
 		self.cadreinfo.pack(side=LEFT,fill=Y)
 		self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="grey50")
@@ -152,7 +152,7 @@ class Vue():
 		
 	def afficherpartie(self,mod):
 		self.canevas.delete("artefact")
-		
+		self.canevas.delete("marqueur")
 		if self.maselection!=None:
 			joueur=mod.joueurs[self.maselection[0]]
 			if self.maselection[1]=="planete":
@@ -171,8 +171,6 @@ class Vue():
 						t=10
 						self.canevas.create_rectangle(x-t,y-t,x+t,y+t,dash=(2,2),outline=mod.joueurs[self.nom].couleur,
 												 tags=("select","marqueur"))
-		#else:
-		#	 self.canevas.delete("marqueur")
 			
 		
 		for i in mod.joueurs.keys():
@@ -181,34 +179,33 @@ class Vue():
 				self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
 									 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
 
-	def cliquecosmos(self,evt):
+	def cliqueDroitCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
 
 		if t and t[0]==self.nom:
-			#self.maselection=self.canevas.find_withtag(CURRENT)#[0]
 			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
-			print(self.maselection)
 			if t[1] == "planete":
 				self.montreplaneteselection()
 			elif t[1] == "flotte":
 				self.montreflotteselection()
-		elif "planete" in t and t[0]!=self.nom:
-			print(t[0])
+
+	def cliqueGaucheCosmos(self,evt):
+		self.btncreervaisseau.pack_forget()
+		t=self.canevas.gettags(CURRENT)
+
+		if "planete" in t and t[0]!=self.nom:
 			if self.maselection:
 				pass # attribuer cette planete a la cible de la flotte selectionne
 				self.parent.ciblerflotte(self.maselection[2],t[2])
-			print("Cette planete ne vous appartient pas - elle est a ",t[0])
-			self.maselection=None
 			self.lbselectecible.pack_forget()
-			self.canevas.delete("marqueur")
+			
 		else:
-			self.canevas.delete("marqueur")
+			
 			if self.maselection:	
 				self.parent.deplacerVaisseau(evt.x,evt.y,self.maselection[2])
+				self.lbselectecible.pack_forget()
 			#self.maselection=None
-			self.lbselectecible.pack_forget()
-			self.canevas.delete("marqueur")
 			
 	def montreplaneteselection(self):
 		self.btncreervaisseau.pack()

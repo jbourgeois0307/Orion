@@ -16,7 +16,7 @@ class Vaisseau():
 		self.y=y
 		self.cargo=0
 		self.energie=100
-		self.vitesse=2
+		self.vitesse=3
 		self.cible=None 
 		
 	def avancer(self):
@@ -78,7 +78,9 @@ class Joueur():
 		x,y,idori=coord
 		for i in self.flotte:
 			if i.id== int(idori):
-				i.cible=Planete(x,y)
+				objplanete = Planete(x,y)
+				i.cible= objplanete
+				del objplanete
 				i.avancer()
 		
 	def prochaineaction(self):
