@@ -3,22 +3,7 @@ import random
 from helper import Helper as hlp
 
 class Vaisseau():
-    def __init__(self,nom,x,y):
-	
-        self.id
-        self.proprietaire
-        self.x
-        self.y
-        self.inventaire
-        self.vitesse
-        self.cible
-		self.hp
-		self.damage
-		self.attackspeed
-		self.viewdistance
-		self.range
-		
-        
+ 
     def avancer(self):
         if self.cible:
             x=self.cible.x
@@ -62,7 +47,16 @@ class VaisseauGuerre(Vaisseau):
 		self.viewdistance = 100
 		self.range = 75
 		self.cible=None
+	
+	def attack(self):
 		
+		distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
+		
+		if distance < self.range:
+			self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+			self.cible.hp -= self.damage
+			tk.after(self.attackspeed, self.attack())
+			
 class VaisseauTransport(Vaisseau):
 	def __init__(self, nom,x,y):
 	    self.id=Id.prochainid()
