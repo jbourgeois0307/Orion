@@ -9,10 +9,7 @@ import xmlrpc.client
 import socket
 import random
 from Vue import *
-from Joueur import *
 from Modele import *
-from Planete import *
-from Vaisseau import *
 from subprocess import Popen 
 from helper import Helper as hlp
 
