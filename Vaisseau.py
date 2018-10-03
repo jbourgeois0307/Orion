@@ -63,7 +63,8 @@ class VaisseauTransport(Vaisseau):
         self.proprietaire=nom
         self.x=x
         self.y=y
-        self.inventaire=20
+        self.inventaireMAX=20
+		self.inventaire=0
         self.vitesse=1.8
 		self.hp = 500
 		self.damage = 0
@@ -72,10 +73,18 @@ class VaisseauTransport(Vaisseau):
 		self.range = 0
 		self.cible=None
 		
-	def load():
-		pass
+	def load(self, nombre):
+		if self.inventaire < self.inventaireMAX:
+			if self.inventaire+nombre <= self.inventaireMAX:
+				self.inventaire += nombre
+				return nombre
+			else:
+				nombre = self.inventaireMAX - self.inventaire
+				self.inventaire = self.inventaireMAX
+				return nombre
 	def unload():
-		pass
+		self.cible.colon += self.inventaire
+		self.inventaire = 0
 		
 class Sonde(Vaisseau):
 	def __init__(self, nom,x,y):
