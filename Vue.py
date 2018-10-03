@@ -6,21 +6,23 @@ class Vue():
     def __init__(self,parent,ip,nom):
         self.parent=parent
         self.root=Tk()
-        self.largeur=640
-        self.hauteur=480
-        self.root.protocol("WM_DELETE_WINDOW", self.fermerfenetre)
-        self.terrain=[]
+
+        self.root.attributes('-fullscreen', 1) #Pour full screen
+        self.root.configure(bg='#1c4873') # Background de ma page
+        
         self.cadreactif=None
-        self.maselection=None
-        self.root.title(os.path.basename(sys.argv[0]))
-        self.modele=None
+        #self.maselection=None
+        #self.root.title(os.path.basename(sys.argv[0]))
+        #self.modele=None
         self.nom=""
-        self.cadreapp=Frame(self.root,width=800,height=600)
+        self.cadreapp=Frame(self.root,width=800,height=600)         #Frame de base a mes fenetre
         self.cadreapp.pack()
         self.creercadresplash(ip,nom)
         self.creercadrelobby()
         self.changecadre(self.cadresplash)
         
+        self.button = Button(self.root, text="Quit", command=self.root.destroy)
+        self.button.pack()        
     def fermerfenetre(self):
         self.parent.fermefenetre()
         
@@ -31,27 +33,33 @@ class Vue():
         self.cadreactif.pack()
             
     def creercadresplash(self,ip,nom):
-        self.cadresplash=Frame(self.cadreapp)
-        self.canevassplash=Canvas(self.cadresplash,width=640,height=480,bg="red")
-        self.canevassplash.pack()
-        self.nomsplash=Entry(bg="pink")
+        self.cadresplash=Frame(self.cadreapp,bg='#15243d')
+        self.titre = Label(self.cadresplash, text = "Bienvenue dans la galaxie orion voyageur!",bg='#15243d',font='arial 20',foreground="white")
+        self.titre.pack(pady=20,padx=100);
+        
+        soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
+        soustitre.pack(pady=10,padx=10);
+        
+        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
         self.nomsplash.insert(0, nom)
-        self.ipsplash=Entry(bg="pink")
+        self.nomsplash.pack(pady=10)
+        
+        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
         self.ipsplash.insert(0, ip)
-        labip=Label(text=ip,bg="red",borderwidth=0,relief=RIDGE)
-        btncreerpartie=Button(text="Creer partie",bg="pink",command=self.creerpartie)
-        btnconnecterpartie=Button(text="Connecter partie",bg="pink",command=self.connecterpartie)
-        self.canevassplash.create_window(200,200,window=self.nomsplash,width=100,height=30)
-        self.canevassplash.create_window(200,250,window=self.ipsplash,width=100,height=30)
-        self.canevassplash.create_window(200,300,window=labip,width=100,height=30)
-        self.canevassplash.create_window(200,350,window=btncreerpartie,width=100,height=30)
-        self.canevassplash.create_window(200,400,window=btnconnecterpartie,width=100,height=30) 
+        self.ipsplash.pack(pady=20)
+        
+        
+        btncreerpartie=Button(self.cadresplash,text="Creer partie",bg='#A3C5D8',command=self.creerpartie)
+        btncreerpartie.pack()
+        btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie)
+        btnconnecterpartie.pack()
+        
             
     def creercadrelobby(self):
         self.cadrelobby=Frame(self.cadreapp)
         self.canevaslobby=Canvas(self.cadrelobby,width=640,height=480,bg="lightblue")
         self.canevaslobby.pack()
-        self.listelobby=Listbox(bg="red",borderwidth=0,relief=FLAT)
+        self.listelobby=Listbox(bg="yellow",borderwidth=0,relief=FLAT)
         self.nbetoile=Entry(bg="pink")
         self.nbetoile.insert(0, 100)
         self.largeespace=Entry(bg="pink")
@@ -192,7 +200,6 @@ class Vue():
             elif t[1] == "flotte":
                 self.montreflotteselection()
         elif "planete" in t and t[0]!=self.nom:
-            print(t[0])
             if self.maselection:
                 pass # attribuer cette planete a la cible de la flotte selectionne
                 self.parent.ciblerflotte(self.maselection[2],t[2])
