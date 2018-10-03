@@ -52,15 +52,15 @@ class Planete():
         self.proprietaire="inconnu"
         self.x=x
         self.y=y
-		self.colon=0
-		self.colonMetal=0
-		self.colonGaz=0
-		self.colonBouffe=0
+	self.colon=0
+	self.colonMetal=0
+	self.colonGaz=0
+	self.colonBouffe=0
         self.taille=random.randrange(4,6)
-		self.metal=(random.randrange(1000,2000)*self.taille) 
-		self.gaz=(random.randrange(1000,2000)*self.taille)
-		self.espace = 6*self.taille
-		self.hp = 5000
+	self.metal=(random.randrange(1000,2000)*self.taille) 
+	self.gaz=(random.randrange(1000,2000)*self.taille)
+	self.espace = 6*self.taille
+	self.hp = 5000
 	
 	def recolte(self):
 		if self.metal > 0:
