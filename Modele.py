@@ -1,4 +1,6 @@
 import random
+from helper import Helper as hlp
+
 
 class Id():
     id=0
@@ -72,9 +74,10 @@ class Joueur():
         for i in self.flotte:
             if i.cible:
                 i.avancer()
+            """
             else:
                 i.cible=random.choice(self.parent.planetes)
-            
+            """
     def prochaineaction2(self):
         for i in self.flotte:
             i.avancer()

@@ -192,6 +192,7 @@ class Vue():
             elif t[1] == "flotte":
                 self.montreflotteselection()
         elif "planete" in t and t[0]!=self.nom:
+            print(t[0])
             if self.maselection:
                 pass # attribuer cette planete a la cible de la flotte selectionne
                 self.parent.ciblerflotte(self.maselection[2],t[2])
