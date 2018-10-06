@@ -106,11 +106,15 @@ class Vue():
         self.cadrejeu=Frame(self.cadrepartie)
         self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
         self.canevas.pack(side=LEFT)
+        
         self.canevas.bind("<Button>",self.cliquecosmos)
+        
         self.cadreinfo=Frame(self.cadrepartie,width=150,height=100,bg="#455571",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
-        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="white",relief=RAISED)
+        
+        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="#FFFFFF",relief=RAISED)
         self.cadreinfogen.pack()
+        
         self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
         self.labid.bind("<Button>",self.afficherplanemetemere)
         self.labid.pack()
