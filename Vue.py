@@ -11,9 +11,9 @@ class Vue():
         self.root.configure(bg='#1c4873') # Background de ma page
         
         self.cadreactif=None
-        #self.maselection=None
-        #self.root.title(os.path.basename(sys.argv[0]))
-        #self.modele=None
+        self.maselection=None
+        self.root.title(os.path.basename(sys.argv[0]))
+        self.modele=None
         self.nom=""
         self.cadreapp=Frame(self.root,width=800,height=600)         #Frame de base a mes fenetre
         self.cadreapp.pack()
