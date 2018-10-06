@@ -107,17 +107,23 @@ class Vue():
         self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
         self.canevas.pack(side=LEFT)
         self.canevas.bind("<Button>",self.cliquecosmos)
-        self.cadreinfo=Frame(self.cadrepartie,width=200,height=200,bg="darkgrey")
+        self.cadreinfo=Frame(self.cadrepartie,width=150,height=100,bg="#455571",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
-        self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="grey50")
+        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="white",relief=RAISED)
         self.cadreinfogen.pack()
-        self.labid=Label(self.cadreinfogen,text=self.nom,fg=mod.joueurs[self.nom].couleur)
+        self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
         self.labid.bind("<Button>",self.afficherplanemetemere)
         self.labid.pack()
-        self.cadreinfochoix=Frame(self.cadreinfo,height=200,width=200,bg="grey30")
+        
+        self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
+        self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
+        
+        
+        self.cadreinfochoix=Frame(self.cadreinfo,height=200,width=200,bg="#455571")
         self.cadreinfochoix.pack()
         self.btncreervaisseau=Button(self.cadreinfo,text="Vaisseau",command=self.creervaisseau)
-        self.lbselectecible=Label(self.cadreinfo,text="Choisir cible",bg="darkgrey")
+        #self.btncreervaisseauguerre=Button(self.cadreinfo,text="Vaisseau Guerre",command=self.creervaisseau)
+        self.lbselectecible=Label(self.cadreinfo,text="Choisir cible",bg="#455571",fg="red")
         
         self.afficherdecor(mod)
         
