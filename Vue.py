@@ -103,6 +103,8 @@ class Vue():
     def creeraffichercadrepartie(self,mod):
         self.nom=self.parent.monnom
         self.mod=mod
+        
+        joueur=self.mod.joueurs[self.nom]
         self.cadrepartie=Frame(self.cadreapp)
         self.cadrejeu=Frame(self.cadrepartie)
         self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
@@ -110,14 +112,20 @@ class Vue():
         
         self.canevas.bind("<Button>",self.cliquecosmos)
         
-        self.cadreinfo=Frame(self.cadrepartie,width=150,height=100,bg="#455571",relief=RAISED)
+        self.cadreinfo=Frame(self.cadrepartie,width=200,height=100,bg="#455571",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
         
-        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="#455571")
+        self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="#455571")
         self.cadreinfogen.pack()
         
-        self.boiteinfo=Frame(self.cadreinfogen,width=130, height=100,bg="#455571",relief=RAISED)
+        self.boiteinfo=Frame(self.cadreinfogen,width=200, height=100,bg="#455571",relief=RAISED)
         self.boiteinfo.pack(side=BOTTOM)
+        
+        self.boiteinfo2=Frame(self.boiteinfo,width=200, height=100,bg="#455571",relief=RAISED)
+        self.boiteinfo2.pack(side=BOTTOM)
+        
+        self.boiteinfo3=Frame(self.boiteinfo2,width=200, height=100,bg="#455571",relief=RAISED)
+        self.boiteinfo3.pack(side=BOTTOM)
         
         
         self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
@@ -127,15 +135,18 @@ class Vue():
         self.labid2=Label(self.boiteinfo,text="Gestion Colon\n", font=("Helvetica",15),bg="#455571",fg="#fbbfda")
         self.labid2.pack()
         
-        self.labidcbcolons=Label(self.boiteinfo,text=self.parent.Joueur.colons,font=("Helvetica",15),bg="#455571",fg="#fbbfda")
+        self.labidcolons=Label(self.boiteinfo,text="Colons disponibles: ",font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidcolons.pack(side=LEFT)
+        self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidcbcolons.pack(side=RIGHT)
+        
+        self.boutoncolonsajout=Button(self.cadreinfo,text="[CREER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.modifcolonsmodele(1))
+        #self.boutoncolonsretrait=Button(self.cadreinfo,text="[RETRAIT COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED)
         
         self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
         self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
         
-        
-        self.cadreinfochoix=Frame(self.cadreinfo,height=200,width=200,bg="#FFFFFF",relief=RAISED)
-        self.cadreinfochoix.pack()
-        self.btncreervaisseau=Button(self.cadreinfo,text="Vaisseau",command=self.creervaisseau)
+        self.btncreervaisseau=Button(self.cadreinfo,text="Vaisseau",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseau)
         #self.btncreervaisseauguerre=Button(self.cadreinfo,text="Vaisseau Guerre",command=self.creervaisseau)
         self.lbselectecible=Label(self.cadreinfo,text="Choisir cible",bg="#455571",fg="red")
         
@@ -210,6 +221,8 @@ class Vue():
 
     def cliquecosmos(self,evt):
         self.btncreervaisseau.pack_forget()
+        self.boutoncolonsajout.pack_forget()
+        #self.boutoncolonsretrait.pack_forget()
         t=self.canevas.gettags(CURRENT)
         if t and t[0]==self.nom:
             #self.maselection=self.canevas.find_withtag(CURRENT)#[0]
@@ -235,8 +248,16 @@ class Vue():
             
     def montreplaneteselection(self):
         self.btncreervaisseau.pack()
+        self.boutoncolonsajout.pack()
+        #self.boutoncolonsrretrait.pack()
+        
     def montreflotteselection(self):
         self.lbselectecible.pack()
+    
+    
+    def modifcolonsmodele(self,nb):
+        joueur=self.mod.joueurs[self.nom]
+        #joueur.totalcolons+=nb
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
