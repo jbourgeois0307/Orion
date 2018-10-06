@@ -22,7 +22,8 @@ class Vue():
         self.changecadre(self.cadresplash)
         
         self.button = Button(self.root, text="Quit", command=self.root.destroy)
-        self.button.pack()        
+        self.button.pack()   
+             
     def fermerfenetre(self):
         self.parent.fermefenetre()
         
@@ -112,18 +113,27 @@ class Vue():
         self.cadreinfo=Frame(self.cadrepartie,width=150,height=100,bg="#455571",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
         
-        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="#FFFFFF",relief=RAISED)
+        self.cadreinfogen=Frame(self.cadreinfo,width=130,height=200,bg="#455571")
         self.cadreinfogen.pack()
+        
+        self.boiteinfo=Frame(self.cadreinfogen,width=130, height=100,bg="#455571",relief=RAISED)
+        self.boiteinfo.pack(side=BOTTOM)
+        
         
         self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
         self.labid.bind("<Button>",self.afficherplanemetemere)
         self.labid.pack()
         
+        self.labid2=Label(self.boiteinfo,text="Gestion Colon\n", font=("Helvetica",15),bg="#455571",fg="#fbbfda")
+        self.labid2.pack()
+        
+        self.labidcbcolons=Label(self.boiteinfo,text=self.parent.Joueur.colons,font=("Helvetica",15),bg="#455571",fg="#fbbfda")
+        
         self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
         self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
         
         
-        self.cadreinfochoix=Frame(self.cadreinfo,height=200,width=200,bg="#455571")
+        self.cadreinfochoix=Frame(self.cadreinfo,height=200,width=200,bg="#FFFFFF",relief=RAISED)
         self.cadreinfochoix.pack()
         self.btncreervaisseau=Button(self.cadreinfo,text="Vaisseau",command=self.creervaisseau)
         #self.btncreervaisseauguerre=Button(self.cadreinfo,text="Vaisseau Guerre",command=self.creervaisseau)
@@ -166,7 +176,7 @@ class Vue():
         self.maselection=None
         self.canevas.delete("marqueur")
         self.btncreervaisseau.pack_forget()
-        
+            
     def afficherpartie(self,mod):
         self.canevas.delete("artefact")
         
