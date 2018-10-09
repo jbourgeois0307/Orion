@@ -10,19 +10,21 @@ class Vue():
         self.root.attributes('-fullscreen', 1) #Pour full screen
         self.root.configure(bg='#1c4873') # Background de ma page
         
+        self.button = Button(self.root, text="X", command=self.root.destroy, font='arial 20', relief=FLAT,bg='#1c4873',foreground="white")
+        self.button.pack(side=TOP, anchor=E)   
+        
         self.cadreactif=None
         self.maselection=None
         self.root.title(os.path.basename(sys.argv[0]))
         self.modele=None
         self.nom=""
         self.cadreapp=Frame(self.root,width=800,height=600)         #Frame de base a mes fenetre
-        self.cadreapp.pack()
+        self.cadreapp.pack(fill="none", expand=True) # Pour centrer la fenetre
         self.creercadresplash(ip,nom)
         self.creercadrelobby()
         self.changecadre(self.cadresplash)
         
-        self.button = Button(self.root, text="Quit", command=self.root.destroy)
-        self.button.pack()   
+
              
     def fermerfenetre(self):
         self.parent.fermefenetre()
@@ -34,9 +36,11 @@ class Vue():
         self.cadreactif.pack()
             
     def creercadresplash(self,ip,nom):
+        
         self.cadresplash=Frame(self.cadreapp,bg='#15243d')
+    
         self.titre = Label(self.cadresplash, text = "Bienvenue dans la galaxie orion voyageur!",bg='#15243d',font='arial 20',foreground="white")
-        self.titre.pack(pady=20,padx=100);
+        self.titre.pack(pady=(100,20),padx=100);
         
         soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
         soustitre.pack(pady=10,padx=10);
@@ -50,29 +54,39 @@ class Vue():
         self.ipsplash.pack(pady=20)
         
         
-        btncreerpartie=Button(self.cadresplash,text="Creer partie",bg='#A3C5D8',command=self.creerpartie)
-        btncreerpartie.pack()
-        btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie)
-        btnconnecterpartie.pack()
+        btncreerpartie=Button(self.cadresplash,text="Creer partie",bg='#A3C5D8',command=self.creerpartie,relief=FLAT,font='arial 12')
+        btncreerpartie.pack(fill="both", expand=True,side=LEFT, padx=(75,5),pady=(0,50))
+        btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie,relief=FLAT,font='arial 12')
+        btnconnecterpartie.pack(fill="both", expand=True,side=LEFT,padx=(5,75),pady=(0,50))
         
+
             
     def creercadrelobby(self):
-        self.cadrelobby=Frame(self.cadreapp)
-        self.canevaslobby=Canvas(self.cadrelobby,width=640,height=480,bg="lightblue")
-        self.canevaslobby.pack()
-        self.listelobby=Listbox(bg="yellow",borderwidth=0,relief=FLAT)
-        self.nbetoile=Entry(bg="pink")
+        self.cadrelobby=Frame(self.cadreapp,bg='#15243d')
+        
+        self.titre=Label(self.cadrelobby,text="Rebonjour Voyageur",bg='#15243d',font='arial 20',foreground="white")
+        self.titre.pack(pady=(50,0))
+             
+        
+        self.listelobby=Listbox(self.cadrelobby,bg='#A3C5D8',borderwidth=0,relief=FLAT,width=60,height=20)
+        self.listelobby.pack(side=LEFT,pady=50,padx=(75,10));
+        
+        self.nbetoile=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER)
         self.nbetoile.insert(0, 100)
-        self.largeespace=Entry(bg="pink")
+        self.nbetoile.pack(pady=(50,10),padx=(10,75));
+        
+        self.largeespace=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER) 
         self.largeespace.insert(0, 1000)
-        self.hautespace=Entry(bg="pink")
+        self.largeespace.pack(pady=(10,10),padx=(10,75));
+        
+        self.hautespace=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER)
         self.hautespace.insert(0, 800)
-        btnlancerpartie=Button(text="Lancer partie",bg="pink",command=self.lancerpartie)
-        self.canevaslobby.create_window(440,240,window=self.listelobby,width=200,height=400)
-        self.canevaslobby.create_window(200,200,window=self.largeespace,width=100,height=30)
-        self.canevaslobby.create_window(200,250,window=self.hautespace,width=100,height=30)
-        self.canevaslobby.create_window(200,300,window=self.nbetoile,width=100,height=30)
-        self.canevaslobby.create_window(200,400,window=btnlancerpartie,width=100,height=30)
+        self.hautespace.pack(pady=(10,10),padx=(10,5));
+        
+        btnlancerpartie=Button(self.cadrelobby,text="Lancer partie",command=self.lancerpartie,bg='#A3C5D8',relief=FLAT,font='arial 12')
+        btnlancerpartie.pack(fill=X,pady=(0,50),padx=(10,75),side=BOTTOM)
+        
+
         
     def connecterpartie(self):
         nom=self.nomsplash.get()
