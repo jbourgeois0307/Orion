@@ -23,7 +23,7 @@ class Joueur():
 					  "deplacerVaisseau":self.deplacerVaisseau}
 		
 	def creervaisseau(self,planete):
-		v=VaisseauGuerre(self.nom,self.planetemere.x+10,self.planetemere.y,self.parent.parent.idActuel.prochainid())
+		v=VaisseauGuerre(self.nom,self.planetemere.x+random.randrange(-10,10),self.planetemere.y+random.randrange(-10,10),self.parent.parent.idActuel.prochainid())
 		print("Vaisseau",v.id)
 		self.flotte.append(v)
 		
