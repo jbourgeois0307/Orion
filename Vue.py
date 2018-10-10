@@ -182,7 +182,7 @@ class Vue():
 	def cliqueDroitCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
-
+		print(str(t))
 		if t and t[0]==self.nom:
 			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
 			if t[1] == "planete":
@@ -196,12 +196,11 @@ class Vue():
 
 		if "planete" in t and t[0]!=self.nom:
 			if self.maselection:
-				pass # attribuer cette planete a la cible de la flotte selectionne
+				#pass # attribuer cette planete a la cible de la flotte selectionne
 				self.parent.ciblerflotte(self.maselection[2],t[2])
 			self.lbselectecible.pack_forget()
-			
+		
 		else:
-			
 			if self.maselection:	
 				self.parent.deplacerVaisseau(evt.x,evt.y,self.maselection[2])
 				self.lbselectecible.pack_forget()
