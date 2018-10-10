@@ -12,8 +12,8 @@ class Modele():
         self.planetes=[]
         self.terrain=[]
         np=len(joueurs)
-        self.largeur=2000 + np * 500        #self.parent.vue.root.winfo_screenwidth()
-        self.hauteur=2000 + np * 500        #self.parent.vue.root.winfo_screenheight()
+        self.largeur=2040 + np * 680        #self.parent.vue.root.winfo_screenwidth()
+        self.hauteur=1920 + np * 480       #self.parent.vue.root.winfo_screenheight()
         self.creerplanetes(joueurs, self)
         self.creerterrain()
          
@@ -79,11 +79,19 @@ class Modele():
         
        
         bordure=24
-        
-        for i in range(341):
-            x=random.randrange(self.largeur-(2*bordure))+bordure
-            y=random.randrange(self.hauteur-(2*bordure))+bordure
-            self.planetes.append(Planete(x,y))
+        for i in range(3 + np):
+            for j in range(4 + np):
+                planetPerParsec = (range.randrange(14, 22))
+                planetePlacees = []                                                 #ajouter liste avec types de planetes par parsec
+                for k in range(planetPerParsec):
+                    x=random.randrange(680 * i -(2*bordure))+bordure
+                    y=random.randrange(480 * j -(2*bordure))+bordure
+                    for L in planetePlacees:
+                        if((((L.x - x)** 2 + (L.y - y) ** 2) ** 0.5 ) > 35):
+                            planetePlacees.append(self.planetes.append(Planete(x,y)))
+                        else:
+                            k -= 1
+
        
             
         '''    

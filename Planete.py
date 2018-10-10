@@ -12,7 +12,7 @@ class Planete():
         self.y=y
         self.type = random.randrange (1,10)
         self.taille= random.randrange(4, 6)
-        self.quantityRess = 800 * self.taille * random.randrange(3,5)  #800 hard coder, devrait vari� en fonction du secteur
+        self.quantityRess = 2400 * self.taille * random.randrange(3,5)  #2400 hard coder, devrait vari� en fonction du secteur
         
 class PlaneteMere():
     def __init__(self,x,y):
