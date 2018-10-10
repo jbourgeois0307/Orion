@@ -54,11 +54,12 @@ class VaisseauGuerre(Vaisseau):
         distance = math.sqrt(math.power(self.x-self.cible.x,2)+math.power(self.y-self.cible.y,2))
        
         if distance < self.range:
-            missile = self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+            ##refaire missile et checker le tk.after
+            ##missile = self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
             self.cible.hp -= self.damage
             tk.after(self.attackspeed, self.attack())
             time.sleep(0.5)
-            del missile
+            ##del missile
             
 class VaisseauTransport(Vaisseau):
     def __init__(self, nom,x,y):
