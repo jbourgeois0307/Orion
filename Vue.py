@@ -7,7 +7,7 @@ class Vue():
 		self.parent=parent
 		self.root=Tk()
 
-		self.root.attributes('-fullscreen', 1) #Pour full screen
+		#self.root.attributes('-fullscreen', 1) #Pour full screen
 		self.root.configure(bg='#1c4873') # Background de ma page
 		
 		self.button = Button(self.root, text="X", command=self.root.destroy, font='arial 20', relief=FLAT,bg='#1c4873',foreground="white")
@@ -176,15 +176,21 @@ class Vue():
 			y=random.randrange(mod.hauteur)
 			self.canevas.create_oval(x,y,x+1,y+1,fill="white",tags=("fond",))
 		
+
+
 		for i in mod.planetes:
+			couleurfill = ""
 			t=i.taille
 			self.canevas.create_oval(i.x-t,i.y-t,i.x+t,i.y+t,fill="grey80",
-									 tags=(i.proprietaire,"planete",str(i.id)))
-		for i in mod.joueurs.keys():
+									tags=(i.proprietaire,"planete",str(i.id)))			
+
+		for i in mod.joueurs:
+			print(len(mod.joueurs[i].planetescontrolees))
 			for j in mod.joueurs[i].planetescontrolees:
 				t=j.taille
 				self.canevas.create_oval(j.x-t,j.y-t,j.x+t,j.y+t,fill=mod.joueurs[i].couleur,
-									 tags=(j.proprietaire,"planete",str(j.id),"possession"))
+									 tags=(j.proprietaire,"planete",str(j
+									 .id),"possession"))
 				
 		self.afficherpartie(mod)
 				
@@ -206,6 +212,18 @@ class Vue():
 	def afficherpartie(self,mod):
 		self.canevas.delete("artefact")
 		self.canevas.delete("marqueur")
+		
+		#for plan in self.canvas.gettags("planete"):
+		j=mod.joueurs[self.nom]
+		for p in mod.planetes:
+			nonControlee = True
+			for v in j.flotte:
+				if nonControlee:
+					if abs(v.x-p.x)<=3 and abs(v.y-p.y)<=3:
+						p.proprietaire = j.nom
+						self.canevas.itemconfig(self.canevas.find_closest(v.x, v.y), fill=j.couleur, outline="black", tags=(p.proprietaire,"planete",str(p.id), "possession") )
+						nonControlee = False
+
 		if self.maselection!=None:
 			joueur=mod.joueurs[self.maselection[0]]
 			if self.maselection[1]=="planete":
@@ -233,7 +251,8 @@ class Vue():
 			for j in i.flotte:
 				self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
 									 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
-
+									 
+		
 	def cliqueGaucheCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
@@ -248,6 +267,7 @@ class Vue():
 	def cliqueDroitCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
+		
 
 		if "planete" in t and t[0]!=self.nom:
 			if self.maselection:
