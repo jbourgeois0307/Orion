@@ -54,22 +54,22 @@ class Planete():
         self.espace = 6*self.taille
         self.hp = 5000
         
-    def recolte(self):
+    def recolte(self, joueur):
         
         if self.metal > 0:
             if self.metal -5*self.colonMetal > 0:
                 self.metal -= 5*self.colonMetal
-                self.proprietaire.metal+= 5*self.colonMetal
+                joueur.metal+= 5*self.colonMetal
             else:
-                self.proprietaire.metal+= self.metal
+                joueur.metal+= self.metal
                 self.metal = 0
                 
         if self.gaz > 0:
             if self.gaz -5*self.colonGaz > 0:
                 self.gaz -= 5*self.colonGaz
-                self.proprietaire.gaz+= 5*self.colonGaz
+                joueur.gaz+= 5*self.colonGaz
             else:
-                self.proprietaire.gaz+= self.gaz
+                joueur.gaz+= self.gaz
                 self.gaz = 0
                 
         ##self.proprietaire.bouffe+= 10*self.colonBouffe
@@ -120,6 +120,10 @@ class Joueur():
         for i in self.flotte:
             i.avancer()
 
+    def recoltePlaneteJoueur(self):
+        for i in self.planetescontrolees:
+            i.recolte(self)
+            
 class Modele():
     def __init__(self,parent,joueurs):
         self.parent=parent
@@ -183,7 +187,7 @@ class Modele():
             self.joueurs[i].prochaineaction()
 
 
-
+            
 
 
 
@@ -191,5 +195,6 @@ class Modele():
 
 if __name__ == '__main__':
     p1 = Planete(1,1)
-    p1.colonMetal=10
-    p1.recolte()
+    p1.colonMetal = 500
+    j1 = Joueur(Modele, "benjamin", p1, "rouge" )
+    j1.recoltePlaneteJoueur()
