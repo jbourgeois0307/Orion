@@ -3,10 +3,10 @@ from helper import Helper as hlp
 
 
 class Id():
-	id=0
-	def prochainid():
-		Id.id+=1
-		return Id.id
+    id=0
+    def prochainid():
+        Id.id+=1
+        return Id.id
 
 class Vaisseau():
     def __init__(self,nom,x,y):
@@ -143,7 +143,7 @@ class Planete():
                 self.gaz = 0
                 
         ##self.proprietaire.bouffe+= 10*self.colonBouffe
-	
+    
     def construireFerme(self,joueur):
         if self.espace > Ferme.espace:
             self.batiment.append(Ferme(self,joueur))
@@ -230,7 +230,7 @@ class Joueur():
         self.flotte=[]
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerflotte":self.ciblerflotte,
-					   "deplacerVaisseau":self.deplacerVaisseau}
+                       "deplacerVaisseau":self.deplacerVaisseau}
         
     def creervaisseau(self,planete):
         v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
@@ -248,22 +248,22 @@ class Joueur():
                         return
         
     def deplacerVaisseau(self,coord):
-		x,y,idori=coord
-		for i in self.flotte:
-			if i.id== int(idori):
-				objplanete = Planete(x,y)
-				i.cible= objplanete
-				i.avancer()
-	
+        x,y,idori=coord
+        for i in self.flotte:
+            if i.id== int(idori):
+                objplanete = Planete(x,y)
+                i.cible= objplanete
+                i.avancer()
+    
     def prochaineaction(self):
         for i in self.flotte:
             if i.cible:
                 i.avancer()
-	"""
+    """
     def prochaineaction2(self):
         for i in self.flotte:
             i.avancer()
-	"""
+    """
 
     def recoltePlaneteJoueur(self):
         for i in self.planetescontrolees:
@@ -342,4 +342,3 @@ if __name__ == '__main__':
 
 
             self.joueurs[i].prochaineaction()
-

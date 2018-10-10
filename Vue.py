@@ -71,17 +71,18 @@ class Vue():
         self.listelobby=Listbox(self.cadrelobby,bg='#A3C5D8',borderwidth=0,relief=FLAT,width=60,height=20)
         self.listelobby.pack(side=LEFT,pady=50,padx=(75,10));
         
-        self.nbetoile=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER)
-        self.nbetoile.insert(0, 100)
-        self.nbetoile.pack(pady=(50,10),padx=(10,75));
-        
-        self.largeespace=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER) 
-        self.largeespace.insert(0, 1000)
-        self.largeespace.pack(pady=(10,10),padx=(10,75));
-        
-        self.hautespace=Entry(self.cadrelobby,bg='#A3C5D8',width=30,relief=FLAT,font='arial 12',justify=CENTER)
-        self.hautespace.insert(0, 800)
-        self.hautespace.pack(pady=(10,10),padx=(10,5));
+        self.MODES = [
+        ("Monochrome", "1"),
+        ("Grayscale", "2"),
+        ("True color", "3"),
+        ("Color separation", "4") ]
+
+    v = IntVar()
+    v.set("L") # initialize
+
+    for int, mode in self.MODES:
+        self.b = Radiobutton(self.cadrelobby, text=text,variable=v, value=mode)
+        self.b.pack(anchor=W)
         
         btnlancerpartie=Button(self.cadrelobby,text="Lancer partie",command=self.lancerpartie,bg='#A3C5D8',relief=FLAT,font='arial 12')
         btnlancerpartie.pack(fill=X,pady=(0,50),padx=(10,75),side=BOTTOM)
@@ -121,7 +122,7 @@ class Vue():
         joueur=self.mod.joueurs[self.nom]
         self.cadrepartie=Frame(self.cadreapp)
         self.cadrejeu=Frame(self.cadrepartie)
-        self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
+        self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="red")
         self.canevas.pack(side=LEFT)
         
         self.canevas.bind("<Button>",self.cliquecosmos)
