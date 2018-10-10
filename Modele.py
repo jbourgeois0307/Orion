@@ -9,105 +9,104 @@ class Id():
 		return Id.id
 
 class Vaisseau():
-    def __init__(self,nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.cargo=0
-        self.energie=100
-        self.vitesse=2
-        self.cible=None 
-        
-    def avancer(self):
-        if self.cible:
-            x=self.cible.x
-            y=self.cible.y
-            ang=hlp.calcAngle(self.x,self.y,x,y)
-            x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
-            self.x,self.y=x1,y1 #int(x1),int(y1)
-            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
-                self.cible=None
-                #print("Change cible")
-        else:
-            print("PAS DE CIBLE")
+	def __init__(self,nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x
+		self.y=y
+		self.cargo=0
+		self.energie=100
+		self.vitesse=2
+		self.cible=None 
+		
+	def avancer(self):
+		if self.cible:
+			x=self.cible.x
+			y=self.cible.y
+			ang=hlp.calcAngle(self.x,self.y,x,y)
+			x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
+			self.x,self.y=x1,y1 #int(x1),int(y1)
+			if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+				self.cible=None
+				#print("Change cible")
+		else:
+			print("PAS DE CIBLE")
 
 class VaisseauGuerre(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=0
-        self.vitesse=2.5
-        self.hp = 350
-        self.damage = 40
-        self.attackspeed = 0.5
-        self.viewdistance = 100
-        self.range = 75
-        self.cible=None
-    
-    def attack(self):
-        
-        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
-        
-        if distance < self.range:
-            self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
-            self.cible.hp -= self.damage
-            tk.after(self.attackspeed, self.attack())
-            
+	def __init__(self, nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x
+		self.y=y
+		self.inventaire=0
+		self.vitesse=2.5
+		self.hp = 350
+		self.damage = 40
+		self.attackspeed = 0.5
+		self.viewdistance = 100
+		self.range = 75
+		self.cible=None
+	
+	def attack(self):
+		
+		distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
+		
+		if distance < self.range:
+			self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+			self.cible.hp -= self.damage
+			tk.after(self.attackspeed, self.attack())
+			
 class VaisseauTransport(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=20
-        self.vitesse=1.8
-        self.hp = 500
-        self.damage = 0
-        self.attackspeed = 0
-        self.viewdistance = 100
-        self.range = 0
-        self.cible=None
-        
-    def load():
-        pass
-    def unload():
-        pass
-        
+	def __init__(self, nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x
+		self.y=y
+		self.inventaire=20
+		self.vitesse=1.8
+		self.hp = 500
+		self.damage = 0
+		self.attackspeed = 0
+		self.viewdistance = 100
+		self.range = 0
+		self.cible=None
+		
+	def load():
+		pass
+	def unload():
+		pass
+		
 class Sonde(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=0
-        self.vitesse=3
-        self.hp = 60
-        self.damage = 0
-        self.attackspeed = 0
-        self.viewdistance = 125
-        self.range = 0
-        self.cible=None
+	def __init__(self, nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x
+		self.y=y
+		self.inventaire=0
+		self.vitesse=3
+		self.hp = 60
+		self.damage = 0
+		self.attackspeed = 0
+		self.viewdistance = 125
+		self.range = 0
+		self.cible=None
 
 class DeathStar(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x+30
-        self.y=y+30
-        self.inventaire=0
-        self.vitesse=0
-        self.hp = 800
-        self.damage = 99999
-        self.attackspeed = 0.1
-        self.viewdistance = 125
-        self.range = 999999999
-        self.cible=None    
+	def __init__(self, nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x+30
+		self.y=y+30
+		self.inventaire=0
+		self.vitesse=0
+		self.hp = 800
+		self.damage = 99999
+		self.attackspeed = 0.1
+		self.viewdistance = 125
+		self.range = 999999999
+		self.cible=None	   
 
 class Planete():
-
     def __init__(self,x,y):
         self.id=Id.prochainid()
         self.proprietaire="inconnu"
@@ -214,40 +213,40 @@ class Canon(Batiment):
             ##del missile
         
 class Joueur():
-    def __init__(self,parent,nom,planetemere,couleur):
-        self.id=Id.prochainid()
-        self.parent=parent
-        self.nom=nom
-        self.metal=100
-        self.gaz=100
-        self.bouffe=100
-        self.artefact=0
-        self.planetemere=planetemere
-        self.planetemere.proprietaire=self.nom
-        self.couleur=couleur
-        self.planetescontrolees=[planetemere]
-        self.totalcolons=10
-        self.flotte=[]
-        self.actions={"creervaisseau":self.creervaisseau,
-                      "ciblerflotte":self.ciblerflotte,
+	def __init__(self,parent,nom,planetemere,couleur):
+		self.id=Id.prochainid()
+		self.parent=parent
+		self.nom=nom
+		self.metal=100
+		self.gaz=100
+		self.bouffe=100
+		self.artefact=0
+		self.planetemere=planetemere
+		self.planetemere.proprietaire=self.nom
+		self.couleur=couleur
+		self.planetescontrolees=[planetemere]
+		self.totalcolons=10
+		self.flotte=[]
+		self.actions={"creervaisseau":self.creervaisseau,
+					  "ciblerflotte":self.ciblerflotte,
 					   "deplacerVaisseau":self.deplacerVaisseau}
-        
-    def creervaisseau(self,planete):
-        v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
-        print("Vaisseau",v.id)
-        self.flotte.append(v)
-        
-    def ciblerflotte(self,ids):
-        idori,iddesti=ids
-        for i in self.flotte:
-            if i.id== int(idori):
-                for j in self.parent.planetes:
-                    if j.id== int(iddesti):
-                        i.cible=j
-                        print("GOT TARGET")
-                        return
-        
-    def deplacerVaisseau(self,coord):
+		
+	def creervaisseau(self,planete):
+		v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
+		print("Vaisseau",v.id)
+		self.flotte.append(v)
+		
+	def ciblerflotte(self,ids):
+		idori,iddesti=ids
+		for i in self.flotte:
+			if i.id== int(idori):
+				for j in self.parent.planetes:
+					if j.id== int(iddesti):
+						i.cible=j
+						print("GOT TARGET")
+						return
+		
+	def deplacerVaisseau(self,coord):
 		x,y,idori=coord
 		for i in self.flotte:
 			if i.id== int(idori):
@@ -255,20 +254,20 @@ class Joueur():
 				i.cible= objplanete
 				i.avancer()
 	
-    def prochaineaction(self):
-        for i in self.flotte:
-            if i.cible:
-                i.avancer()
+	def prochaineaction(self):
+		for i in self.flotte:
+			if i.cible:
+				i.avancer()
 	"""
-    def prochaineaction2(self):
-        for i in self.flotte:
-            i.avancer()
+	def prochaineaction2(self):
+		for i in self.flotte:
+			i.avancer()
 	"""
 
-    def recoltePlaneteJoueur(self):
-        for i in self.planetescontrolees:
-            i.recolte(self)
-            
+	def recoltePlaneteJoueur(self):
+		for i in self.planetescontrolees:
+			i.recolte(self)
+			
 class Modele():
     def __init__(self,parent,joueurs):
         self.parent=parent
@@ -330,16 +329,3 @@ class Modele():
                 
         for i in self.joueurs:
             self.joueurs[i].prochaineaction()
-
-
-            
-
-
-
-
-
-if __name__ == '__main__':
-
-
-            self.joueurs[i].prochaineaction()
-
