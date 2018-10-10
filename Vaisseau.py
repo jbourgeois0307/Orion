@@ -3,6 +3,12 @@ import random
 from helper import Helper as hlp
 
 class Vaisseau():
+    def __init__(self,nom,x,y):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.cible = None
  
     def avancer(self):
         if self.cible:
@@ -34,12 +40,8 @@ class Vaisseau():
                 self.cible=None
                 
 class VaisseauGuerre(Vaisseau):
-    def __init__(self,nom,x,y):
-        
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
+    def __init__(self):
+        Vaisseau.__init__(self, nom, x, y)
         self.inventaire=0
         self.vitesse=2.5
         self.hp = 350
@@ -47,7 +49,7 @@ class VaisseauGuerre(Vaisseau):
         self.attackspeed = 0.5
         self.viewdistance = 100
         self.range = 75
-        self.cible=None
+
     
     def attack(self):
             
@@ -62,12 +64,8 @@ class VaisseauGuerre(Vaisseau):
             ##del missile
             
 class VaisseauTransport(Vaisseau):
-    def __init__(self, nom,x,y):
-        
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
+    def __init__(self):
+        Vaisseau.__init__(self, nom, x, y)
         self.inventaireMAX=20
         self.inventaire=0
         self.vitesse=1.8
@@ -76,8 +74,6 @@ class VaisseauTransport(Vaisseau):
         self.attackspeed = 0
         self.viewdistance = 100
         self.range = 0
-        self.cible=None
-
         
     def load(self, nombre):
         if self.inventaire < self.inventaireMAX:
@@ -93,11 +89,8 @@ class VaisseauTransport(Vaisseau):
         self.inventaire = 0
         
 class Sonde(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
+    def __init__(self):
+        Vaisseau.__init__(self, nom, x, y)
         self.inventaire=0
         self.vitesse=3
         self.hp = 60
@@ -105,9 +98,8 @@ class Sonde(Vaisseau):
         self.attackspeed = 0
         self.viewdistance = 125
         self.range = 0
-        self.cible=None
 
-class DeathStar(Vaisseau):
+class DeathStar():
     def __init__(self, nom,x,y):
         self.id=Id.prochainid()
         self.proprietaire=nom
