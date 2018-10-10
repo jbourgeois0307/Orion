@@ -11,9 +11,9 @@ class Modele():
         self.actionsafaire={}
         self.planetes=[]
         self.terrain=[]
-        np=len(joueurs)
-        self.largeur=2000 + np * 500        #self.parent.vue.root.winfo_screenwidth()
-        self.hauteur=2000 + np * 500        #self.parent.vue.root.winfo_screenheight()
+        #np=len(joueurs)
+        self.largeur=2000 + 10 * 500#self.parent.vue.root.winfo_screenwidth()
+        self.hauteur=2000 + 10 * 500 #self.parent.vue.root.winfo_screenheight()
         self.creerplanetes(joueurs, self)
         self.creerterrain()
          
@@ -79,7 +79,6 @@ class Modele():
         
        
         bordure=24
-        
         for i in range(341):
             x=random.randrange(self.largeur-(2*bordure))+bordure
             y=random.randrange(self.hauteur-(2*bordure))+bordure
