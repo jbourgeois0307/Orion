@@ -220,6 +220,11 @@ class Vue():
 			for v in j.flotte:
 				if nonControlee:
 					if abs(v.x-p.x)<=3 and abs(v.y-p.y)<=3:
+						for joueur in mod.joueurs:
+							if joueur!=j.nom:
+								if p in joueur.planetescontrolees:
+									joueur.planetescontrolees.remove(p)
+						j.planetescontrolees.append(p)
 						p.proprietaire = j.nom
 						self.canevas.itemconfig(self.canevas.find_closest(v.x, v.y), fill=j.couleur, outline="black", tags=(p.proprietaire,"planete",str(p.id), "possession") )
 						nonControlee = False
