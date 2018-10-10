@@ -31,7 +31,80 @@ class Vaisseau():
                 #print("Change cible")
         else:
             print("PAS DE CIBLE")
+
+class VaisseauGuerre(Vaisseau):
+    def __init__(self, nom,x,y):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=0
+        self.vitesse=2.5
+        self.hp = 350
+        self.damage = 40
+        self.attackspeed = 0.5
+        self.viewdistance = 100
+        self.range = 75
+        self.cible=None
     
+    def attack(self):
+        
+        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
+        
+        if distance < self.range:
+            self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+            self.cible.hp -= self.damage
+            tk.after(self.attackspeed, self.attack())
+            
+class VaisseauTransport(Vaisseau):
+    def __init__(self, nom,x,y):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=20
+        self.vitesse=1.8
+        self.hp = 500
+        self.damage = 0
+        self.attackspeed = 0
+        self.viewdistance = 100
+        self.range = 0
+        self.cible=None
+        
+    def load():
+        pass
+    def unload():
+        pass
+        
+class Sonde(Vaisseau):
+    def __init__(self, nom,x,y):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x
+        self.y=y
+        self.inventaire=0
+        self.vitesse=3
+        self.hp = 60
+        self.damage = 0
+        self.attackspeed = 0
+        self.viewdistance = 125
+        self.range = 0
+        self.cible=None
+
+class DeathStar(Vaisseau):
+    def __init__(self, nom,x,y):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.x=x+30
+        self.y=y+30
+        self.inventaire=0
+        self.vitesse=0
+        self.hp = 800
+        self.damage = 99999
+        self.attackspeed = 0.1
+        self.viewdistance = 125
+        self.range = 999999999
+        self.cible=None    
 
 class Planete():
     def __init__(self,x,y):
@@ -73,7 +146,6 @@ class Planete():
                 self.gaz = 0
                 
         ##self.proprietaire.bouffe+= 10*self.colonBouffe
-		
 
 class Joueur():
     def __init__(self,parent,nom,planetemere,couleur):
@@ -88,6 +160,7 @@ class Joueur():
         self.planetemere.proprietaire=self.nom
         self.couleur=couleur
         self.planetescontrolees=[planetemere]
+        self.totalcolons=10
         self.flotte=[]
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerflotte":self.ciblerflotte}
