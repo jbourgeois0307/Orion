@@ -3,37 +3,38 @@ from helper import Helper as hlp
 
 
 class Id():
-    id=0
-    def prochainid():
-        Id.id+=1
-        return Id.id
+	id=0
+	def prochainid():
+		Id.id+=1
+		return Id.id
 
 class Vaisseau():
-    def __init__(self,nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.cargo=0
-        self.energie=100
-        self.vitesse=2
-        self.cible=None 
-        
-    def avancer(self):
-        if self.cible:
-            x=self.cible.x
-            y=self.cible.y
-            ang=hlp.calcAngle(self.x,self.y,x,y)
-            x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
-            self.x,self.y=x1,y1 #int(x1),int(y1)
-            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
-                self.cible=None
-                #print("Change cible")
-        else:
-            print("PAS DE CIBLE")
-    
+	def __init__(self,nom,x,y):
+		self.id=Id.prochainid()
+		self.proprietaire=nom
+		self.x=x
+		self.y=y
+		self.cargo=0
+		self.energie=100
+		self.vitesse=3
+		self.cible=None 
+		
+	def avancer(self):
+		if self.cible:
+			x=self.cible.x
+			y=self.cible.y
+			ang=hlp.calcAngle(self.x,self.y,x,y)
+			x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
+			self.x,self.y=x1,y1 #int(x1),int(y1)
+			if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+				self.cible=None
+				#print("Change cible")
+		else:
+			print("PAS DE CIBLE")
+	
 
 class Planete():
+
     def __init__(self,x,y):
         self.id=Id.prochainid()
         self.proprietaire="inconnu"
@@ -48,14 +49,8 @@ class Planete():
         self.gaz=(random.randrange(1000,2000)*self.taille)
         self.espace = 6*self.taille
         self.hp = 5000
-        self.colon = 0
-        self.metal=(random.randrange(1000,2000)*self.taille)
-        self.gaz=(random.randrange(1000,2000)*self.taille)
-        self.espace = 6*self.taille
-        self.hp = 5000
         
     def recolte(self, joueur):
-        
         if self.metal > 0:
             if self.metal -5*self.colonMetal > 0:
                 self.metal -= 5*self.colonMetal
@@ -90,7 +85,8 @@ class Joueur():
         self.planetescontrolees=[planetemere]
         self.flotte=[]
         self.actions={"creervaisseau":self.creervaisseau,
-                      "ciblerflotte":self.ciblerflotte}
+                      "ciblerflotte":self.ciblerflotte,
+					   "deplacerVaisseau":self.deplacerVaisseau}
         
     def creervaisseau(self,planete):
         v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
@@ -107,18 +103,23 @@ class Joueur():
                         print("GOT TARGET")
                         return
         
-        
+    def deplacerVaisseau(self,coord):
+		x,y,idori=coord
+		for i in self.flotte:
+			if i.id== int(idori):
+				objplanete = Planete(x,y)
+				i.cible= objplanete
+				i.avancer()
+	
     def prochaineaction(self):
         for i in self.flotte:
             if i.cible:
                 i.avancer()
-            """
-            else:
-                i.cible=random.choice(self.parent.planetes)
-            """
+	"""
     def prochaineaction2(self):
         for i in self.flotte:
             i.avancer()
+	"""
 
     def recoltePlaneteJoueur(self):
         for i in self.planetescontrolees:
@@ -185,16 +186,3 @@ class Modele():
                 
         for i in self.joueurs:
             self.joueurs[i].prochaineaction()
-
-
-            
-
-
-
-
-
-if __name__ == '__main__':
-    p1 = Planete(1,1)
-    p1.colonMetal = 500
-    j1 = Joueur(Modele, "benjamin", p1, "rouge" )
-    j1.recoltePlaneteJoueur()
