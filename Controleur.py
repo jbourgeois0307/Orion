@@ -12,10 +12,12 @@ from Vue import *
 from Modele import *
 from subprocess import Popen 
 from helper import Helper as hlp
+from Id import *
 
 class Controleur():
 	def __init__(self):
 		print("IN CONTROLEUR")
+		self.idActuel=Id
 		self.attente=0
 		self.cadre=0 # le no de cadre pour assurer la syncronisation avec les autres participants
 		self.tempo=0 # insert a reconnaitre qu'on a lance le serveur et qu'on peut s'inscrire automatiquement sans cliquer sur inscription dans l'interface

@@ -1,221 +1,12 @@
 import random
 from helper import Helper as hlp
+from Vaisseau import *
+from Planete import *
 
-
-class Id():
-	id=0
-	def prochainid():
-		Id.id+=1
-		return Id.id
-
-class Vaisseau():
-	def __init__(self,nom,x,y):
-		self.id=Id.prochainid()
-		self.proprietaire=nom
-		self.x=x
-		self.y=y
-		self.cargo=0
-		self.energie=100
-		self.vitesse=2
-		self.cible=None 
-		
-	def avancer(self):
-		if self.cible:
-			x=self.cible.x
-			y=self.cible.y
-			ang=hlp.calcAngle(self.x,self.y,x,y)
-			x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
-			self.x,self.y=x1,y1 #int(x1),int(y1)
-			if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
-				self.cible=None
-				#print("Change cible")
-		else:
-			print("PAS DE CIBLE")
-
-class VaisseauGuerre(Vaisseau):
-	def __init__(self, nom,x,y):
-		self.id=Id.prochainid()
-		self.proprietaire=nom
-		self.x=x
-		self.y=y
-		self.inventaire=0
-		self.vitesse=2.5
-		self.hp = 350
-		self.damage = 40
-		self.attackspeed = 0.5
-		self.viewdistance = 100
-		self.range = 75
-		self.cible=None
-	
-	def attack(self):
-		
-		distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
-		
-		if distance < self.range:
-			self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
-			self.cible.hp -= self.damage
-			tk.after(self.attackspeed, self.attack())
-			
-class VaisseauTransport(Vaisseau):
-	def __init__(self, nom,x,y):
-		self.id=Id.prochainid()
-		self.proprietaire=nom
-		self.x=x
-		self.y=y
-		self.inventaire=20
-		self.vitesse=1.8
-		self.hp = 500
-		self.damage = 0
-		self.attackspeed = 0
-		self.viewdistance = 100
-		self.range = 0
-		self.cible=None
-		
-	def load():
-		pass
-	def unload():
-		pass
-		
-class Sonde(Vaisseau):
-	def __init__(self, nom,x,y):
-		self.id=Id.prochainid()
-		self.proprietaire=nom
-		self.x=x
-		self.y=y
-		self.inventaire=0
-		self.vitesse=3
-		self.hp = 60
-		self.damage = 0
-		self.attackspeed = 0
-		self.viewdistance = 125
-		self.range = 0
-		self.cible=None
-
-class DeathStar(Vaisseau):
-	def __init__(self, nom,x,y):
-		self.id=Id.prochainid()
-		self.proprietaire=nom
-		self.x=x+30
-		self.y=y+30
-		self.inventaire=0
-		self.vitesse=0
-		self.hp = 800
-		self.damage = 99999
-		self.attackspeed = 0.1
-		self.viewdistance = 125
-		self.range = 999999999
-		self.cible=None	   
-
-class Planete():
-    def __init__(self,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire="inconnu"
-        self.x=x
-        self.y=y
-        self.colon=0
-        self.colonMetal=0
-        self.colonGaz=0
-        self.colonBouffe=0
-        self.taille=random.randrange(4,6)
-        self.metal=(random.randrange(1000,2000)*self.taille)
-        self.gaz=(random.randrange(1000,2000)*self.taille)
-        self.espace = 6*self.taille
-        self.hp = 5000
-        self.batiment={}
-        self.Canon={}
-        
-    def recolte(self, joueur):
-        if self.metal > 0:
-            if self.metal -5*self.colonMetal > 0:
-                self.metal -= 5*self.colonMetal
-                joueur.metal+= 5*self.colonMetal
-            else:
-                joueur.metal+= self.metal
-                self.metal = 0
-                
-        if self.gaz > 0:
-            if self.gaz -5*self.colonGaz > 0:
-                self.gaz -= 5*self.colonGaz
-                joueur.gaz+= 5*self.colonGaz
-            else:
-                joueur.gaz+= self.gaz
-                self.gaz = 0
-                
-        ##self.proprietaire.bouffe+= 10*self.colonBouffe
-	
-    def construireFerme(self,joueur):
-        if self.espace > Ferme.espace:
-            self.batiment.append(Ferme(self,joueur))
-    
-    def construireMine(self,joueur):
-        if self.espace > Mine.espace:
-            self.batiment.append(Mine(self,joueur))
-            
-    def construireHangar(self,joueur):
-        if self.espace > Hangar.espace:
-            self.batiment.append(Hangar(self,joueur))
-    
-    def construireCanon(self,joueur):
-        if self.espace > Canon.espace:
-            self.Canon.append(Canon(self,joueur))
-
-class Batiment():
-    def __init__(self,parent,proprietaire):
-        self.parent = parent
-        self.proprietaire = proprietaire
-    
-    def salvage(self):
-        self.proprietaire.metal += 0.35*self.coutMetal
-        self.proprietaire.gaz += 0.35*self.coutGaz
-    
-class Ferme(Batiment):
-    def __init__(self):
-        Batiment.__init__(self, parent, proprietaire)
-        self.espace = 3
-        self.coutMetal = 50
-        self.coutGaz = 25
-        
-class Mine(Batiment):
-    def __init__(self):
-        Batiment.__init__(self, parent, proprietaire)
-        self.espace = 5
-        self.coutMetal = 125
-        self.coutGaz = 75
-        
-class Hangar(Batiment):
-    def __init__(self):
-        Batiment.__init__(self, parent, proprietaire)
-        self.espace = 12
-        self.coutMetal = 200
-        self.coutGaz = 130
-
-class Canon(Batiment):
-    def __init__(self):
-        Batiment.__init__(self, parent, proprietaire)
-        self.espace = 3
-        self.coutMetal = 60
-        self.coutGaz = 30
-        self.hp = 250
-        self.dmg = 35
-        self.range = 85
-        self.cible
-        
-    def attack(self):
-        
-        distance = math.sqrt(math.power(self.x-self.cible.x,2)+math.power(self.y-self.cible.y,2))
-       
-        if distance < self.range:
-            ##refaire missile et checker le tk.after
-            ##missile = self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
-            self.cible.hp -= self.damage
-            tk.after(self.attackspeed, self.attack())
-            time.sleep(0.5)
-            ##del missile
-        
 class Joueur():
-	def __init__(self,parent,nom,planetemere,couleur):
-		self.id=Id.prochainid()
+	def __init__(self,parent,nom,planetemere,couleur,id):
 		self.parent=parent
+		self.id=id
 		self.nom=nom
 		self.metal=100
 		self.gaz=100
@@ -229,10 +20,10 @@ class Joueur():
 		self.flotte=[]
 		self.actions={"creervaisseau":self.creervaisseau,
 					  "ciblerflotte":self.ciblerflotte,
-					   "deplacerVaisseau":self.deplacerVaisseau}
+					  "deplacerVaisseau":self.deplacerVaisseau}
 		
 	def creervaisseau(self,planete):
-		v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
+		v=VaisseauGuerre(self.nom,self.planetemere.x+10,self.planetemere.y,self.parent.parent.idActuel.prochainid())
 		print("Vaisseau",v.id)
 		self.flotte.append(v)
 		
@@ -250,19 +41,13 @@ class Joueur():
 		x,y,idori=coord
 		for i in self.flotte:
 			if i.id== int(idori):
-				objplanete = Planete(x,y)
-				i.cible= objplanete
+				i.cible=Planete(x,y,-1)
 				i.avancer()
 	
 	def prochaineaction(self):
 		for i in self.flotte:
 			if i.cible:
 				i.avancer()
-	"""
-	def prochaineaction2(self):
-		for i in self.flotte:
-			i.avancer()
-	"""
 
 	def recoltePlaneteJoueur(self):
 		for i in self.planetescontrolees:
@@ -297,7 +82,7 @@ class Modele():
         for i in range(100):
             x=random.randrange(self.largeur-(2*bordure))+bordure
             y=random.randrange(self.hauteur-(2*bordure))+bordure
-            self.planetes.append(Planete(x,y))
+            self.planetes.append(Planete(x,y,self.parent.idActuel.prochainid()))
         np=len(joueurs)
         planes=[]
         while np:
@@ -309,7 +94,7 @@ class Modele():
         couleurs=["red","blue","lightgreen","yellow",
                   "lightblue","pink","gold","purple"]
         for i in joueurs:
-            self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0))
+            self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0),self.parent.idActuel.prochainid())
             
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:

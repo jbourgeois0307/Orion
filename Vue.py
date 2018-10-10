@@ -205,7 +205,7 @@ class Vue():
 			
 	def afficherpartie(self,mod):
 		self.canevas.delete("artefact")
-		
+		self.canevas.delete("marqueur")
 		if self.maselection!=None:
 			joueur=mod.joueurs[self.maselection[0]]
 			if self.maselection[1]=="planete":
@@ -234,7 +234,7 @@ class Vue():
 				self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
 									 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
 
-	def cliqueDroitCosmos(self,evt):
+	def cliqueGaucheCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
 		print(str(t))
@@ -245,7 +245,7 @@ class Vue():
 			elif t[1] == "flotte":
 				self.montreflotteselection()
 
-	def cliqueGaucheCosmos(self,evt):
+	def cliqueDroitCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
 		t=self.canevas.gettags(CURRENT)
 
