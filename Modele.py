@@ -3,10 +3,10 @@ from helper import Helper as hlp
 
 
 class Id():
-	id=0
-	def prochainid():
-		Id.id+=1
-		return Id.id
+    id=0
+    def prochainid():
+        Id.id+=1
+        return Id.id
 
 class Vaisseau():
 	def __init__(self,nom,x,y):
@@ -142,7 +142,7 @@ class Planete():
                 self.gaz = 0
                 
         ##self.proprietaire.bouffe+= 10*self.colonBouffe
-	
+    
     def construireFerme(self,joueur):
         if self.espace > Ferme.espace:
             self.batiment.append(Ferme(self,joueur))
@@ -213,56 +213,56 @@ class Canon(Batiment):
             ##del missile
         
 class Joueur():
-	def __init__(self,parent,nom,planetemere,couleur):
-		self.id=Id.prochainid()
-		self.parent=parent
-		self.nom=nom
-		self.metal=100
-		self.gaz=100
-		self.bouffe=100
-		self.artefact=0
-		self.planetemere=planetemere
-		self.planetemere.proprietaire=self.nom
-		self.couleur=couleur
-		self.planetescontrolees=[planetemere]
-		self.totalcolons=10
-		self.flotte=[]
-		self.actions={"creervaisseau":self.creervaisseau,
-					  "ciblerflotte":self.ciblerflotte,
-					   "deplacerVaisseau":self.deplacerVaisseau}
-		
-	def creervaisseau(self,planete):
-		v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
-		print("Vaisseau",v.id)
-		self.flotte.append(v)
-		
-	def ciblerflotte(self,ids):
-		idori,iddesti=ids
-		for i in self.flotte:
-			if i.id== int(idori):
-				for j in self.parent.planetes:
-					if j.id== int(iddesti):
-						i.cible=j
-						print("GOT TARGET")
-						return
-		
-	def deplacerVaisseau(self,coord):
-		x,y,idori=coord
-		for i in self.flotte:
-			if i.id== int(idori):
-				objplanete = Planete(x,y)
-				i.cible= objplanete
-				i.avancer()
-	
-	def prochaineaction(self):
-		for i in self.flotte:
-			if i.cible:
-				i.avancer()
-	"""
-	def prochaineaction2(self):
-		for i in self.flotte:
-			i.avancer()
-	"""
+    def __init__(self,parent,nom,planetemere,couleur):
+        self.id=Id.prochainid()
+        self.parent=parent
+        self.nom=nom
+        self.metal=100
+        self.gaz=100
+        self.bouffe=100
+        self.artefact=0
+        self.planetemere=planetemere
+        self.planetemere.proprietaire=self.nom
+        self.couleur=couleur
+        self.planetescontrolees=[planetemere]
+        self.totalcolons=10
+        self.flotte=[]
+        self.actions={"creervaisseau":self.creervaisseau,
+                      "ciblerflotte":self.ciblerflotte,
+                       "deplacerVaisseau":self.deplacerVaisseau}
+        
+    def creervaisseau(self,planete):
+        v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
+        print("Vaisseau",v.id)
+        self.flotte.append(v)
+        
+    def ciblerflotte(self,ids):
+        idori,iddesti=ids
+        for i in self.flotte:
+            if i.id== int(idori):
+                for j in self.parent.planetes:
+                    if j.id== int(iddesti):
+                        i.cible=j
+                        print("GOT TARGET")
+                        return
+        
+    def deplacerVaisseau(self,coord):
+        x,y,idori=coord
+        for i in self.flotte:
+            if i.id== int(idori):
+                objplanete = Planete(x,y)
+                i.cible= objplanete
+                i.avancer()
+    
+    def prochaineaction(self):
+        for i in self.flotte:
+            if i.cible:
+                i.avancer()
+    """
+    def prochaineaction2(self):
+        for i in self.flotte:
+            i.avancer()
+    """
 
 	def recoltePlaneteJoueur(self):
 		for i in self.planetescontrolees:
@@ -328,4 +328,20 @@ class Modele():
             del self.actionsafaire[cadre]
                 
         for i in self.joueurs:
+<<<<<<< HEAD
             self.joueurs[i].prochaineaction()
+=======
+            self.joueurs[i].prochaineaction()
+
+
+            
+
+
+
+
+
+if __name__ == '__main__':
+
+
+            self.joueurs[i].prochaineaction()
+>>>>>>> d970fec616cae30d6b321306efbf02059577491d
