@@ -124,7 +124,8 @@ class Vue():
 		self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
 		self.canevas.pack(side=LEFT)
 		
-		self.canevas.bind("<Button>",self.cliquecosmos)
+		self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
+		self.canevas.bind("<Button-3>",self.cliqueDroitCosmos)
 		
 		self.cadreinfo=Frame(self.cadrepartie,width=200,height=100,bg="#455571",relief=RAISED)
 		self.cadreinfo.pack(side=LEFT,fill=Y)
@@ -233,32 +234,31 @@ class Vue():
 				self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
 									 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
 
-	def cliquecosmos(self,evt):
+	def cliqueDroitCosmos(self,evt):
 		self.btncreervaisseau.pack_forget()
-		self.boutoncolonsajout.pack_forget()
-		#self.boutoncolonsretrait.pack_forget()
 		t=self.canevas.gettags(CURRENT)
+		print(str(t))
 		if t and t[0]==self.nom:
-			#self.maselection=self.canevas.find_withtag(CURRENT)#[0]
 			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
-			print(self.maselection)
 			if t[1] == "planete":
 				self.montreplaneteselection()
 			elif t[1] == "flotte":
 				self.montreflotteselection()
-		elif "planete" in t and t[0]!=self.nom:
+
+	def cliqueGaucheCosmos(self,evt):
+		self.btncreervaisseau.pack_forget()
+		t=self.canevas.gettags(CURRENT)
+
+		if "planete" in t and t[0]!=self.nom:
 			if self.maselection:
-				pass # attribuer cette planete a la cible de la flotte selectionne
+				#pass # attribuer cette planete a la cible de la flotte selectionne
 				self.parent.ciblerflotte(self.maselection[2],t[2])
-			print("Cette planete ne vous appartient pas - elle est a ",t[0])
-			self.maselection=None
 			self.lbselectecible.pack_forget()
-			self.canevas.delete("marqueur")
+		
 		else:
-			print("Region inconnue")
-			self.maselection=None
-			self.lbselectecible.pack_forget()
-			self.canevas.delete("marqueur")
+			if self.maselection:	
+				self.parent.deplacerVaisseau(evt.x,evt.y,self.maselection[2])
+				self.lbselectecible.pack_forget()
 			
 	def montreplaneteselection(self):
 		self.btncreervaisseau.pack()
