@@ -22,36 +22,33 @@ class Controleur():
                      # ne peut pas etre remplace par egoserveur car si cette variable test a vrai (1), l'inscription est effectuee et tempo remis a 0 pour ne pas reinscrire deux fois...
                      # NOTE le nom de variable est ici epouvantable, j'en conviens - devrait quelquechose comme 'autoInscription'
         self.egoserveur=0 # est-ce que je suis celui qui a demarre le serveur, a priori, non (0)
-        self.actions=[]       # la liste de mes actions a envoyer au serveur pour qu'il les redistribue a tous les participants
+        self.actions=[]    # la liste de mes actions a envoyer au serveur pour qu'il les redistribue a tous les participants
         self.statut=0 # etat dans le quel je me trouve : 0 -> rien, 1 -> inscrit, 2 -> demarre, 3-> joue
         self.monip=self.trouverIP() # la fonction pour retourner mon ip
-        self.monnom=self.generernom() # un generateur de nom pour faciliter le deboggage (comme il genere un nom quasi aleatoire et on peut demarrer plusieurs 'participants' sur une même machine pour tester)
+        self.monnom=None # un generateur de nom pour faciliter le deboggage (comme il genere un nom quasi aleatoire et on peut demarrer plusieurs 'participants' sur une même machine pour tester)
         self.modele=None
         self.serveur=None
-        self.vue=Vue(self,self.monip,self.monnom)
+        self.vue=Vue(self,self.monip)
         self.vue.root.mainloop()
         
     def trouverIP(self): # fonction pour trouver le IP en 'pignant' gmail
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # on cree un socket
-        s.connect(("gmail.com",80))       # on envoie le ping
+        s.connect(("gmail.com",80))    # on envoie le ping
         monip=s.getsockname()[0] # on analyse la reponse qui contient l'IP en position 0 
         s.close() # ferme le socket
         return monip
     
-    def generernom(self):  # generateur de nouveau nom - accelere l'entree de nom pour les tests - parfois � peut generer le meme nom mais c'est rare
-        monnom="jmd_"+str(random.randrange(1000))
-        return monnom
 
-	def creerpartie(self):
-		if self.egoserveur==0:
-			pid=Popen([sys.executable,"./2018_orion_mini_serveur.py"],shell=1).pid # on lance l'application serveur
-			self.egoserveur=1 # on note que c'est soi qui, ayant demarre le serveur, aura le privilege de lancer la simulation
-			self.tempo=1 # on change d'etat pour s'inscrire automatiquement 
-						 # (parce que dans ce type de programme on prend pour acquis que celui qui prepare la simulation veut aussi y participer)
 
+    def creerpartie(self):
+        if self.egoserveur==0:
+            pid=Popen([sys.executable,"./2018_orion_mini_serveur.py"],shell=1).pid # on lance l'application serveur
+            self.egoserveur=1 # on note que c'est soi qui, ayant demarre le serveur, aura le privilege de lancer la simulation
+            self.tempo=1 # on change d'etat pour s'inscrire automatiquement 
+                         # (parce que dans ce type de programme on prend pour acquis que celui qui prepare la simulation veut aussi y participer)
 
     # NOTE si on demarre le serveur, cette fonction est appellee pour nous (voir timer et variable tempo)
-    #       ou par un clique sur le bouton 'Creerunclient' du layout
+    #      ou par un clique sur le bouton 'Creerunclient' du layout
     def inscrirejoueur(self):
         ipserveur=self.vue.ipsplash.get() # lire le IP dans le champ du layout
         nom=self.vue.nomsplash.get() # noter notre nom
@@ -99,7 +96,7 @@ class Controleur():
         if self.serveur: # s'il existe un serveur
             self.cadre=self.cadre+1 # increment du compteur de cadre
             if self.attente==0:
-                self.modele.prochaineaction(self.cadre)       # mise a jour du modele
+                self.modele.prochaineaction(self.cadre)    # mise a jour du modele
                 self.vue.afficherpartie(self.modele) # mise a jour de la vue
             if self.actions: # si on a des actions a partager 
                 rep=self.serveur.faireaction([self.monnom,self.cadre,self.actions]) # on les envoie 
@@ -123,7 +120,7 @@ class Controleur():
                     for k in rep[2][i]: # pour toutes les actions lies a une cle du dictionnaire d'actions recu
                         self.modele.actionsafaire[i].append(k) # ajouter cet action au dictionnaire sous l'entree dont la cle correspond a i
             if rep[1]=="attend": # si jamais rep[0] est vide MAIS que rep[1] == 'attend', on veut alors patienter
-                self.cadre=self.cadre-1     # donc on revient au cadre initial
+                self.cadre=self.cadre-1  # donc on revient au cadre initial
                 self.attente=1
                 #print("ALERTE EN ATTENTE",self.monnom)
             else:
@@ -139,12 +136,11 @@ class Controleur():
             
     def creervaisseau(self):
         self.actions.append([self.monnom,"creervaisseau",""])
-    
-    def deplacerVaisseau(self, x,y,id):
-        self.actions.append([self.monnom,"deplacerVaisseau",[x,y,id]])
-    
+        
     def ciblerflotte(self,idorigine,iddestination):
         self.actions.append([self.monnom,"ciblerflotte",[idorigine,iddestination]])
+        
+
         
 if __name__=="__main__":
     c=Controleur()

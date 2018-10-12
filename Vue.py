@@ -3,98 +3,175 @@ import os,os.path
 import random
 
 class Vue():
-	def __init__(self,parent,ip,nom):
-		self.parent=parent
-		self.root=Tk()
+    def __init__(self,parent,ip):
+        self.parent=parent
+        self.root=Tk()
 
-		self.root.attributes('-fullscreen', 1) #Pour full screen
-		self.root.configure(bg='#1c4873') # Background de ma page
-		
-		self.button = Button(self.root, text="X", command=self.root.destroy, font='arial 20', relief=FLAT,bg='#1c4873',foreground="white")
-		self.button.pack(side=TOP, anchor=E)   
-		
-		self.cadreactif=None
-		self.maselection=None
-		self.root.title(os.path.basename(sys.argv[0]))
-		self.modele=None
-		self.nom=""
-		self.cadreapp=Frame(self.root,width=800,height=600)			#Frame de base a mes fenetre
-		self.cadreapp.pack(fill="none", expand=True) # Pour centrer la fenetre
-		self.creercadresplash(ip,nom)
-		self.creercadrelobby()
-		self.changecadre(self.cadresplash)
-		
+        #self.root.attributes('-fullscreen', 1) #Pour full screen
+        self.root.configure(bg='#1c4873') # Background de ma page
+        
+        self.button = Button(self.root, text="X", command=self.root.destroy, font='arial 20', relief=FLAT,bg='#1c4873',foreground="white")
+        self.button.pack(side=TOP, anchor=E)   
+        
+        self.cadreactif=None
+        self.maselection=None
+        self.root.title(os.path.basename(sys.argv[0]))
+        self.modele=None
+        self.nom=""
+        self.cadreapp=Frame(self.root,width=800,height=600)         #Frame de base a mes fenetre
+        self.cadreapp.pack(fill="none", expand=True) # Pour centrer la fenetre
+        self.creercadresplash(ip)
+        self.creercadrelobby_Createur()
+        self.creercadrelobby_Connecteur()
+        self.changecadre(self.cadresplash)
+        
 
-			 
-	def fermerfenetre(self):
-		self.parent.fermefenetre()
-		
-	def changecadre(self,cadre):
-		if self.cadreactif:
-			self.cadreactif.pack_forget()
-		self.cadreactif=cadre
-		self.cadreactif.pack()
-			
-	def creercadresplash(self,ip,nom):
-		
-		self.cadresplash=Frame(self.cadreapp,bg='#15243d')
-	
-		self.titre = Label(self.cadresplash, text = "Bienvenue dans la galaxie orion voyageur!",bg='#15243d',font='arial 20',foreground="white")
-		self.titre.pack(pady=(100,20),padx=100);
-		
-		soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
-		soustitre.pack(pady=10,padx=10);
-		
-		self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
-		self.nomsplash.insert(0, nom)
-		self.nomsplash.pack(pady=10)
-		
-		self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
-		self.ipsplash.insert(0, ip)
-		self.ipsplash.pack(pady=20)
-		
-		
-		btncreerpartie=Button(self.cadresplash,text="Creer partie",bg='#A3C5D8',command=self.creerpartie,relief=FLAT,font='arial 12')
-		btncreerpartie.pack(fill="both", expand=True,side=LEFT, padx=(75,5),pady=(0,50))
-		btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie,relief=FLAT,font='arial 12')
-		btnconnecterpartie.pack(fill="both", expand=True,side=LEFT,padx=(5,75),pady=(0,50))
-		
+             
+    def fermerfenetre(self):
+        self.parent.fermefenetre()
+        
+    def changecadre(self,cadre):
+        if self.cadreactif:
+            self.cadreactif.pack_forget()
+        self.cadreactif=cadre
+        self.cadreactif.pack()
+            
+    def creercadresplash(self,ip):
+        
+        self.cadresplash=Frame(self.cadreapp,bg='#15243d')
+    
+        self.titre = Label(self.cadresplash, text = "Bienvenue dans la galaxie orion voyageur!",bg='#15243d',font='arial 20',foreground="white")
+        self.titre.pack(pady=(100,20),padx=100);
+        
+        soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
+        soustitre.pack(pady=10,padx=10);
+        
+        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae', justify=CENTER)
+        self.nomsplash.insert(0, "Entrez votre nom")
+        self.nomsplash.pack(pady=10)
+        
+        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae', justify=CENTER)
+        self.ipsplash.insert(0, ip)
+        self.ipsplash.pack(pady=20)
+        
+        
+        btncreerpartie=Button(self.cadresplash,text="Creer partie",bg='#A3C5D8',command=self.creerpartie,relief=FLAT,font='arial 12')
+        btncreerpartie.pack(fill="both", expand=True,side=LEFT, padx=(75,5),pady=(0,50))
+        btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie,relief=FLAT,font='arial 12')
+        btnconnecterpartie.pack(fill="both", expand=True,side=LEFT,padx=(5,75),pady=(0,50))
+        
 
             
-    def creercadrelobby(self):
-        self.cadrelobby=Frame(self.cadreapp,bg='#15243d')
+    def creercadrelobby_Createur(self):
+        #print(self.parent.inscrirejoueur().monnom)
+        self.cadrelobby_Createur=Frame(self.cadreapp,bg='#15243d')
         
-        self.titre=Label(self.cadrelobby,text="Rebonjour Voyageur",bg='#15243d',font='arial 20',foreground="white")
+        self.titre=Label(self.cadrelobby_Createur,text="Rebonjour Voyageur",bg='#15243d',font='arial 20',foreground="white")
         self.titre.pack(pady=(50,0))
              
         
-        self.listelobby=Listbox(self.cadrelobby,bg='#A3C5D8',borderwidth=0,relief=FLAT,width=60,height=20)
-        self.listelobby.pack(side=LEFT,pady=50,padx=(75,10));
+        self.listelobby_CR=Listbox(self.cadrelobby_Createur,bg='#A3C5D8',borderwidth=0,relief=FLAT,width=60,height=20)
+        self.listelobby_CR.pack(side=LEFT,pady=50,padx=(75,10));
         
-        self.MODES = [
-        ("Monochrome", "1"),
-        ("Grayscale", "2"),
-        ("True color", "3"),
-        ("Color separation", "4") ]
-
-    v = IntVar()
-    v.set("L") # initialize
-
-    for int, mode in self.MODES:
-        self.b = Radiobutton(self.cadrelobby, text=text,variable=v, value=mode)
-        self.b.pack(anchor=W)
+                
+        self.cadreCouleur= Frame(self.cadrelobby_Createur,bg='#A3C5D8')
+        self.cadreCouleur.pack()
         
-        btnlancerpartie=Button(self.cadrelobby,text="Lancer partie",command=self.lancerpartie,bg='#A3C5D8',relief=FLAT,font='arial 12')
+        self.Sous_titre2=Label(self.cadreCouleur,text="Choisiez votre couleur",width=30,bg='#A3C5D8',font='arial 14')
+        self.Sous_titre2.pack()
+        #choixCouleur = [('#009ee3'),('#e5007d'),('#951b81'),('#95c11e'),('#f39200') ] #Couleur a choisir
+        #couleurSelection =[('#80cef1'),('#e680b2'),('#c88fbf'),('#c9dc91'),('#f8c77e') ]    #Liste des couleur pour affichage selection
+        
+        self.varCouleur=StringVar()
+        self.varCouleur.set="red"
+        
+        #v = IntVar()
+        
+        Bcouleur1=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
+        Bcouleur1.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur2=Radiobutton( self.cadreCouleur, bg='#e5007d',selectcolor='#e680b2', value='#e5007d',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur2 )
+        Bcouleur2.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur3=Radiobutton( self.cadreCouleur, bg='#951b81',selectcolor='#c88fbf', value='#951b81',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur3 )
+        Bcouleur3.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur4=Radiobutton( self.cadreCouleur, bg='#95c11e',selectcolor='#c9dc91', value='#95c11e',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur4 )
+        Bcouleur4.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur5=Radiobutton( self.cadreCouleur, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
+        Bcouleur5.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
+        Bcouleur6.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        #self.couleurChoisi=choixCouleur[val]
+        
+        Bcouleur2.select()
+            
+         
+        #self.parent.modele.joueurs.couleur= self.couleurChoisi
+       # self.test=Label(text="self.parent.modele.joueurs.couleur=)    
+        
+        btnlancerpartie=Button(self.cadrelobby_Createur,text="Lancer partie",command=self.lancerpartie,bg='#A3C5D8',relief=FLAT,font='arial 12')
         btnlancerpartie.pack(fill=X,pady=(0,50),padx=(10,75),side=BOTTOM)
         
-
+    def creercadrelobby_Connecteur(self):   
+        #print(self.parent.inscrirejoueur().monnom)
+        self.cadrelobby_Connecteur=Frame(self.cadreapp,bg='#15243d')
+        
+        self.titre=Label(self.cadrelobby_Connecteur,text="Rebonjour Voyageur",bg='#15243d',font='arial 20',foreground="white")
+        self.titre.pack(pady=(50,0))
+             
+        
+        self.listelobby_CO=Listbox(self.cadrelobby_Connecteur,bg='#A3C5D8',borderwidth=0,relief=FLAT,width=60,height=20)
+        self.listelobby_CO.pack(side=LEFT,pady=50,padx=(75,10));
+        
+                
+        self.cadreCouleur= Frame(self.cadrelobby_Connecteur,bg='#A3C5D8')
+        self.cadreCouleur.pack()
+        
+        self.Sous_titre2=Label(self.cadreCouleur,text="Choisiez votre couleur",width=30,bg='#A3C5D8',font='arial 14')
+        self.Sous_titre2.pack()
+        #choixCouleur = [('#009ee3'),('#e5007d'),('#951b81'),('#95c11e'),('#f39200') ] #Couleur a choisir
+        #couleurSelection =[('#80cef1'),('#e680b2'),('#c88fbf'),('#c9dc91'),('#f8c77e') ]    #Liste des couleur pour affichage selection
+        
+        self.varCouleur=StringVar()
+        self.varCouleur.set="red"
+        
+        #v = IntVar()
+        
+        Bcouleur1=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
+        Bcouleur1.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur2=Radiobutton( self.cadreCouleur, bg='#e5007d',selectcolor='#e680b2', value='#e5007d',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur2 )
+        Bcouleur2.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur3=Radiobutton( self.cadreCouleur, bg='#951b81',selectcolor='#c88fbf', value='#951b81',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur3 )
+        Bcouleur3.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur4=Radiobutton( self.cadreCouleur, bg='#95c11e',selectcolor='#c9dc91', value='#95c11e',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur4 )
+        Bcouleur4.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur5=Radiobutton( self.cadreCouleur, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
+        Bcouleur5.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        
+        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.trouvecouleur )
+        Bcouleur6.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
+        #self.couleurChoisi=choixCouleur[val]
+        
+        #Bcouleur2.select()
+        #self.couleurChoisi=choixCouleur[val]
+            
+         
+        #self.parent.modele.joueurs.couleur= self.couleurChoisi
+       # self.test=Label(text="self.parent.modele.joueurs.couleur=)    
         
     def connecterpartie(self):
         nom=self.nomsplash.get()
         ip=self.ipsplash.get()
         if nom and ip:
             self.parent.inscrirejoueur()
-            self.changecadre(self.cadrelobby)
+            self.changecadre(self.cadrelobby_Connecteur)
             print("BOUCLEATTENTE de CONNECTER")
             self.parent.boucleattente()
         
@@ -104,7 +181,7 @@ class Vue():
         if nom and ip:
             self.parent.creerpartie()
             self.parent.inscrirejoueur()
-            self.changecadre(self.cadrelobby)
+            self.changecadre(self.cadrelobby_Createur)
             print("BOUCLEATTENTE de CREER")
             self.parent.boucleattente()
         
@@ -112,8 +189,10 @@ class Vue():
         self.parent.lancerpartie()
         
     def affichelisteparticipants(self,lj):
-        self.listelobby.delete(0,END)
-        self.listelobby.insert(0,lj)
+        self.listelobby_CR.delete(0,END)
+        self.listelobby_CR.insert(0,lj)
+        self.listelobby_CO.delete(0,END)
+        self.listelobby_CO.insert(END,lj)
         
     def creeraffichercadrepartie(self,mod):
         self.nom=self.parent.monnom
@@ -122,7 +201,7 @@ class Vue():
         joueur=self.mod.joueurs[self.nom]
         self.cadrepartie=Frame(self.cadreapp)
         self.cadrejeu=Frame(self.cadrepartie)
-        self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="red")
+        self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
         self.canevas.pack(side=LEFT)
         
         self.canevas.bind("<Button>",self.cliquecosmos)
@@ -234,44 +313,64 @@ class Vue():
                 self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
                                      tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
 
-	def cliqueDroitCosmos(self,evt):
-		self.btncreervaisseau.pack_forget()
-		t=self.canevas.gettags(CURRENT)
-		print(str(t))
-		if t and t[0]==self.nom:
-			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
-			if t[1] == "planete":
-				self.montreplaneteselection()
-			elif t[1] == "flotte":
-				self.montreflotteselection()
-
-	def cliqueGaucheCosmos(self,evt):
-		self.btncreervaisseau.pack_forget()
-		t=self.canevas.gettags(CURRENT)
-
-		if "planete" in t and t[0]!=self.nom:
-			if self.maselection:
-				#pass # attribuer cette planete a la cible de la flotte selectionne
-				self.parent.ciblerflotte(self.maselection[2],t[2])
-			self.lbselectecible.pack_forget()
-		
-		else:
-			if self.maselection:	
-				self.parent.deplacerVaisseau(evt.x,evt.y,self.maselection[2])
-				self.lbselectecible.pack_forget()
-			
-	def montreplaneteselection(self):
-		self.btncreervaisseau.pack()
-		self.boutoncolonsajout.pack()
-		#self.boutoncolonsrretrait.pack()
-		
-	def montreflotteselection(self):
-		self.lbselectecible.pack()
-	
-	
-	def modifcolonsmodele(self,nb):
-		joueur=self.mod.joueurs[self.nom]
-		#joueur.totalcolons+=nb
-	
-	def afficherartefacts(self,joueurs):
-		pass #print("ARTEFACTS de ",self.nom)
+    def cliquecosmos(self,evt):
+        self.btncreervaisseau.pack_forget()
+        self.boutoncolonsajout.pack_forget()
+        #self.boutoncolonsretrait.pack_forget()
+        t=self.canevas.gettags(CURRENT)
+        if t and t[0]==self.nom:
+            #self.maselection=self.canevas.find_withtag(CURRENT)#[0]
+            self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
+            print(self.maselection)
+            if t[1] == "planete":
+                self.montreplaneteselection()
+            elif t[1] == "flotte":
+                self.montreflotteselection()
+        elif "planete" in t and t[0]!=self.nom:
+            if self.maselection:
+                pass # attribuer cette planete a la cible de la flotte selectionne
+                self.parent.ciblerflotte(self.maselection[2],t[2])
+            print("Cette planete ne vous appartient pas - elle est a ",t[0])
+            self.maselection=None
+            self.lbselectecible.pack_forget()
+            self.canevas.delete("marqueur")
+        else:
+            print("Region inconnue")
+            self.maselection=None
+            self.lbselectecible.pack_forget()
+            self.canevas.delete("marqueur")
+            
+    def montreplaneteselection(self):
+        self.btncreervaisseau.pack()
+        self.boutoncolonsajout.pack()
+        #self.boutoncolonsrretrait.pack()
+        
+    def montreflotteselection(self):
+        self.lbselectecible.pack()
+    
+    
+    def modifcolonsmodele(self,nb):
+        joueur=self.mod.joueurs[self.nom]
+        #joueur.totalcolons+=nb
+    
+    def afficherartefacts(self,joueurs):
+        pass #print("ARTEFACTS de ",self.nom)
+        
+    def trouvecouleur(self):
+        print("======================"+self.varCouleur.get())
+    def definircouleur1(self):
+        self.varCouleur='#009ee3'
+        print("===============+++======="+self.varCouleur)
+    def definircouleur2(self):
+        self.varCouleur='#e5007d'
+        print("==============+++========"+self.varCouleur)
+    def definircouleur3(self):
+        self.varCouleur='#951b81'
+        print("==========++++============"+self.varCouleur)
+    def definircouleur4(self):
+        self.varCouleur='#95c11e'
+        print("======================"+self.varCouleur)
+    def definircouleur5(self):
+        self.varCouleur='#f39200'
+        print("============++++=========="+self.varCouleur)
+     
