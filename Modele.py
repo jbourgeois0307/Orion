@@ -115,8 +115,8 @@ class Modele():
         self.planetes = []
         self.terrain = []
         self.np = len(joueurs)
-        self.largeur = 2040 + self.np * 680  # self.parent.vue.root.winfo_screenwidth()
-        self.hauteur = 1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight()
+        self.largeur = 800  # self.parent.vue.root.winfo_screenwidth()
+        self.hauteur = 800  # self.parent.vue.root.winfo_screenheight()
         self.creerplanetes(joueurs, self)
         self.creerterrain()
 

@@ -215,19 +215,20 @@ class Vue():
 		
 		#for plan in self.canvas.gettags("planete"):
 		j=mod.joueurs[self.nom]
-		for p in mod.planetes:
-			nonControlee = True
-			for v in j.flotte:
-				if nonControlee:
-					if abs(v.x-p.x)<=3 and abs(v.y-p.y)<=3:
-						for joueur in mod.joueurs:
-							if joueur!=j.nom:
-								if p in joueur.planetescontrolees:
-									joueur.planetescontrolees.remove(p)
-						j.planetescontrolees.append(p)
-						p.proprietaire = j.nom
-						self.canevas.itemconfig(self.canevas.find_closest(v.x, v.y), fill=j.couleur, outline="black", tags=(p.proprietaire,"planete",str(p.id), "possession") )
-						nonControlee = False
+		for joueur in mod.joueurs.keys():
+			for p in mod.planetes:
+				nonControlee = True
+				for v in mod.joueurs[joueur].flotte:
+					if nonControlee:
+						if abs(v.x-p.x)<=3 and abs(v.y-p.y)<=3:
+							for autre_joueur in mod.joueurs.keys():
+								if autre_joueur!=joueur:
+									if p in mod.joueurs[autre_joueur].planetescontrolees:
+										mod.joueurs[autre_joueur].planetescontrolees.remove(p)
+							mod.joueurs[joueur].planetescontrolees.append(p)
+							p.proprietaire = joueur
+							self.canevas.itemconfig(self.canevas.find_closest(v.x, v.y), fill=mod.joueurs[joueur].couleur, outline="black", tags=(p.proprietaire,"planete",str(p.id), "possession") )
+							nonControlee = False
 
 		if self.maselection!=None:
 			joueur=mod.joueurs[self.maselection[0]]
