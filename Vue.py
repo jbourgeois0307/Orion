@@ -18,7 +18,7 @@ class Vue():
         self.root.title(os.path.basename(sys.argv[0]))
         self.modele=None
         self.nom=""
-        self.cadreapp=Frame(self.root,width=800,height=600)         #Frame de base a mes fenetre
+        self.cadreapp=Frame(self.root,width=800,height=600)            #Frame de base a mes fenetre
         self.cadreapp.pack(fill="none", expand=True) # Pour centrer la fenetre
         self.creercadresplash(ip)
         self.creercadrelobby_Createur()
@@ -46,11 +46,11 @@ class Vue():
         soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
         soustitre.pack(pady=10,padx=10);
         
-        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae', justify=CENTER)
+        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
         self.nomsplash.insert(0, "Entrez votre nom")
         self.nomsplash.pack(pady=10)
         
-        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae', justify=CENTER)
+        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
         self.ipsplash.insert(0, ip)
         self.ipsplash.pack(pady=20)
         
@@ -155,7 +155,7 @@ class Vue():
         Bcouleur5=Radiobutton( self.cadreCouleur, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
         Bcouleur5.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.trouvecouleur )
+        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
         Bcouleur6.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         #self.couleurChoisi=choixCouleur[val]
         
@@ -164,7 +164,8 @@ class Vue():
             
          
         #self.parent.modele.joueurs.couleur= self.couleurChoisi
-       # self.test=Label(text="self.parent.modele.joueurs.couleur=)    
+       # self.test=Label(text="self.parent.modele.joueurs.couleur=)        
+
         
     def connecterpartie(self):
         nom=self.nomsplash.get()
@@ -204,7 +205,8 @@ class Vue():
         self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
         self.canevas.pack(side=LEFT)
         
-        self.canevas.bind("<Button>",self.cliquecosmos)
+        self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
+        self.canevas.bind("<Button-3>",self.cliqueDroitCosmos)
         
         self.cadreinfo=Frame(self.cadrepartie,width=200,height=100,bg="#455571",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
@@ -255,15 +257,21 @@ class Vue():
             y=random.randrange(mod.hauteur)
             self.canevas.create_oval(x,y,x+1,y+1,fill="white",tags=("fond",))
         
+
+
         for i in mod.planetes:
+            couleurfill = ""
             t=i.taille
             self.canevas.create_oval(i.x-t,i.y-t,i.x+t,i.y+t,fill="grey80",
-                                     tags=(i.proprietaire,"planete",str(i.id)))
-        for i in mod.joueurs.keys():
+                                    tags=(i.proprietaire,"planete",str(i.id)))            
+
+        for i in mod.joueurs:
+            print(len(mod.joueurs[i].planetescontrolees))
             for j in mod.joueurs[i].planetescontrolees:
                 t=j.taille
                 self.canevas.create_oval(j.x-t,j.y-t,j.x+t,j.y+t,fill=mod.joueurs[i].couleur,
-                                     tags=(j.proprietaire,"planete",str(j.id),"possession"))
+                                     tags=(j.proprietaire,"planete",str(j
+                                     .id),"possession"))
                 
         self.afficherpartie(mod)
                 
@@ -284,7 +292,24 @@ class Vue():
             
     def afficherpartie(self,mod):
         self.canevas.delete("artefact")
+        self.canevas.delete("marqueur")
         
+        #for plan in self.canvas.gettags("planete"):
+        j=mod.joueurs[self.nom]
+        for p in mod.planetes:
+            nonControlee = True
+            for v in j.flotte:
+                if nonControlee:
+                    if abs(v.x-p.x)<=3 and abs(v.y-p.y)<=3:
+                        for joueur in mod.joueurs:
+                            if joueur!=j.nom:
+                                if p in joueur.planetescontrolees:
+                                    joueur.planetescontrolees.remove(p)
+                        j.planetescontrolees.append(p)
+                        p.proprietaire = j.nom
+                        self.canevas.itemconfig(self.canevas.find_closest(v.x, v.y), fill=j.couleur, outline="black", tags=(p.proprietaire,"planete",str(p.id), "possession") )
+                        nonControlee = False
+
         if self.maselection!=None:
             joueur=mod.joueurs[self.maselection[0]]
             if self.maselection[1]=="planete":
@@ -304,7 +329,7 @@ class Vue():
                         self.canevas.create_rectangle(x-t,y-t,x+t,y+t,dash=(2,2),outline=mod.joueurs[self.nom].couleur,
                                                  tags=("select","marqueur"))
         #else:
-        #    self.canevas.delete("marqueur")
+        #     self.canevas.delete("marqueur")
             
         
         for i in mod.joueurs.keys():
@@ -312,33 +337,34 @@ class Vue():
             for j in i.flotte:
                 self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
                                      tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
-
-    def cliquecosmos(self,evt):
+                                     
+        
+    def cliqueGaucheCosmos(self,evt):
         self.btncreervaisseau.pack_forget()
-        self.boutoncolonsajout.pack_forget()
-        #self.boutoncolonsretrait.pack_forget()
         t=self.canevas.gettags(CURRENT)
+        print(str(t))
         if t and t[0]==self.nom:
-            #self.maselection=self.canevas.find_withtag(CURRENT)#[0]
             self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
-            print(self.maselection)
             if t[1] == "planete":
                 self.montreplaneteselection()
             elif t[1] == "flotte":
                 self.montreflotteselection()
-        elif "planete" in t and t[0]!=self.nom:
+
+    def cliqueDroitCosmos(self,evt):
+        self.btncreervaisseau.pack_forget()
+        t=self.canevas.gettags(CURRENT)
+        
+
+        if "planete" in t and t[0]!=self.nom:
             if self.maselection:
-                pass # attribuer cette planete a la cible de la flotte selectionne
+                #pass # attribuer cette planete a la cible de la flotte selectionne
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-            print("Cette planete ne vous appartient pas - elle est a ",t[0])
-            self.maselection=None
             self.lbselectecible.pack_forget()
-            self.canevas.delete("marqueur")
+        
         else:
-            print("Region inconnue")
-            self.maselection=None
-            self.lbselectecible.pack_forget()
-            self.canevas.delete("marqueur")
+            if self.maselection:    
+                self.parent.deplacerVaisseau(evt.x,evt.y,self.maselection[2])
+                self.lbselectecible.pack_forget()
             
     def montreplaneteselection(self):
         self.btncreervaisseau.pack()
@@ -355,9 +381,7 @@ class Vue():
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-        
-    def trouvecouleur(self):
-        print("======================"+self.varCouleur.get())
+    
     def definircouleur1(self):
         self.varCouleur='#009ee3'
         print("===============+++======="+self.varCouleur)
@@ -373,4 +397,3 @@ class Vue():
     def definircouleur5(self):
         self.varCouleur='#f39200'
         print("============++++=========="+self.varCouleur)
-     

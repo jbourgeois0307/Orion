@@ -1,211 +1,202 @@
 import random
 from helper import Helper as hlp
+from Vaisseau import *
+from Planete import *
 
-
-class Id():
-    id=0
-    def prochainid():
-        Id.id+=1
-        return Id.id
-
-class Vaisseau():
-    def __init__(self,nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.cargo=0
-        self.energie=100
-        self.vitesse=2
-        self.cible=None 
-        
-    def avancer(self):
-        if self.cible:
-            x=self.cible.x
-            y=self.cible.y
-            ang=hlp.calcAngle(self.x,self.y,x,y)
-            x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
-            self.x,self.y=x1,y1 #int(x1),int(y1)
-            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
-                self.cible=None
-                #print("Change cible")
-        else:
-            print("PAS DE CIBLE")
-
-class VaisseauGuerre(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=0
-        self.vitesse=2.5
-        self.hp = 350
-        self.damage = 40
-        self.attackspeed = 0.5
-        self.viewdistance = 100
-        self.range = 75
-        self.cible=None
-    
-    def attack(self):
-        
-        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
-        
-        if distance < self.range:
-            self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
-            self.cible.hp -= self.damage
-            tk.after(self.attackspeed, self.attack())
-            
-class VaisseauTransport(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=20
-        self.vitesse=1.8
-        self.hp = 500
-        self.damage = 0
-        self.attackspeed = 0
-        self.viewdistance = 100
-        self.range = 0
-        self.cible=None
-        
-    def load():
-        pass
-    def unload():
-        pass
-        
-class Sonde(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x
-        self.y=y
-        self.inventaire=0
-        self.vitesse=3
-        self.hp = 60
-        self.damage = 0
-        self.attackspeed = 0
-        self.viewdistance = 125
-        self.range = 0
-        self.cible=None
-
-class DeathStar(Vaisseau):
-    def __init__(self, nom,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire=nom
-        self.x=x+30
-        self.y=y+30
-        self.inventaire=0
-        self.vitesse=0
-        self.hp = 800
-        self.damage = 99999
-        self.attackspeed = 0.1
-        self.viewdistance = 125
-        self.range = 999999999
-        self.cible=None    
-
-class Planete():
-    def __init__(self,x,y):
-        self.id=Id.prochainid()
-        self.proprietaire="inconnu"
-        self.x=x
-        self.y=y
-        self.taille=random.randrange(4,6)
-        self.metal=(random.randrange(1000,2000)*self.taille)
-        self.gaz=(random.randrange(1000,2000)*self.taille)
-        self.espace = 6*self.taille
-        self.hp = 5000
 
 class Joueur():
-    def __init__(self,parent,nom,planetemere):
-        self.id=Id.prochainid()
-        self.nom=nom
-        self.planetemere=planetemere
-        self.planetemere.proprietaire=self.nom
-        self.couleur=None
-        self.planetescontrolees=[planetemere]
-        self.totalcolons=10
-        self.flotte=[]
-        self.actions={"creervaisseau":self.creervaisseau,
-                      "ciblerflotte":self.ciblerflotte}
-        
-    def creervaisseau(self,planete):
-        v=Vaisseau(self.nom,self.planetemere.x+10,self.planetemere.y)
-        print("Vaisseau",v.id)
+    def __init__(self, parent, nom, planetemere,id):
+        self.parent = parent
+        self.id = id
+        self.nom = nom
+        self.metal = 100
+        self.gaz = 100
+        self.bouffe = 100
+        self.artefact = 0
+        self.planetemere = planetemere
+        self.planetemere.proprietaire = self.nom
+        self.couleur = None
+        self.planetescontrolees = [planetemere]
+        self.totalcolons = 10
+        self.flotte = []
+        self.actions = {"creervaisseau": self.creervaisseau,
+                        "ciblerflotte": self.ciblerflotte,
+                        "deplacerVaisseau": self.deplacerVaisseau}
+
+    def creervaisseau(self, planete):
+        v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
+        print("Vaisseau", v.id)
         self.flotte.append(v)
-        
-    def ciblerflotte(self,ids):
-        idori,iddesti=ids
+
+    def ciblerflotte(self, ids):
+        idori, iddesti = ids
         for i in self.flotte:
-            if i.id== int(idori):
+            if i.id == int(idori):
                 for j in self.parent.planetes:
-                    if j.id== int(iddesti):
-                        i.cible=j
+                    if j.id == int(iddesti):
+                        i.cible = j
                         print("GOT TARGET")
                         return
-        
-        
+
+    def deplacerVaisseau(self, coord):
+        x, y, idori = coord
+        for i in self.flotte:
+            if i.id == int(idori):
+                i.cible = Planete(x, y, -1)
+                i.avancer()
+
     def prochaineaction(self):
         for i in self.flotte:
             if i.cible:
                 i.avancer()
-            """
-            else:
-                i.cible=random.choice(self.parent.planetes)
-            """
-    def prochaineaction2(self):
-        for i in self.flotte:
-            i.avancer()
+
+    def recoltePlaneteJoueur(self):
+        for i in self.planetescontrolees:
+            i.recolte(self)
+
+        def __init__(self, parent, nom, planetemere, couleur, id):
+            self.parent = parent
+            self.id = id
+            self.nom = nom
+            self.metal = 100
+            self.gaz = 100
+            self.bouffe = 100
+            self.artefact = 0
+            self.planetemere = planetemere
+            self.planetemere.proprietaire = self.nom
+            self.couleur = couleur
+            self.planetescontrolees = [planetemere]
+            self.totalcolons = 10
+            self.flotte = []
+            self.actions = {"creervaisseau": self.creervaisseau,
+                            "ciblerflotte": self.ciblerflotte,
+                            "deplacerVaisseau": self.deplacerVaisseau}
+
+        def creervaisseau(self, planete):
+            v = VaisseauGuerre(self.nom, self.planetemere.x + random.randrange(-10, 10),
+                               self.planetemere.y + random.randrange(-10, 10), self.parent.parent.idActuel.prochainid())
+            print("Vaisseau", v.id)
+            self.flotte.append(v)
+
+        def ciblerflotte(self, ids):
+            idori, iddesti = ids
+            for i in self.flotte:
+                if i.id == int(idori):
+                    for j in self.parent.planetes:
+                        if j.id == int(iddesti):
+                            i.cible = j
+                            print("GOT TARGET")
+                            return
+
+        def deplacerVaisseau(self, coord):
+            x, y, idori = coord
+            for i in self.flotte:
+                if i.id == int(idori):
+                    i.cible = Planete(x, y, -1)
+                    i.avancer()
+
+        def prochaineaction(self):
+            for i in self.flotte:
+                if i.cible:
+                    i.avancer()
+
+        def recoltePlaneteJoueur(self):
+            for i in self.planetescontrolees:
+                i.recolte(self)
+
 
 class Modele():
-    def __init__(self,parent,joueurs):
-        self.parent=parent
-        self.largeur=500 #self.parent.vue.root.winfo_screenwidth()
-        self.hauteur=400 #self.parent.vue.root.winfo_screenheight()
-        self.joueurs={}
-        self.actionsafaire={}
-        self.planetes=[]
-        self.terrain=[]
-        self.creerplanetes(joueurs)
+    def __init__(self, parent, joueurs):
+        self.parent = parent
+        self.joueurs = {}
+        self.joueurs2 = []
+        self.actionsafaire = {}
+        self.planetes = []
+        self.terrain = []
+        self.np = len(joueurs)
+        self.largeur = 2040 + self.np * 680  # self.parent.vue.root.winfo_screenwidth()
+        self.hauteur = 1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight()
+        self.creerplanetes(joueurs, self)
         self.creerterrain()
-        
+
     def creerterrain(self):
-        self.terrain=[]
+        self.terrain = []
         for i in range(10):
-            ligne=[]
+            ligne = []
             for j in range(10):
-                n=random.randrange(5)
-                if n==0:
+                n = random.randrange(5)
+                if n == 0:
                     ligne.append(1)
                 else:
                     ligne.append(0)
             self.terrain.append(ligne)
-        
-    def creerplanetes(self,joueurs):
-        bordure=10
+
+    def creerplanetes(self, joueurs, parent):
+        bordure = 10
+        self.np = len(joueurs)  # nombre joueurs
+        planes = []  # liste des planete meres seulement
+        self.hauteur = parent.hauteur
+        self.largeur = parent.largeur
+        '''
         for i in range(100):
-            x=random.randrange(self.largeur-(2*bordure))+bordure
-            y=random.randrange(self.hauteur-(2*bordure))+bordure
-            self.planetes.append(Planete(x,y))
-        np=len(joueurs)
-        planes=[]
+            x = random.randrange(self.largeur - (2 * bordure)) + bordure
+            y = random.randrange(self.hauteur - (2 * bordure)) + bordure
+            self.planetes.append(Planete(x, y, self.parent.idActuel.prochainid()))
+        np = len(joueurs)
+        planes = []
         while np:
-            p=random.choice(self.planetes)
+            p = random.choice(self.planetes)
             if p not in planes:
                 planes.append(p)
                 self.planetes.remove(p)
-                np-=1
-
-        couleurs=['#009ee3','#e5007d','#951b81','#95c11e',
-                  '#f39200',"#pink"] #Je donne la couleur que j'ai choisie a mes planet mes les autre sont aleatoire
+                np -= 1
+        couleurs = ["red", "blue", "lightgreen", "yellow",
+                    "lightblue", "pink", "gold", "purple"]
         for i in joueurs:
+            self.joueurs[i] = Joueur(self, i, planes.pop(0), couleurs.pop(0), self.parent.idActuel.prochainid())
+        '''
+        if self.np == 1:
+            planes.append(PlaneteMere(50, 50, self.parent.idActuel.prochainid()))
+
+        if self.np == 2:
+            planes.append(PlaneteMere(100, self.hauteur / 2, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur - 100, self.hauteur / 2, self.parent.idActuel.prochainid()))
+
+        elif self.np == 3:
+            planes.append(PlaneteMere(self.largeur / 2, 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(100, self.hauteur - 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur - 100, self.hauteur - 100, self.parent.idActuel.prochainid()))
+
+        elif self.np == 4:
+            planes.append(PlaneteMere(100, 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur - 100, 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(100, self.hauteur - 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(100, self.hauteur - 100, self.parent.idActuel.prochainid()))
+
+        elif self.np == 5:
+            planes.append(PlaneteMere(self.largeur / 2, 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(100, self.hauteur / 3.09, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur - 100, self.hauteur / 3.09, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur * 0.25, self.hauteur - 100, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur * 0.75, self.hauteur - 100, self.parent.idActuel.prochainid()))
+
+        elif self.np == 6:
+            planes.append(PlaneteMere(self.largeur * 0.24, 50, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(50, self.hauteur / 2, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur * 0.75, 50, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur - 50, self.hauteur * 0.50, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur * 0.75, self.hauteur - 50, self.parent.idActuel.prochainid()))
+            planes.append(PlaneteMere(self.largeur * 0.24, self.hauteur - 50, self.parent.idActuel.prochainid()))
+
+        for i in joueurs:
+            couleurs=['#009ee3','#e5007d','#951b81','#95c11e',
+                  '#f39200',"#pink"] #Je donne la couleur que j'ai choisie a mes planet mes les autre sont aleatoire
             print(i)
             print(self.parent.monnom)
             print(self.parent.vue.varCouleur)
             print(couleurs[0])
-            self.joueurs[i]=Joueur(self,i,planes.pop(0))
+            self.joueurs[i]=Joueur(self,i,planes.pop(0), self.parent.idActuel.prochainid())
             compteur=0
             for j in couleurs:
                 if(j==self.parent.vue.varCouleur):
@@ -215,12 +206,67 @@ class Modele():
                 self.joueurs[i].couleur=self.parent.vue.varCouleur
             else:
                 self.joueurs[i].couleur=couleurs.pop(0)
-            
-            
-    def prochaineaction(self,cadre):
+
+        bordure = 15
+        '''
+        for i in range(341):
+             x=random.randrange(self.largeur)
+             y=random.randrange(self.hauteur)
+             self.planetes.append(Planete(x,y))
+        '''
+        ##creation du reste de l'univers; on divise en secteur (3 de large plus nb player) par 4 de haut + np
+        # ensuite en popule entre X et Y planetes par secteur
+
+        for i in range(3 + self.np):
+            for j in range(4 + self.np):
+                planetPerParsec = (random.randrange(13, 20))
+                planetePlacees = []  # deprecated
+                planeteTemp = []  # ajouter liste avec types de planetes par parsec
+
+                for k in range(planetPerParsec):
+                    x = random.randrange(680 * i + bordure, 680 * (i + 1))
+                    y = random.randrange(480 * j + bordure, 480 * (j + 1))
+                    planeteTemp.append(Planete(x, y, self.parent.idActuel.prochainid()))
+
+                # on exclue les doublons a 125 pixels de distance et moins
+                compteurDoublon = 0
+                for L in planeteTemp:
+                    for M in planeteTemp:
+                        if ((((L.x - M.x) ** 2 + (L.y - M.y) ** 2) ** 0.5) < 125 and L is not M):
+                            planeteTemp.remove(
+                                M)  # self.planeteTemp.append(Planete(L.x, L.y, self.parent.idActuel.prochainid()))
+                            compteurDoublon += 1
+
+                planetToAdd = 20 - len(planeteTemp)
+                if planetToAdd <= 0:
+                    pass;
+                else:
+                    planeteTemp = []
+                    for k in range(planetToAdd):
+                        x = random.randrange(680 * i + bordure, 680 * (i + 1))
+                        y = random.randrange(480 * j + bordure, 480 * (j + 1))
+                        planeteTemp.append(Planete(x, y, self.parent.idActuel.prochainid()))
+
+                    # laneteDoublon = planeteTemp
+                    compteurDoublon = 0
+                    for L in planeteTemp:
+                        for M in planeteTemp:
+                            if (((L.x - M.x) ** 2 + (L.y - M.y) ** 2) ** 0.5) < 125 and L is not M:
+                                planeteTemp.remove(
+                                    M)  # self.planeteTemp.append(Planete(L.x, L.y, self.parent.idActuel.prochainid()))
+                                compteurDoublon += 1
+
+                # pour fins de statistiques    print(i, "  " , j, "  ", len(planeteTemp))
+                for Z in planeteTemp:
+                    self.planetes.append(Z)
+
+
+                    ## pour fins de statistiquess   print(len(self.planetes))
+
+    def prochaineaction(self, cadre):
         if cadre in self.actionsafaire:
             for i in self.actionsafaire[cadre]:
-                #print(i)
+                # print(i)
                 self.joueurs[i[0]].actions[i[1]](i[2])
                 """
                 print("4- le modele distribue les actions au divers participants")
@@ -232,6 +278,6 @@ class Modele():
                 print("NOTE... c'est seulement changer la position de l'auto si sa vitesse est non-nul")
                 """
             del self.actionsafaire[cadre]
-                
+
         for i in self.joueurs:
             self.joueurs[i].prochaineaction()
