@@ -19,6 +19,7 @@ class Planete():
         self.hp = 5000
         self.batiment = {}
         self.Canon = {}
+        self.produitVaisseau = False            #bool specifique qui determine si oui/non la planete peut produire des vaisseaux
 
     def recolte(self, joueur):
         if self.metal > 0:
@@ -70,7 +71,18 @@ class PlaneteMere():
         self.type = 10
         self.taille= 24
         self.quantityRess = 9000            #hard coded for now
-
+        self.colon = 22
+        self.colonMetal = 0
+        self.colonGaz = 0
+        self.colonBouffe = 0
+        self.taille = 18  # random.randrange(4, 6)
+        self.metal = (random.randrange(10000, 20000) * self.taille)
+        self.gaz = (random.randrange(10000, 20000) * self.taille)
+        self.espace = 6 * self.taille
+        self.hp = 25000
+        self.batiment = {}
+        self.Canon = {}
+        self.produitVaisseau = True
 
 
 class Batiment():
@@ -128,3 +140,6 @@ class Canon(Batiment):
             tk.after(self.attackspeed, self.attack())
             time.sleep(0.5)
             ##del missile
+
+
+

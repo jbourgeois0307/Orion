@@ -2,6 +2,7 @@ import random
 from helper import Helper as hlp
 from Vaisseau import *
 from Planete import *
+from ArtificialDumbness import *
 
 
 class Joueur():
@@ -22,6 +23,7 @@ class Joueur():
         self.actions = {"creervaisseau": self.creervaisseau,
                         "ciblerflotte": self.ciblerflotte,
                         "deplacerVaisseau": self.deplacerVaisseau}
+
 
     def creervaisseau(self, planete):
         v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
@@ -59,6 +61,7 @@ class Joueur():
 class Modele():
     def __init__(self, parent, joueurs):
         self.parent = parent
+        self.AI = AI(self)
         self.joueurs = {}
         self.joueurs2 = []
         self.actionsafaire = {}
@@ -69,6 +72,8 @@ class Modele():
         self.hauteur = 1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight()
         self.creerplanetes(joueurs, self)
         self.creerterrain()
+
+
 
     def creerterrain(self):
         self.terrain = []
@@ -145,6 +150,7 @@ class Modele():
         for i in joueurs:
             self.joueurs[i] = Joueur(self, i, planes.pop(0), couleurs.pop(0), self.parent.idActuel.prochainid())
 
+        # self.joueurs[self.np +1] = Joueur(self, self.np + 1, self.AI.planetecontrolees, "orange", self.parent.idActuel.prochainid)
         bordure = 15
         '''
         for i in range(341):
@@ -168,14 +174,17 @@ class Modele():
                     y = random.randrange(480 * j + bordure, 480 * (j + 1))
                     planeteTemp.append(Planete(x, y, self.parent.idActuel.prochainid()))
 
-                #on exclue les doublons a 125 pixels de distance et moins
+                #on exclue les doublons a 125 'pixels' de distance et moins
                 compteurDoublon = 0
                 for L in planeteTemp:
                     for M in planeteTemp:
                         if ((((L.x - M.x) ** 2 + (L.y - M.y) ** 2) ** 0.5) < 125 and L is not M):
                             planeteTemp.remove(M)           #self.planeteTemp.append(Planete(L.x, L.y, self.parent.idActuel.prochainid()))
                             compteurDoublon +=1
-
+                    for N in planes:
+                        if (((L.x - N.x) ** 2 + (L.y - N.y) ** 2) ** 0.5) < 175:
+                            planeteTemp.remove(L)
+                            compteurDoublon += 1
 
                 planetToAdd = 20 - len(planeteTemp)
                 if planetToAdd <= 0:
@@ -187,20 +196,23 @@ class Modele():
                         y = random.randrange(480 * j + bordure, 480 * (j + 1))
                         planeteTemp.append(Planete(x, y, self.parent.idActuel.prochainid()))
 
-                    #laneteDoublon = planeteTemp
+                    #DEBUG deprecated planeteDoublon = planeteTemp
                     compteurDoublon = 0
                     for L in planeteTemp:
                         for M in planeteTemp:
                             if (((L.x - M.x) ** 2 + (L.y - M.y) ** 2) ** 0.5) < 125 and L is not M:
                                 planeteTemp.remove(M)                            # self.planeteTemp.append(Planete(L.x, L.y, self.parent.idActuel.prochainid()))
                                 compteurDoublon += 1
-
-                #pour fins de statistiques    print(i, "  " , j, "  ", len(planeteTemp))
+                        for N in planes:                                        #liste d'exclusion distincte pour planetes meres
+                            if (((L.x - N.x) ** 2 + (L.y - N.y) ** 2) ** 0.5) < 175:
+                                planeteTemp.remove(L)
+                                compteurDoublon += 1
+                                #DEBUG pour fins de statistiques  :  print(i, "  " , j, "  ", len(planeteTemp))
                 for Z in planeteTemp:
                     self.planetes.append(Z)
 
 
-        ## pour fins de statistiquess   print(len(self.planetes))
+        ##DEBUG  pour fins de statistiquess :  print(len(self.planetes))
 
     def prochaineaction(self, cadre):
         if cadre in self.actionsafaire:
@@ -220,3 +232,72 @@ class Modele():
 
         for i in self.joueurs:
             self.joueurs[i].prochaineaction()
+
+class AI():
+    def __init__(self, parent):
+        self.nom = "HAL"
+        self.parent = parent
+        self.grandPa = parent.parent
+        self.id = self.grandPa.idActuel.prochainid()
+
+        self.shipYardValue = 4                      ##variable de base d'evaluation de la valeur des planete ship building
+        self.planetecontrolees = []
+                            #parent.largeur / 2, parent.hauteur /2, parent.idActuel.prochainid()))
+        self.planetemere = PlaneteMere(525, 325, self.grandPa.idActuel.prochainid())
+        self.planetemere.proprietaire = self.nom
+        self.couleur = "blue"
+        self.planetecontrolees.append(self.planetemere)
+        self.threatShips = []
+        self.threatMinDistance = 600
+        self.threatenedPlanet = [[]]
+        self.flotteAI = []
+        self.gestionnaireAI(self, self.grandPa)
+        self.player = Joueur(self, self.nom, self.planetemere, self.couleur, self.id)
+        self.actions = {"creervaisseauAI": self.player.creervaisseauAI,
+                        "ciblerflotte": self.player.ciblerflotte,
+                        "deplacerVaisseau": self.player.deplacerVaisseau}
+
+
+    def gestionnaireAI(self, parent, grandPa):
+        for i in range (5):
+            grandPa.creervaisseauAI()
+
+    def creervaisseauAI(self, parent):
+        for i in range (2):
+            #batirVaisseau(parent.planetecontrolees.index(0), grandPa)
+            v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                               self.parent.parent.idActuel.prochainid())
+            print("Vaisseau AI bati", v.id)
+            self.flotteAI.append(v)
+            #grandPa.creervaisseauAI()
+        '''
+        self.mod1 = grandPapa
+        for j in self.planeteControlees:
+            planetthreatened = False
+            parent.threatShips = []
+            for i in self.mod1.joueurs.flotte:
+                     #pour chaque vaisseau joueur on evalue la menace (proximite et direction) vis-a-vis chaque planete AI
+                if (((j.x - i.x) ** 2 + (j.y - i.y) ** 2) ** 0.5) < self.threatMinDistance \
+                        or (((j.x - i.cible.x) ** 2 + (j.y - i.cible.y) ** 2) ** 0.5) < self.threatMinDistance /2:
+                    parent.threatShips.append(i)
+                    planetThreatened = True
+        if planetthreatened:
+            parent.threatenedPlanet.append(j)
+            parent.threatenedPlanet[j].append(parent.threatShips)
+        '''
+
+    def batirVaisseau(self, planete, grandPapa):
+        v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
+        print("Vaisseau AI bati", v.id)
+        self.flotteAI.append(v)
+        grandPapa.creervaisseau()
+
+
+
+
+
+    def analyseMenaces(self):
+        pass
+       # for i in visibleShips
+

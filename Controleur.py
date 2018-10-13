@@ -151,6 +151,9 @@ class Controleur():
     def creervaisseau(self):
         self.actions.append([self.monnom, "creervaisseau", ""])
 
+    def creervaisseauAI(self):
+        self.actions.append([self.modele.AI.nom, "creervaisseauAI", ""])
+
     def deplacerVaisseau(self, x, y, id):
         self.actions.append([self.monnom, "deplacerVaisseau", [x, y, id]])
 
