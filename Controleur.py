@@ -125,14 +125,12 @@ class Controleur():
                 # print("APRES",rep[2])
                 # FIN DE PATCH
 
-                for i in rep[
-                    2]:  # pour chaque action a faire (rep[2] est dictionnaire d'actions en provenance des participants
+                for i in rep[2]:  # pour chaque action a faire (rep[2] est dictionnaire d'actions en provenance des participants
                     # dont les cles sont les cadres durant lesquels ses actions devront etre effectuees
                     if i not in self.modele.actionsafaire.keys():  # si la cle i n'existe pas
                         self.modele.actionsafaire[i] = []  # faire une entree dans le dictonnaire
                     for k in rep[2][i]:  # pour toutes les actions lies a une cle du dictionnaire d'actions recu
-                        self.modele.actionsafaire[i].append(
-                            k)  # ajouter cet action au dictionnaire sous l'entree dont la cle correspond a i
+                        self.modele.actionsafaire[i].append(k)  # ajouter cet action au dictionnaire sous l'entree dont la cle correspond a i
             if rep[1] == "attend":  # si jamais rep[0] est vide MAIS que rep[1] == 'attend', on veut alors patienter
                 self.cadre = self.cadre - 1  # donc on revient au cadre initial
                 self.attente = 1

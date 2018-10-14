@@ -281,6 +281,9 @@ class Vue():
             for j in i.flotte:
                 self.canevas.create_rectangle(j.x - 3, j.y - 3, j.x + 3, j.y + 3, fill=i.couleur,
                                               tags=(j.proprietaire, "flotte", str(j.id), "artefact"))
+        for k in mod.AI.flotteAI:
+            self.canevas.create_rectangle(k.x - 3, k.y - 3, k.x + 3, k.y + 3, fill=mod.AI.couleur,
+                                          tags=(k.proprietaire, "flotte", str(k.id), "artefact"))
 
     def cliqueGaucheCosmos(self, evt):
         self.btncreervaisseau.pack_forget()

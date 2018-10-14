@@ -68,8 +68,8 @@ class Modele():
         self.planetes = []
         self.terrain = []
         self.np = len(joueurs)
-        self.largeur = 2040 + self.np * 680  # self.parent.vue.root.winfo_screenwidth()
-        self.hauteur = 1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight()
+        self.largeur = 600 # 2040 + self.np * 680  # self.parent.vue.root.winfo_screenwidth()
+        self.hauteur = 480 #1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight()
         self.creerplanetes(joueurs, self)
         self.creerterrain()
 
@@ -217,7 +217,21 @@ class Modele():
     def prochaineaction(self, cadre):
         if cadre in self.actionsafaire:
             for i in self.actionsafaire[cadre]:
-                # print(i)
+                self.AI.gestionnaireAI(self)
+
+
+
+
+
+
+                #self.AI.gestionnaireAI(self, self.parent)
+                '''
+                for z in self.parent.actions:
+                    print(z[0])
+                    print(z[1])
+                    print(z[2])
+        #           self.AI.player.actions[z[1]](z[2])
+                '''
                 self.joueurs[i[0]].actions[i[1]](i[2])
                 """
                 print("4- le modele distribue les actions au divers participants")
@@ -251,25 +265,26 @@ class AI():
         self.threatMinDistance = 600
         self.threatenedPlanet = [[]]
         self.flotteAI = []
-        self.gestionnaireAI(self, self.grandPa)
         self.player = Joueur(self, self.nom, self.planetemere, self.couleur, self.id)
-        self.actions = {"creervaisseauAI": self.player.creervaisseauAI,
+        self.actionsafaire = []
+        self.actions = {"creervaisseauAI": self.creervaisseauAI,
                         "ciblerflotte": self.player.ciblerflotte,
                         "deplacerVaisseau": self.player.deplacerVaisseau}
 
 
-    def gestionnaireAI(self, parent, grandPa):
-        for i in range (5):
-            grandPa.creervaisseauAI()
+    def gestionnaireAI(self, parent):
+        self.creervaisseauAI(parent)
+        self.controleFlotteAI(parent)
 
     def creervaisseauAI(self, parent):
-        for i in range (2):
-            #batirVaisseau(parent.planetecontrolees.index(0), grandPa)
-            v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
-                               self.parent.parent.idActuel.prochainid())
-            print("Vaisseau AI bati", v.id)
-            self.flotteAI.append(v)
-            #grandPa.creervaisseauAI()
+        for i in self.planetecontrolees:
+            if i.produitVaisseau:
+                                                 #batirVaisseau(parent.planetecontrolees.index(0), grandPa)
+                v = VaisseauGuerre(self.nom, i.x + 20, i.y +5, #self.planetemere.x + 10, self.planetemere.y,
+                                   self.parent.parent.idActuel.prochainid())
+                print("Vaisseau AI bati", v.id, v.x, v.y)
+                self.flotteAI.append(v)
+                #grandPa.creervaisseauAI()
         '''
         self.mod1 = grandPapa
         for j in self.planeteControlees:
@@ -292,6 +307,46 @@ class AI():
         print("Vaisseau AI bati", v.id)
         self.flotteAI.append(v)
         grandPapa.creervaisseau()
+
+    def controleFlotteAI(self, parent):
+        for j in self.flotteAI:
+            if j.cible == None:
+                planeteAuComplet = []
+                planeteAuComplet = self.parent.planetes
+                for L in planeteAuComplet:
+                    proxima = []
+                    supraproxima = []
+                    L.dist = None
+                    L.dist = (((L.x - j.x) ** 2 + (L.y - j.y) ** 2) ** 0.5)
+                    if L.dist > 1200:
+                        planeteAuComplet.remove(L)
+                        continue
+                    if L.dist > 700:
+                        proxima.append(L)
+                        planeteAuComplet.remove(L)
+                        continue
+                    else:
+                        supraproxima = planeteAuComplet
+                        if len(supraproxima) > 0:
+                            for M in supraproxima:
+                                coord = (225, 220, j.id)
+                                self.deplacerVaisseauAI(coord)
+                                supraproxima.remove(M)
+                        else:
+                            for N in proxima:
+                                coord = (145, 75, j.id)
+                                self.deplacerVaisseauAI(coord)
+                                supraproxima.remove(M)
+
+
+    def deplacerVaisseauAI(self, coord):
+        x, y, idori = coord
+        for i in self.flotteAI:
+            if i.id == int(idori):
+                i.cible = Planete(x, y, -1)
+                i.avancer()
+
+
 
 
 
