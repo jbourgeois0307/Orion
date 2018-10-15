@@ -1,0 +1,2 @@
+#Ignore les fichiers suivants dans les futurs push
+__pycache__/

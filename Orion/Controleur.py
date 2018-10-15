@@ -148,17 +148,8 @@ class Controleur():
             self.serveur.jequitte(self.monnom)
         self.vue.root.destroy()
 
-    def creervaisseauAtt(self):
-        self.actions.append([self.monnom, "creervaisseauAtt", ""])
-        
-    def creervaisseauSonde(self):
-    	self.actions.append([self.monnom,"creervaisseauSonde",""])
-    	
-	#def creervaisseauTrans(self):
-	#	self.actions.append([self.monnom,"creervaisseauTrans",""])
-		
-    def creervaisseauTrans(self):
-        self.actions.append([self.monnom,"creervaisseauTrans",""])
+    def creervaisseau(self):
+        self.actions.append([self.monnom, "creervaisseau", ""])
 
     def deplacerVaisseau(self, x, y, id):
         self.actions.append([self.monnom, "deplacerVaisseau", [x, y, id]])

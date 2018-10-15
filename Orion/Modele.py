@@ -19,26 +19,12 @@ class Joueur():
         self.planetescontrolees = [planetemere]
         self.totalcolons = 10
         self.flotte = []
-        self.actions = {"creervaisseauAtt": self.creervaisseauAtt,
-                        "creervaisseauSonde": self.creervaisseauSonde,
-                        "creervaisseauTrans": self.creervaisseauTrans,
+        self.actions = {"creervaisseau": self.creervaisseau,
                         "ciblerflotte": self.ciblerflotte,
                         "deplacerVaisseau": self.deplacerVaisseau}
 
-    def creervaisseauAtt(self, planete):
+    def creervaisseau(self, planete):
         v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
-                           self.parent.parent.idActuel.prochainid())
-        print("Vaisseau", v.id)
-        self.flotte.append(v)
-        
-    def creervaisseauSonde(self, planete):
-        v = Sonde(self.nom, self.planetemere.x + 10, self.planetemere.y,
-                           self.parent.parent.idActuel.prochainid())
-        print("Vaisseau", v.id)
-        self.flotte.append(v)
-        
-    def creervaisseauTrans(self, planete):
-        v = VaisseauTransport(self.nom, self.planetemere.x + 10, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
@@ -68,6 +54,24 @@ class Joueur():
     def recoltePlaneteJoueur(self):
         for i in self.planetescontrolees:
             i.recolte(self)
+
+        def __init__(self, parent, nom, planetemere, couleur, id):
+            self.parent = parent
+            self.id = id
+            self.nom = nom
+            self.metal = 100
+            self.gaz = 100
+            self.bouffe = 100
+            self.artefact = 0
+            self.planetemere = planetemere
+            self.planetemere.proprietaire = self.nom
+            self.couleur = couleur
+            self.planetescontrolees = [planetemere]
+            self.totalcolons = 10
+            self.flotte = []
+            self.actions = {"creervaisseau": self.creervaisseau,
+                            "ciblerflotte": self.ciblerflotte,
+                            "deplacerVaisseau": self.deplacerVaisseau}
 
         def creervaisseau(self, planete):
             v = VaisseauGuerre(self.nom, self.planetemere.x + random.randrange(-10, 10),
@@ -106,7 +110,7 @@ class Modele():
     def __init__(self, parent, joueurs):
         self.parent = parent
         self.joueurs = {}
-        #self.joueurs2 = []
+        self.joueurs2 = []
         self.actionsafaire = {}
         self.planetes = []
         self.terrain = []
