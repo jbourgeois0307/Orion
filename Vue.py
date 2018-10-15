@@ -172,11 +172,12 @@ class Vue():
 		self.labidcolons.pack(side=LEFT)
 		self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
 		self.labidcbcolons.pack(side=RIGHT)
+		self.labidcolonplanete=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
 		
 		self.labidcolonvaisseau=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
-		self.boutoncolonsajout=Button(self.cadreinfo,text="[LOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.modifcolonsmodele)
+		self.boutoncolonsajout=Button(self.cadreinfo,text="[LOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.ajoutcolonsmodele)
 		#,command=self.modifcolonsmodele(1,mod)
-		self.boutoncolonsretrait=Button(self.cadreinfo,text="[DELOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED)
+		self.boutoncolonsretrait=Button(self.cadreinfo,text="[DELOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.retraitcolonsmodele)
 		#,command=self.modifcolonsmodele(-1,mod)
 		
 		self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
@@ -310,7 +311,7 @@ class Vue():
 		if t and t[0]==self.nom:
 			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
 			if t[1] == "planete":
-				self.montreplaneteselection()
+				self.montreplaneteselection(0)
 			elif t[1] == "flotte":
 				self.montreflotteselection(0)
 
@@ -330,8 +331,11 @@ class Vue():
 				self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
 				self.lbselectecible.pack_forget()
 			
-	def montreplaneteselection(self):
+	def montreplaneteselection(self,i):
+		joueur=self.modele.joueurs[self.nom]
 		self.packBtnPlanete()
+		self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[i].colon))
+		self.labidcolonplanete.pack()
 		#self.boutoncolonsrretrait.pack()
 		
 	def montreflotteselection(self,i):
@@ -342,12 +346,12 @@ class Vue():
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsajout.pack()
 		self.boutoncolonsretrait.pack()
-		
-	
+
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
 	
 	def unpackBtnPlanete(self):
+		self.labidcolonplanete.pack_forget()
 		self.btncreervaisseauAtt.pack_forget()
 		self.btncreervaisseauSonde.pack_forget()
 		self.btncreervaisseauTrans.pack_forget()
@@ -359,11 +363,21 @@ class Vue():
 		self.boutoncolonsretrait.pack_forget()
 		
 	def packBtnPlanete(self):
+		self.labidcolonplanete.pack()
 		self.btncreervaisseauAtt.pack()
 		self.btncreervaisseauSonde.pack()
 		self.btncreervaisseauTrans.pack()
 		
-	def modifcolonsmodele(self):
-		joueur=self.mod.joueurs[self.nom]
+	def ajoutcolonsmodele(self):
+		joueur=self.modele.joueurs[self.nom]
 		joueur.flotte[0].load(1)
+		print(joueur.flotte[0].inventaire)
 		self.labidcolonvaisseau.pack()
+		joueur.planete[0].ajoutColon(joueur,-1)
+		
+	def retraitcolonsmodele(self):
+		joueur=self.modele.joueurs[self.nom]
+		joueur.flotte[0].load(-1)
+		self.labidcolonvaisseau.pack()
+		self.boutoncolonsretrait.config(state=DISABLED)
+		joueur.planete[0].ajoutColon(joueur,1)

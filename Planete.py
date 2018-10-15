@@ -58,7 +58,11 @@ class Planete():
     def priseDePossession(self, joueur):
         self.proprietaire = joueur.nom
         joueur.planetescontrolees.append(self)
-
+    
+    def ajoutColon(self,joueur,nb):
+        self.proprietaire = joueur.nom
+        self.colon+=nb
+        
     # (self.proprietaire).planetescontrolees.append(self)
 
 class PlaneteMere():
@@ -67,6 +71,7 @@ class PlaneteMere():
         self.proprietaire="inconnu"                     #tagger
         self.x=x
         self.y=y
+        self.colon = 10
         self.type = 10
         self.taille= 24
         self.quantityRess = 9000            #hard coded for now
