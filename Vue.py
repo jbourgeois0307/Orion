@@ -23,9 +23,9 @@ class Vue():
 		self.creercadresplash(ip,nom)
 		self.creercadrelobby()
 		self.changecadre(self.cadresplash)
+		self.vbar = None
+		self.hbar = None
 		
-
-			 
 	def fermerfenetre(self):
 		self.parent.fermefenetre()
 		
@@ -121,8 +121,25 @@ class Vue():
 		joueur=self.mod.joueurs[self.nom]
 		self.cadrepartie=Frame(self.cadreapp)
 		self.cadrejeu=Frame(self.cadrepartie)
-		self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11")
+		self.canevas=Canvas(self.cadrepartie,width=mod.largeur,height=mod.hauteur,bg="grey11",scrollregion=(0,0,self.mod.largeur,self.mod.hauteur))
+		self.hbar=Scrollbar(self.cadrepartie,orient=HORIZONTAL, width=0)
+		self.hbar.pack(side=BOTTOM,fill=X)
+		self.hbar.config(command=self.canevas.xview)
+		self.vbar=Scrollbar(self.cadrepartie,orient=VERTICAL,width = 0)
+		self.vbar.pack(side=RIGHT,fill=Y)
+		self.vbar.config(command=self.canevas.yview)
+		self.canevas.config(width=1920,height=1080)
+		self.canevas.config(xscrollcommand=self.hbar.set, yscrollcommand=self.vbar.set)
+		self.canevas.pack(side=LEFT,expand=True,fill=BOTH)
 		self.canevas.pack(side=LEFT)
+		
+		self.canevas.bind("<1>",	 lambda event: self.canevas.focus_set())
+		self.canevas.bind("<w>",	lambda event: self.canevas.yview_scroll(-1, "units"))
+		self.canevas.bind("<a>",  lambda event: self.canevas.xview_scroll(-1, "units"))
+		self.canevas.bind("<s>",  lambda event: self.canevas.yview_scroll( 1, "units"))		
+		self.canevas.bind("<d>", lambda event: self.canevas.xview_scroll( 1, "units"))
+
+		self.canevas.focus_set()
 		
 		self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
 		self.canevas.bind("<Button-3>",self.cliqueDroitCosmos)
