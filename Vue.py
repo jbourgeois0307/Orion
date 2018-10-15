@@ -173,8 +173,11 @@ class Vue():
 		self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
 		self.labidcbcolons.pack(side=RIGHT)
 		
-		self.boutoncolonsajout=Button(self.cadreinfo,text="[CREER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.modifcolonsmodele(1))
-		#self.boutoncolonsretrait=Button(self.cadreinfo,text="[RETRAIT COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED)
+		self.labidcolonvaisseau=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
+		self.boutoncolonsajout=Button(self.cadreinfo,text="[LOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.modifcolonsmodele)
+		#,command=self.modifcolonsmodele(1,mod)
+		self.boutoncolonsretrait=Button(self.cadreinfo,text="[DELOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED)
+		#,command=self.modifcolonsmodele(-1,mod)
 		
 		self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
 		self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
@@ -301,6 +304,7 @@ class Vue():
 		
 	def cliqueGaucheCosmos(self,evt):
 		self.unpackBtnPlanete()
+		self.unpackBtnFlotte()
 		t=self.canevas.gettags(CURRENT)
 		print(str(t))
 		if t and t[0]==self.nom:
@@ -308,7 +312,7 @@ class Vue():
 			if t[1] == "planete":
 				self.montreplaneteselection()
 			elif t[1] == "flotte":
-				self.montreflotteselection()
+				self.montreflotteselection(0)
 
 	def cliqueDroitCosmos(self,evt):
 		self.unpackBtnPlanete()
@@ -330,13 +334,15 @@ class Vue():
 		self.packBtnPlanete()
 		#self.boutoncolonsrretrait.pack()
 		
-	def montreflotteselection(self):
+	def montreflotteselection(self,i):
 		self.lbselectecible.pack()
-	
-	
-	def modifcolonsmodele(self,nb):
 		joueur=self.modele.joueurs[self.nom]
-		#joueur.totalcolons+=nb
+		self.lbselectecible.pack()
+		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[i].inventaire))
+		self.labidcolonvaisseau.pack()
+		self.boutoncolonsajout.pack()
+		self.boutoncolonsretrait.pack()
+		
 	
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
@@ -347,8 +353,17 @@ class Vue():
 		self.btncreervaisseauTrans.pack_forget()
 		self.boutoncolonsajout.pack_forget()
 		
+	def unpackBtnFlotte(self):
+		self.labidcolonvaisseau.pack_forget()
+		self.boutoncolonsajout.pack_forget()
+		self.boutoncolonsretrait.pack_forget()
+		
 	def packBtnPlanete(self):
 		self.btncreervaisseauAtt.pack()
 		self.btncreervaisseauSonde.pack()
 		self.btncreervaisseauTrans.pack()
-		self.boutoncolonsajout.pack()
+		
+	def modifcolonsmodele(self):
+		joueur=self.mod.joueurs[self.nom]
+		joueur.flotte[0].load(1)
+		self.labidcolonvaisseau.pack()

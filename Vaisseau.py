@@ -22,10 +22,24 @@ class Vaisseau():
                 #print("Change cible")
         else:
             print("PAS DE CIBLE")
+            
+    def load(self, nombre):
+        if self.inventaire < self.inventaireMAX:
+            if self.inventaire+nombre <= self.inventaireMAX:
+                self.inventaire += nombre
+                return nombre
+            else:
+                nombre = self.inventaireMAX - self.inventaire
+                self.inventaire = self.inventaireMAX
+                return nombre
+    def unload():
+        self.cible.colon += self.inventaire
+        self.inventaire = 0
                 
 class VaisseauGuerre(Vaisseau):
     def __init__(self,nom,x,y,id):
         Vaisseau.__init__(self, nom, x, y,id)
+        self.inventaireMAX=5
         self.inventaire=0
         self.vitesse=2.5
         self.hp = 350
@@ -59,23 +73,13 @@ class VaisseauTransport(Vaisseau):
         self.viewdistance = 100
         self.range = 0
         
-    def load(self, nombre):
-        if self.inventaire < self.inventaireMAX:
-            if self.inventaire+nombre <= self.inventaireMAX:
-                self.inventaire += nombre
-                return nombre
-            else:
-                nombre = self.inventaireMAX - self.inventaire
-                self.inventaire = self.inventaireMAX
-                return nombre
-    def unload():
-        self.cible.colon += self.inventaire
-        self.inventaire = 0
+    
         
 class Sonde(Vaisseau):
     def __init__(self,nom,x,y,id):
         Vaisseau.__init__(self, nom, x, y,id)
         print("teste")
+        self.inventaireMAX=1
         self.inventaire=0
         self.vitesse=3
         self.hp = 60
@@ -86,6 +90,7 @@ class Sonde(Vaisseau):
 
 class DeathStar():
     def __init__(self, nom,x,y):
+        self.inventaireMAX=100
         self.id=Id.prochainid()
         self.proprietaire=nom
         self.x=x+30
