@@ -28,10 +28,10 @@ class Controleur():
         self.actions = []  # la liste de mes actions a envoyer au serveur pour qu'il les redistribue a tous les participants
         self.statut = 0  # etat dans le quel je me trouve : 0 -> rien, 1 -> inscrit, 2 -> demarre, 3-> joue
         self.monip = self.trouverIP()  # la fonction pour retourner mon ip
-        self.monnom = self.generernom()  # un generateur de nom pour faciliter le deboggage (comme il genere un nom quasi aleatoire et on peut demarrer plusieurs 'participants' sur une même machine pour tester)
+        self.monnom = None
         self.modele = None
         self.serveur = None
-        self.vue = Vue(self, self.monip, self.monnom)
+        self.vue = Vue(self, self.monip)
         self.vue.root.mainloop()
 
     def trouverIP(self):  # fonction pour trouver le IP en 'pignant' gmail
@@ -41,10 +41,6 @@ class Controleur():
         s.close()  # ferme le socket
         return monip
 
-    def generernom(
-            self):  # generateur de nouveau nom - accelere l'entree de nom pour les tests - parfois � peut generer le meme nom mais c'est rare
-        monnom = "jmd_" + str(random.randrange(1000))
-        return monnom
 
     def creerpartie(self):
         if self.egoserveur == 0:

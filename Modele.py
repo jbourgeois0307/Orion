@@ -5,7 +5,7 @@ from Planete import *
 
 
 class Joueur():
-    def __init__(self, parent, nom, planetemere, couleur, id):
+    def __init__(self, parent, nom, planetemere, id):
         self.parent = parent
         self.id = id
         self.nom = nom
@@ -15,7 +15,7 @@ class Joueur():
         self.artefact = 0
         self.planetemere = planetemere
         self.planetemere.proprietaire = self.nom
-        self.couleur = couleur
+        self.couleur = None
         self.planetescontrolees = [planetemere]
         self.totalcolons = 10
         self.flotte = []
@@ -185,11 +185,23 @@ class Modele():
             planes.append(PlaneteMere(self.largeur * 0.75, self.hauteur - 50, self.parent.idActuel.prochainid()))
             planes.append(PlaneteMere(self.largeur * 0.24, self.hauteur - 50, self.parent.idActuel.prochainid()))
 
-        couleurs = ["red", "blue", "lightgreen", "yellow",
-                    "lightblue", "pink", "gold", "purple"]
-
         for i in joueurs:
-            self.joueurs[i] = Joueur(self, i, planes.pop(0), couleurs.pop(0), self.parent.idActuel.prochainid())
+            couleurs=['#009ee3','#e5007d','#951b81','#95c11e',
+                  '#f39200',"#pink"] #Je donne la couleur que j'ai choisie a mes planet mes les autre sont aleatoire
+            print(i)
+            print(self.parent.monnom)
+            print(self.parent.vue.varCouleur)
+            print(couleurs[0])
+            self.joueurs[i]=Joueur(self,i,planes.pop(0), self.parent.idActuel.prochainid())
+            compteur=0
+            for j in couleurs:
+                if(j==self.parent.vue.varCouleur):
+                    del couleurs[compteur]
+                compteur+=1
+            if(i==self.parent.monnom):
+                self.joueurs[i].couleur=self.parent.vue.varCouleur
+            else:
+                self.joueurs[i].couleur=couleurs.pop(0)
 
         bordure = 15
         '''
