@@ -48,8 +48,8 @@ class VaisseauGuerre(Vaisseau):
             del missile
             
 class VaisseauTransport(Vaisseau):
-    def __init__(self):
-        Vaisseau.__init__(self, nom, x, y)
+    def __init__(self,nom,x,y,id):
+        Vaisseau.__init__(self, nom, x, y,id)
         self.inventaireMAX=20
         self.inventaire=0
         self.vitesse=1.8
@@ -73,8 +73,9 @@ class VaisseauTransport(Vaisseau):
         self.inventaire = 0
         
 class Sonde(Vaisseau):
-    def __init__(self):
-        Vaisseau.__init__(self, nom, x, y)
+    def __init__(self,nom,x,y,id):
+        Vaisseau.__init__(self, nom, x, y,id)
+        print("teste")
         self.inventaire=0
         self.vitesse=3
         self.hp = 60

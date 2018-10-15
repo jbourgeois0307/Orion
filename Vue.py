@@ -1,6 +1,7 @@
 from tkinter import *
 import os,os.path
 import random
+from Vaisseau import *
 
 class Vue():
 	def __init__(self,parent,ip,nom):
@@ -178,8 +179,9 @@ class Vue():
 		self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
 		self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
 		
-		self.btncreervaisseau=Button(self.cadreinfo,text="Vaisseau",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseau)
-		#self.btncreervaisseauguerre=Button(self.cadreinfo,text="Vaisseau Guerre",command=self.creervaisseau)
+		self.btncreervaisseauAtt=Button(self.cadreinfo,text="Fregate",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauAtt)
+		self.btncreervaisseauSonde=Button(self.cadreinfo,text="Sonde",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauSonde)
+		self.btncreervaisseauTrans=Button(self.cadreinfo,text="Cargo",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauTrans)
 		self.lbselectecible=Label(self.cadreinfo,text="Choisir cible",bg="#455571",fg="red")
 		
 		self.afficherdecor(mod)
@@ -219,12 +221,26 @@ class Vue():
 		t=10
 		self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(3,3),width=2,outline=couleur,
 								 tags=("planetemere","marqueur"))
-	def creervaisseau(self):
+	def creervaisseauAtt(self):
 		print("Creer vaisseau")
-		self.parent.creervaisseau()
-		self.maselection=None
-		self.canevas.delete("marqueur")
-		self.btncreervaisseau.pack_forget()
+		self.parent.creervaisseauAtt()
+		#self.maselection=None
+		#self.canevas.delete("marqueur")
+		#self.btncreervaisseau.pack_forget()
+		
+	def creervaisseauTrans(self):
+		print("Creer vaisseau")
+		self.parent.creervaisseauTrans()
+		#self.maselection=None
+		#self.canevas.delete("marqueur")
+		#self.btncreervaisseau.pack_forget()
+		
+	def creervaisseauSonde(self):
+		print("Creer vaisseau")
+		self.parent.creervaisseauSonde()
+		#self.maselection=None
+		#self.canevas.delete("marqueur")
+		#self.btncreervaisseau.pack_forget()
 			
 	def afficherpartie(self,mod):
 		self.canevas.delete("artefact")
@@ -272,12 +288,19 @@ class Vue():
 		for i in mod.joueurs.keys():
 			i=mod.joueurs[i]
 			for j in i.flotte:
-				self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
-									 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
+				if isinstance(j, VaisseauGuerre):
+					self.canevas.create_rectangle(j.x-3,j.y-3,j.x+3,j.y+3,fill=i.couleur,
+												tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
+				if isinstance(j, Sonde):
+					self.canevas.create_oval(j.x-5,j.y-2,j.x+5,j.y+2,fill=i.couleur,
+												tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
+				if isinstance(j, VaisseauTransport):
+					self.canevas.create_rectangle(j.x-5,j.y-4,j.x+5,j.y+4,fill=i.couleur,
+												tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
 									 
 		
 	def cliqueGaucheCosmos(self,evt):
-		self.btncreervaisseau.pack_forget()
+		self.unpackBtnPlanete()
 		t=self.canevas.gettags(CURRENT)
 		print(str(t))
 		if t and t[0]==self.nom:
@@ -288,7 +311,7 @@ class Vue():
 				self.montreflotteselection()
 
 	def cliqueDroitCosmos(self,evt):
-		self.btncreervaisseau.pack_forget()
+		self.unpackBtnPlanete()
 		t=self.canevas.gettags(CURRENT)
 		
 
@@ -304,8 +327,7 @@ class Vue():
 				self.lbselectecible.pack_forget()
 			
 	def montreplaneteselection(self):
-		self.btncreervaisseau.pack()
-		self.boutoncolonsajout.pack()
+		self.packBtnPlanete()
 		#self.boutoncolonsrretrait.pack()
 		
 	def montreflotteselection(self):
@@ -318,3 +340,15 @@ class Vue():
 	
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
+	
+	def unpackBtnPlanete(self):
+		self.btncreervaisseauAtt.pack_forget()
+		self.btncreervaisseauSonde.pack_forget()
+		self.btncreervaisseauTrans.pack_forget()
+		self.boutoncolonsajout.pack_forget()
+		
+	def packBtnPlanete(self):
+		self.btncreervaisseauAtt.pack()
+		self.btncreervaisseauSonde.pack()
+		self.btncreervaisseauTrans.pack()
+		self.boutoncolonsajout.pack()

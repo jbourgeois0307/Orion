@@ -19,12 +19,26 @@ class Joueur():
         self.planetescontrolees = [planetemere]
         self.totalcolons = 10
         self.flotte = []
-        self.actions = {"creervaisseau": self.creervaisseau,
+        self.actions = {"creervaisseauAtt": self.creervaisseauAtt,
+                        "creervaisseauSonde": self.creervaisseauSonde,
+                        "creervaisseauTrans": self.creervaisseauTrans,
                         "ciblerflotte": self.ciblerflotte,
                         "deplacerVaisseau": self.deplacerVaisseau}
 
-    def creervaisseau(self, planete):
+    def creervaisseauAtt(self, planete):
         v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
+        print("Vaisseau", v.id)
+        self.flotte.append(v)
+        
+    def creervaisseauSonde(self, planete):
+        v = Sonde(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
+        print("Vaisseau", v.id)
+        self.flotte.append(v)
+        
+    def creervaisseauTrans(self, planete):
+        v = VaisseauTransport(self.nom, self.planetemere.x + 10, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
