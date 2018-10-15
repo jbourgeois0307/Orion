@@ -1,5 +1,7 @@
 import random
 from helper import Helper as hlp
+import math
+from Vue import Vue as Vue
 
 class Vaisseau():
     def __init__(self,nom,x,y,id):
@@ -9,9 +11,13 @@ class Vaisseau():
         self.x=x
         self.y=y
         self.cible = None
+        self.vue = Vue
  
     def avancer(self):
         if self.cible:
+            if self.proprietaire != self.cible.proprietaire:
+                self.attack()
+                
             x=self.cible.x
             y=self.cible.y
             ang=hlp.calcAngle(self.x,self.y,x,y)
@@ -22,6 +28,18 @@ class Vaisseau():
                 #print("Change cible")
         else:
             print("PAS DE CIBLE")
+    
+    def attack(self):
+            
+        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
+       
+        if distance < self.range:
+            ##refaire missile et checker le tk.after
+            missile = self.vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+            self.cible.hp -= self.damage
+            tk.after(self.attackspeed, self.attack())
+            #time.sleep(0.5)
+            del missile        
                 
 class VaisseauGuerre(Vaisseau):
     def __init__(self,nom,x,y,id):
@@ -37,7 +55,7 @@ class VaisseauGuerre(Vaisseau):
     
     def attack(self):
             
-        distance = math.sqrt(math.power(self.x-self.cible.x,2)+math.power(self.y-self.cible.y,2))
+        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
        
         if distance < self.range:
             ##refaire missile et checker le tk.after
