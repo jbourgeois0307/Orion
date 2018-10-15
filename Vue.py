@@ -10,20 +10,24 @@ class Vue():
         #self.root.attributes('-fullscreen', 1) #Pour full screen
         self.root.configure(bg='#1c4873') # Background de ma page
         
+        
         self.button = Button(self.root, text="X", command=self.root.destroy, font='arial 20', relief=FLAT,bg='#1c4873',foreground="white")
         self.button.pack(side=TOP, anchor=E)   
+        
+        self.background_image=PhotoImage(file="C:\\Users\\1330655\\Desktop\\bg_image.gif");
         
         self.cadreactif=None
         self.maselection=None
         self.root.title(os.path.basename(sys.argv[0]))
         self.modele=None
         self.nom=""
-        self.cadreapp=Frame(self.root,width=800,height=600)            #Frame de base a mes fenetre
+        self.cadreapp=Frame(self.root,width=800,height=600 )            #Frame de base a mes fenetre
         self.cadreapp.pack(fill="none", expand=True) # Pour centrer la fenetre
         self.creercadresplash(ip)
         self.creercadrelobby_Createur()
         self.creercadrelobby_Connecteur()
         self.changecadre(self.cadresplash)
+        #self.background_image=PhotoImage(file="Y:\\Gestion de projet\\workspace\\orion git\\Orion\\bg_image.jpg");
         
 
              
@@ -37,7 +41,6 @@ class Vue():
         self.cadreactif.pack()
             
     def creercadresplash(self,ip):
-        
         self.cadresplash=Frame(self.cadreapp,bg='#15243d')
     
         self.titre = Label(self.cadresplash, text = "Bienvenue dans la galaxie orion voyageur!",bg='#15243d',font='arial 20',foreground="white")
@@ -59,9 +62,7 @@ class Vue():
         btncreerpartie.pack(fill="both", expand=True,side=LEFT, padx=(75,5),pady=(0,50))
         btnconnecterpartie=Button(self.cadresplash,text="Connecter partie",bg='#A3C5D8',command=self.connecterpartie,relief=FLAT,font='arial 12')
         btnconnecterpartie.pack(fill="both", expand=True,side=LEFT,padx=(5,75),pady=(0,50))
-        
-
-            
+                    
     def creercadrelobby_Createur(self):
         #print(self.parent.inscrirejoueur().monnom)
         self.cadrelobby_Createur=Frame(self.cadreapp,bg='#15243d')
