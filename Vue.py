@@ -151,14 +151,10 @@ class Vue():
 		self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="#455571")
 		self.cadreinfogen.pack()
 		
-		self.boiteinfo=Frame(self.cadreinfogen,width=200, height=100,bg="#455571",relief=RAISED)
+		self.boiteinfo=Frame(self.cadreinfogen,width=220, height=100,bg="#455571",relief=RAISED)
 		self.boiteinfo.pack(side=BOTTOM)
-		
-		self.boiteinfo2=Frame(self.boiteinfo,width=200, height=100,bg="#455571",relief=RAISED)
-		self.boiteinfo2.pack(side=BOTTOM)
-		
-		self.boiteinfo3=Frame(self.boiteinfo2,width=200, height=100,bg="#455571",relief=RAISED)
-		self.boiteinfo3.pack(side=BOTTOM)
+		self.boiteinfoMETAL=Frame(self.cadreinfo,width=220, height=100,bg="#455571",relief=RAISED)
+		self.boiteinfo.pack(side=BOTTOM)
 		
 		
 		self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
@@ -172,6 +168,9 @@ class Vue():
 		self.labidcolons.pack(side=LEFT)
 		self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
 		self.labidcbcolons.pack(side=RIGHT)
+		
+		self.labidmetal=Label(self.boiteinfoMETAL, text="Metal : ",font=("Helvetica",10),bg="#455571",fg="#fbbfda" )
+		
 		self.labidcolonplanete=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
 		
 		self.labidcolonvaisseau=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
@@ -180,7 +179,7 @@ class Vue():
 		self.boutoncolonsretrait=Button(self.cadreinfo,text="[DELOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.retraitcolonsmodele)
 		#,command=self.modifcolonsmodele(-1,mod)
 		
-		self.cadreinfobtm=Frame(self.cadreapp,width=704, height=120, bg="#455571")
+		self.cadreinfobtm=Frame(self.cadreapp,width=1800, height=120, bg="#455571")
 		self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
 		
 		self.btncreervaisseauAtt=Button(self.cadreinfo,text="Fregate",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauAtt)
