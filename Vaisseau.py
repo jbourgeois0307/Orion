@@ -13,9 +13,6 @@ class Vaisseau():
  
     def avancer(self):
         if self.cible:
-            if isinstance(self.cible, Vaisseau):
-                if self.cible.proprietaire != self.proprietaire:
-                    self.attack()
             x=self.cible.x
             y=self.cible.y
             ang=hlp.calcAngle(self.x,self.y,x,y)
@@ -24,6 +21,9 @@ class Vaisseau():
             if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
                 self.cible=None
                 #print("Change cible")
+            if isinstance(self.cible, Vaisseau):
+                if self.cible.proprietaire != self.proprietaire:
+                    self.attack()
         else:
             print("PAS DE CIBLE")
             
