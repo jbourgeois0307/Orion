@@ -188,7 +188,7 @@ class Modele():
 
         for i in joueurs:
             couleurs=['#009ee3','#e5007d','#951b81','#95c11e',
-                  '#f39200',"#pink"] #Je donne la couleur que j'ai choisie a mes planet mes les autre sont aleatoire
+                  '#f39200',"#a40606"] #Je donne la couleur que j'ai choisie a mes planet mes les autre sont aleatoire
             print(i)
             print(self.parent.monnom)
             print(self.parent.vue.varCouleur)

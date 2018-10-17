@@ -47,11 +47,11 @@ class Vue():
         soustitre=Label(self.cadresplash, text = "Pour des fin de securite veuillez vous identifier",bg='#15243d',font='arial 16',foreground="white")
         soustitre.pack(pady=10,padx=10);
         
-        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
+        self.nomsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae',justify=CENTER)
         self.nomsplash.insert(0, "Entrez votre nom")
         self.nomsplash.pack(pady=10)
         
-        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae')
+        self.ipsplash=Entry(self.cadresplash,bg='#A3C5D8',relief=FLAT,foreground="white",font='arial 14',highlightthickness=2,highlightcolor='#849fae',justify=CENTER)
         self.ipsplash.insert(0, ip)
         self.ipsplash.pack(pady=20)
         
@@ -76,7 +76,7 @@ class Vue():
         
                 
         self.cadreCouleur= Frame(self.cadrelobby_Createur,bg='#A3C5D8')
-        self.cadreCouleur.pack()
+        self.cadreCouleur.pack(pady=50,padx=(10,75))
         
         self.Sous_titre2=Label(self.cadreCouleur,text="Choisiez votre couleur",width=30,bg='#A3C5D8',font='arial 14')
         self.Sous_titre2.pack()
@@ -103,7 +103,7 @@ class Vue():
         Bcouleur5=Radiobutton( self.cadreCouleur, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
         Bcouleur5.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
+        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#a40606',selectcolor='#890909', value='#a40606',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur6 )
         Bcouleur6.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         #self.couleurChoisi=choixCouleur[val]
         
@@ -128,10 +128,10 @@ class Vue():
         self.listelobby_CO.pack(side=LEFT,pady=50,padx=(75,10));
         
                 
-        self.cadreCouleur= Frame(self.cadrelobby_Connecteur,bg='#A3C5D8')
-        self.cadreCouleur.pack()
+        self.cadreCouleur1= Frame(self.cadrelobby_Connecteur,bg='#A3C5D8')
+        self.cadreCouleur1.pack(pady=50,padx=(10,75))
         
-        self.Sous_titre2=Label(self.cadreCouleur,text="Choisiez votre couleur",width=30,bg='#A3C5D8',font='arial 14')
+        self.Sous_titre2=Label(self.cadreCouleur1,text="Choisiez votre couleur",width=30,bg='#A3C5D8',font='arial 14')
         self.Sous_titre2.pack()
         #choixCouleur = [('#009ee3'),('#e5007d'),('#951b81'),('#95c11e'),('#f39200') ] #Couleur a choisir
         #couleurSelection =[('#80cef1'),('#e680b2'),('#c88fbf'),('#c9dc91'),('#f8c77e') ]    #Liste des couleur pour affichage selection
@@ -141,22 +141,22 @@ class Vue():
         
         #v = IntVar()
         
-        Bcouleur1=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
+        Bcouleur1=Radiobutton( self.cadreCouleur1, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur1 )
         Bcouleur1.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur2=Radiobutton( self.cadreCouleur, bg='#e5007d',selectcolor='#e680b2', value='#e5007d',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur2 )
+        Bcouleur2=Radiobutton( self.cadreCouleur1, bg='#e5007d',selectcolor='#e680b2', value='#e5007d',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur2 )
         Bcouleur2.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur3=Radiobutton( self.cadreCouleur, bg='#951b81',selectcolor='#c88fbf', value='#951b81',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur3 )
+        Bcouleur3=Radiobutton( self.cadreCouleur1, bg='#951b81',selectcolor='#c88fbf', value='#951b81',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur3 )
         Bcouleur3.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur4=Radiobutton( self.cadreCouleur, bg='#95c11e',selectcolor='#c9dc91', value='#95c11e',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur4 )
+        Bcouleur4=Radiobutton( self.cadreCouleur1, bg='#95c11e',selectcolor='#c9dc91', value='#95c11e',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur4 )
         Bcouleur4.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur5=Radiobutton( self.cadreCouleur, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
+        Bcouleur5=Radiobutton( self.cadreCouleur1, bg='#f39200',selectcolor='#f8c77e', value='#f39200',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
         Bcouleur5.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         
-        Bcouleur6=Radiobutton( self.cadreCouleur, bg='#009ee3',selectcolor='#80cef1', value='#009ee3',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur5 )
+        Bcouleur6=Radiobutton( self.cadreCouleur1, bg='#a40606',selectcolor='#890909', value='#a40606',fg="white",indicatoron=0,offrelief=FLAT,width=3,variable=self.varCouleur,command=self.definircouleur6 )
         Bcouleur6.pack(anchor=W,pady=5,padx=5,fill="both", expand=True,side=LEFT)
         #self.couleurChoisi=choixCouleur[val]
         
@@ -202,7 +202,7 @@ class Vue():
         joueur=self.modele.joueurs[self.nom]
         self.cadrepartie=Frame(self.cadreapp)
         self.cadrejeu=Frame(self.cadrepartie)
-        self.canevas=Canvas(self.cadrepartie,width=1600,height=1000,bg="grey11",scrollregion=(0,0,self.modele.largeur,self.modele.hauteur))
+        self.canevas=Canvas(self.cadrepartie,width=1600,height=1000,bg="#071337",scrollregion=(0,0,self.modele.largeur,self.modele.hauteur))
         self.canevas.pack(side=LEFT,expand=True,fill=BOTH)
         self.canevas.pack(side=LEFT)
         self.canevas.bind("<1>", lambda event: self.canevas.focus_set())
@@ -213,49 +213,49 @@ class Vue():
         self.canevas.focus_set()
         self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
         self.canevas.bind("<Button-3>",self.cliqueDroitCosmos)
-        self.cadreinfo=Frame(self.cadrepartie,width=1000,height=100,bg="#455571",relief=RAISED)
+        self.cadreinfo=Frame(self.cadrepartie,width=1000,height=100,bg="#1c4873",relief=RAISED)
         self.cadreinfo.pack(side=LEFT,fill=Y)
         
-        self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="#455571")
+        self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="#1c4873")
         self.cadreinfogen.pack()
         
-        self.boiteinfo=Frame(self.cadreinfogen,width=220, height=100,bg="#455571",relief=RAISED)
+        self.boiteinfo=Frame(self.cadreinfogen,width=220, height=100,bg="#1c4873",relief=RAISED)
         self.boiteinfo.pack(side=BOTTOM)
-        self.boiteinfoMETAL=Frame(self.cadreinfogen,width=220, height=10,bg="#455571",relief=RAISED)
+        self.boiteinfoMETAL=Frame(self.cadreinfogen,width=220, height=10,bg="#1c4873",relief=RAISED)
         self.boiteinfo.pack(side=BOTTOM)
         
-        self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="#fbbfda",bg="#455571",font=("Helvetica",20),pady=10)
+        self.labid=Label(self.cadreinfogen,text="MINI\nORION",fg="white",bg="#1c4873",font=("Helvetica",20),pady=10)
         self.labid.bind("<Button>",self.afficherplanemetemere)
         self.labid.pack()
         
-        self.labid2=Label(self.boiteinfo,text="Gestion Colon\n", font=("Helvetica",15),bg="#455571",fg="#fbbfda")
+        self.labid2=Label(self.boiteinfo,text="Gestion Colon\n", font=("Helvetica",15),bg="#1c4873",fg="white")
         self.labid2.pack()
         
-        self.labidcolons=Label(self.boiteinfo,text="Colons disponibles:  " +str(joueur.totalcolons),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidcolons=Label(self.boiteinfo,text="Colons disponibles:  " +str(joueur.totalcolons),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidcolons.pack()
-        self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjgaz.pack()
-        self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjmetal.pack()
-        self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjbouffe.pack()
         
-        self.labidmetal=Label(self.cadreinfo, text="Metal sur planete : ",font=("Helvetica",10),bg="#455571",fg="#77D9D3" )
-        self.labidgaz=Label(self.cadreinfo, text="Gaz sur planete: ",font=("Helvetica",10),bg="#455571",fg="#cc98e5" )
-        self.labidvaisseauhp=Label(self.cadreinfo, text="HP : ",font=("Helvetica",10),bg="#455571",fg="#ffffff" )
+        self.labidmetal=Label(self.cadreinfo, text="Metal sur planete : ",font=("Helvetica",10),bg="#1c4873",fg="#77D9D3" )
+        self.labidgaz=Label(self.cadreinfo, text="Gaz sur planete: ",font=("Helvetica",10),bg="#1c4873",fg="#cc98e5" )
+        self.labidvaisseauhp=Label(self.cadreinfo, text="HP : ",font=("Helvetica",10),bg="#1c4873",fg="#ffffff" )
         
-        self.labidcolonplanete=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
+        self.labidcolonplanete=Label(self.cadreinfo,fg="white",bg="#1c4873",font=("Helvetica",10))
         
-        self.labidcolonvaisseau=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
-        self.boutoncolonsajout=Button(self.cadreinfo,text="[EMBARQUER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.ajoutcolonsmodele)
-        self.boutoncolonsretrait=Button(self.cadreinfo,text="[EJECTER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.retraitcolonsmodele)
-        self.boutoncolonsdebarquer=Button(self.cadreinfo,text="[DEBARQUER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.debarquercolonsmodele)
-        self.labiddebarquement=Label(self.cadreinfo,text="QUELLE PLANETE?",fg="#ff0000",bg="#455571",font=("Helvetica",15))
+        self.labidcolonvaisseau=Label(self.cadreinfo,fg="white",bg="#1c4873",font=("Helvetica",10))
+        self.boutoncolonsajout=Button(self.cadreinfo,text="[EMBARQUER COLONS]",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.ajoutcolonsmodele)
+        self.boutoncolonsretrait=Button(self.cadreinfo,text="[EJECTER COLONS]",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.retraitcolonsmodele)
+        self.boutoncolonsdebarquer=Button(self.cadreinfo,text="[DEBARQUER COLONS]",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.debarquercolonsmodele)
+        self.labiddebarquement=Label(self.cadreinfo,text="QUELLE PLANETE?",fg="#ff0000",bg="#A3C5D8",font=("Helvetica",15))
         
-        self.btncreervaisseauAtt=Button(self.cadreinfo,text="Fregate",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauAtt)
-        self.btncreervaisseauSonde=Button(self.cadreinfo,text="Sonde",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauSonde)
-        self.btncreervaisseauTrans=Button(self.cadreinfo,text="Cargo",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauTrans)
-        self.btnrecolte=Button(self.cadreinfo,text="[RECOLTE]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.recoltemodele)
+        self.btncreervaisseauAtt=Button(self.cadreinfo,text="Fregate",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.creervaisseauAtt)
+        self.btncreervaisseauSonde=Button(self.cadreinfo,text="Sonde",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.creervaisseauSonde)
+        self.btncreervaisseauTrans=Button(self.cadreinfo,text="Cargo",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.creervaisseauTrans)
+        self.btnrecolte=Button(self.cadreinfo,text="RECOLTE",font=("Helvetica",8),bg="#A3C5D8",fg="white",relief=FLAT,command=self.recoltemodele)
         self.afficherdecor(mod)
         
         self.changecadre(self.cadrepartie)
@@ -384,9 +384,9 @@ class Vue():
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-            else:
-                if self.maselection:
-                    self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
+        else:
+            if self.maselection:
+                self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
                     
     def montreplaneteselection(self):
         t=self.canevas.gettags(CURRENT)
@@ -396,7 +396,7 @@ class Vue():
                 temp=joueur.planetescontrolees.index(i)
                 self.tempRecolte=temp
         self.packBtnPlanete()
-        self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[temp].colon))
+        self.labidcolonplanete.config(text="Colons: "+str(joueur.planetescontrolees[temp].colon))
         self.labidcolonplanete.pack()
         self.labidmetal.config(text="Metal sur planete: "+str(joueur.planetescontrolees[temp].metal))
         self.labidmetal.pack()
@@ -414,9 +414,9 @@ class Vue():
         self.labidcolonvaisseau.pack()
         self.labidvaisseauhp.config(text="HP : "+str(joueur.flotte[temp].hp))
         self.labidvaisseauhp.pack()
-        self.boutoncolonsajout.pack()
-        self.boutoncolonsretrait.pack()
-        self.boutoncolonsdebarquer.pack()
+        self.boutoncolonsajout.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.boutoncolonsretrait.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.boutoncolonsdebarquer.pack(fill=X,padx=(10,0),pady=(10,0))
         if joueur.flotte[temp].inventaire==0:
             self.boutoncolonsretrait.config(state=DISABLED)
             self.boutoncolonsretrait.pack()
@@ -449,11 +449,11 @@ class Vue():
         self.boutoncolonsdebarquer.pack_forget()
         
     def packBtnPlanete(self):
-        self.labidcolonplanete.pack()
-        self.btncreervaisseauAtt.pack()
-        self.btncreervaisseauSonde.pack()
-        self.btncreervaisseauTrans.pack()
-        self.btnrecolte.pack()
+        self.labidcolonplanete.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.btncreervaisseauAtt.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.btncreervaisseauSonde.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.btncreervaisseauTrans.pack(fill=X,padx=(10,0),pady=(10,0))
+        self.btnrecolte.pack(fill=X,padx=(10,0),pady=(10,0))
         
     def ajoutcolonsmodele(self):
         joueur=self.modele.joueurs[self.nom]
@@ -525,11 +525,11 @@ class Vue():
         self.labidjgaz.pack_forget()
         self.labidjmetal.pack_forget()
         self.labidjbouffe.pack_forget()
-        self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjgaz.pack()
-        self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjmetal.pack()
-        self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+        self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjbouffe.pack()
         self.btnrecolte.config(state=NORMAL)
         
@@ -548,4 +548,8 @@ class Vue():
     def definircouleur5(self):
         self.varCouleur='#f39200'
         print("============++++=========="+self.varCouleur)
+    def definircouleur6(self):
+        self.varCouleur='#a40606'
+        print("============++++=========="+self.varCouleur)  
+        
 
