@@ -95,43 +95,9 @@ class Joueur():
         for i in self.planetescontrolees:
             i.recolte(self)
 
-        def creervaisseau(self, planete):
-            v = VaisseauGuerre(self.nom, self.planetemere.x + random.randrange(-10, 10),
-                               self.planetemere.y + random.randrange(-10, 10), self.parent.parent.idActuel.prochainid())
-            print("Vaisseau", v.id)
-            self.flotte.append(v)
-
-        def ciblerflotte(self, ids):
-            idori, iddesti = ids
-            for i in self.flotte:
-                if i.id == int(idori):
-                    for j in self.parent.planetes:
-                        if j.id == int(iddesti):
-                            i.cible = j
-                            print("GOT TARGET")
-                            return
-
-        def deplacerVaisseau(self, coord):
-            x, y, idori = coord
-            for i in self.flotte:
-                if i.id == int(idori):
-                    i.cible = Planete(x, y, -1)
-                    i.avancer()
-
-        def prochaineaction(self):
-            for i in self.flotte:
-                if i.cible:
-                    i.avancer()
-
-        def recoltePlaneteJoueur(self):
-            for i in self.planetescontrolees:
-                i.recolte(self)
-
-
 class Modele():
     def __init__(self, parent, joueurs):
         self.parent = parent
-        self.AI = AI(self)
         self.joueurs = {}
         self.joueurs2 = []
         self.actionsafaire = {}
@@ -141,6 +107,7 @@ class Modele():
         self.largeur = 2040 + self.np * 680  # self.parent.vue.root.winfo_screenwidth()
         self.hauteur = 1920 + self.np * 480  # self.parent.vue.root.winfo_screenheight(
         self.creerplanetes(joueurs, self)
+        self.AI = AI(self)
         self.creerterrain()
 
     def creerterrain(self):
@@ -333,7 +300,11 @@ class AI():
         #deprecated self.actions = {"creervaisseauAI": self.creervaisseauAI,
          #               "ciblerflotte": self.player.ciblerflotte,
           #              "deplacerVaisseau": self.player.deplacerVaisseau}
-
+        self.planeteAuComplet = []
+        for x in self.parent.planetes:
+            self.planeteAuComplet.append(x)
+        #planeteAuComplet = self.parent.planetes
+            
     def gestionnaireAI(self, parent):
         self.timer += 1
 
@@ -384,6 +355,8 @@ class AI():
          #   for i in joueurs[i].flotte
         self.cible = None
         i = 0
+        #planeteAuComplet = self.parent.planetes
+       
         for j in self.flotteAI:
             if j.onAssignment == False:
 
@@ -392,7 +365,9 @@ class AI():
                 #y = random.randrange(45, 250)
 
                 planeteAuComplet = []
-                planeteAuComplet = self.parent.planetes
+                #planeteAuComplet = self.parent.planetes
+                for x in self.parent.planetes:
+                    planeteAuComplet.append(x)
                 proxima = []
                 supraproxima = []
                 for L in planeteAuComplet:
