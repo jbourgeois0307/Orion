@@ -1,5 +1,6 @@
 import random
 from helper import Helper as hlp
+import math
 
 class Vaisseau():
     def __init__(self,nom,x,y,id):
@@ -15,6 +16,9 @@ class Vaisseau():
  
     def avancer(self):
         if self.cible:
+            if isinstance(self.cible, Vaisseau):
+                if self.cible.proprietaire != self.proprietaire:
+                    self.attack()
             x=self.cible.x
             y=self.cible.y
             ang=hlp.calcAngle(self.x,self.y,x,y)
@@ -39,9 +43,10 @@ class Vaisseau():
     def unload(self):
         #self.cible.colon += self.inventaire
         self.inventaire = 0
+        
                 
 class VaisseauGuerre(Vaisseau):
-    def __init__(self,nom,x,y,id):
+    def __init__(self, nom,x,y,id):
         Vaisseau.__init__(self, nom, x, y,id)
         self.inventaireMAX=5
         self.inventaire=0
@@ -57,15 +62,19 @@ class VaisseauGuerre(Vaisseau):
     
     def attack(self):
             
-        distance = math.sqrt(math.power(self.x-self.cible.x,2)+math.power(self.y-self.cible.y,2))
+        distance = math.sqrt(math.pow(self.x-self.cible.x,2)+math.pow(self.y-self.cible.y,2))
        
         if distance < self.range:
             ##refaire missile et checker le tk.after
-            missile = self.parent.parent.Vue.canevas.create_line(self.cible.x, self.cible.y, self.x, self.y, color="red")
+    
             self.cible.hp -= self.damage
-            tk.after(self.attackspeed, self.attack())
-            time.sleep(0.5)
-            del missile
+            if self.cible.hp == 0:
+                del self.cible
+                self.cible = None
+            #tk.after(self.attackspeed, self.attack())
+        else:
+            self.cible = None
+            #del missile
             
 class VaisseauTransport(Vaisseau):
     def __init__(self,nom,x,y,id):
@@ -79,7 +88,8 @@ class VaisseauTransport(Vaisseau):
         self.viewdistance = 100
         self.range = 0
         
-    
+    def attack(self):
+        pass
         
 class Sonde(Vaisseau):
     def __init__(self,nom,x,y,id):
@@ -93,7 +103,10 @@ class Sonde(Vaisseau):
         self.attackspeed = 0
         self.viewdistance = 125
         self.range = 0
-
+    
+    def attack(self):
+        pass
+    
 class DeathStar():
     def __init__(self, nom,x,y):
         self.inventaireMAX=100
@@ -109,7 +122,10 @@ class DeathStar():
         self.viewdistance = 125
         self.range = 999999999
         self.cible=None
-            
+     
+    def attack(self):
+        pass     
+      
     def destroyPlanet(self):
         if self.cible in jeu.planetes:
             self.cible.remove
