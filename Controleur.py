@@ -171,7 +171,7 @@ class Controleur():
             joueur.recolteActivee=True
             joueur.ranOnce==True
             joueur.start=time.time()
-        if time.time() - joueur.start > 10:
+        if time.time() - joueur.start > 20:
             joueur.recolteActivee=False
             joueur.start=0
             joueur.ranOnce=False
@@ -183,6 +183,7 @@ class Controleur():
             joueur.startReproduction=time.time()
         if time.time() - joueur.startReproduction>10:
             joueur.reproductionColons()
+            self.vue.metAJourData()
 
 if __name__ == "__main__":
     c = Controleur()

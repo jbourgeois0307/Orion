@@ -552,4 +552,8 @@ class Vue():
     def definircouleur5(self):
         self.varCouleur='#f39200'
         print("============++++=========="+self.varCouleur)
+        
+    def metAJourData(self):
+        joueur=self.modele.joueurs[self.nom]
+        self.labidcolons.config(text="Colons disponibles:  " +str(joueur.totalcolons))
 
