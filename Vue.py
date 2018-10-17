@@ -432,6 +432,8 @@ class Vue():
         self.boutoncolonsretrait.pack(fill=X,padx=(10,0),pady=(10,0))
         self.boutoncolonsdebarquer.pack(fill=X,padx=(10,0),pady=(10,0))
         if joueur.flotte[temp].inventaire==0:
+            self.boutoncolonsajout.config(state=NORMAL)
+            self.boutoncolonsajout.pack()
             self.boutoncolonsretrait.config(state=DISABLED)
             self.boutoncolonsretrait.pack()
             self.boutoncolonsdebarquer.config(state=DISABLED)

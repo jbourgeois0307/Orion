@@ -15,7 +15,7 @@ class Joueur():
         self.ranOnce=False
         self.id = id
         self.nom = nom
-        self.metal = 100
+        self.metal = 201
         self.gaz = 100
         self.bouffe = 100
         self.artefact = 0
@@ -78,12 +78,16 @@ class Joueur():
         x, y, idori = coord
         for i in self.flotte:
             if i.id == int(idori):
-                i.cible = Planete(x, y, -1)
-                i.avancer()
+                if self.gaz>19:
+                    i.cible = Planete(x, y, -1)
+                    i.avancer()
+                    self.gaz-=20
+                    self.parent.parent.metAjourVue()
                 
     def reproductionColons(self):
-        self.planetescontrolees[0].colon+=1
-        self.totalcolons+=1
+        tauxReproduction=round(self.totalcolons*0.10)
+        self.planetescontrolees[0].colon+=tauxReproduction
+        self.totalcolons+=tauxReproduction
         self.startReproduction=0
     
     def prochaineaction(self):

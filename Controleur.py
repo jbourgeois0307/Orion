@@ -170,7 +170,7 @@ class Controleur():
         if joueur.start == 0:
             joueur.recolteActivee=True
             joueur.start=time.time()
-        if time.time() - joueur.start > 15:
+        if time.time() - joueur.start > 12:
             joueur.recolteActivee=False
             joueur.start=0
             self.vue.recoltemodele()
@@ -179,7 +179,7 @@ class Controleur():
         joueur=self.modele.joueurs[self.monnom]
         if joueur.startReproduction==0:
             joueur.startReproduction=time.time()
-        if time.time() - joueur.startReproduction>10:
+        if time.time() - joueur.startReproduction>7:
             joueur.reproductionColons()
             self.metAjourVue()
             

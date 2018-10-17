@@ -103,7 +103,6 @@ class PlaneteMere():
                 joueur.gaz += self.gaz
                 self.gaz = 0
 
-            ##self.proprietaire.bouffe+= 10*self.colonBouffe
 
 class Batiment():
     def __init__(self, parent, proprietaire):
