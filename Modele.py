@@ -106,8 +106,9 @@ class Joueur():
 class Modele():
     def __init__(self, parent, joueurs):
         self.parent = parent
+        self.AI = AI(self)
         self.joueurs = {}
-        #self.joueurs2 = []
+        self.joueurs2 = []
         self.actionsafaire = {}
         self.planetes = []
         self.terrain = []
@@ -203,6 +204,7 @@ class Modele():
                 self.joueurs[i].couleur=self.parent.vue.varCouleur
             else:
                 self.joueurs[i].couleur=couleurs.pop(0)
+        
 
         bordure = 15
         '''
@@ -261,6 +263,8 @@ class Modele():
                     ## pour fins de statistiquess   print(len(self.planetes))
 
     def prochaineaction(self, cadre):
+        if self.AI:
+            self.AI.gestionnaireAI(self)
         if cadre in self.actionsafaire:
             for i in self.actionsafaire[cadre]:
                 # print(i)
@@ -278,3 +282,210 @@ class Modele():
 
         for i in self.joueurs:
             self.joueurs[i].prochaineaction()
+            
+class AI():
+    def __init__(self, parent):
+        self.start = True
+        self.nom = "HAL"
+        self.timer = 0
+        self.parent = parent
+        self.grandPa = parent.parent
+        self.id = self.grandPa.idActuel.prochainid()
+
+        self.shipYardValue = 4  ##variable de base d'evaluation de la valeur des planete ship building
+        self.planetecontrolees = []
+        # parent.largeur / 2, parent.hauteur /2, parent.idActuel.prochainid()))
+        self.planetemere = PlaneteMere(525, 325, self.grandPa.idActuel.prochainid())
+        self.planetemere.proprietaire = self.nom
+        self.couleur = "blue"
+        self.planetecontrolees.append(self.planetemere)
+        self.threatShips = []
+        self.threatMinDistance = 600
+        self.threatenedPlanet = [[]]
+        self.flotteAI = []
+        self.player = Joueur(self, self.nom, self.planetemere, self.id)
+        self.actionsafaire = []
+        #deprecated self.actions = {"creervaisseauAI": self.creervaisseauAI,
+         #               "ciblerflotte": self.player.ciblerflotte,
+          #              "deplacerVaisseau": self.player.deplacerVaisseau}
+
+    def gestionnaireAI(self, parent):
+        self.timer += 1
+
+        self.controleFlotteAI(parent)
+        if(self.timer > 40):
+            self.creervaisseauAI(parent)
+            self.controleFlotteAI(parent)
+            self.timer = 0
+
+
+    def creervaisseauAI(self, parent):
+        if len(self.flotteAI) < 4:
+            for i in self.planetecontrolees:
+                if i.produitVaisseau:
+                    for L in range(1):
+
+                            # batirVaisseau(parent.planetecontrolees.index(0), grandPa)
+                        v = VaisseauGuerre(self.nom, i.x + 10 * L, i.y + 5 * L,  # self.planetemere.x + 10, self.planetemere.y,
+                                               self.parent.parent.idActuel.prochainid())
+                        print("Vaisseau AI bati", v.id, v.x, v.y)
+                        self.flotteAI.append(v)
+                        # grandPa.creervaisseauAI()
+        '''
+        self.mod1 = grandPapa
+        for j in self.planeteControlees:
+            planetthreatened = False
+            parent.threatShips = []
+            for i in self.mod1.joueurs.flotte:
+                     #pour chaque vaisseau joueur on evalue la menace (proximite et direction) vis-a-vis chaque planete AI
+                if (((j.x - i.x) ** 2 + (j.y - i.y) ** 2) ** 0.5) < self.threatMinDistance \
+                        or (((j.x - i.cible.x) ** 2 + (j.y - i.cible.y) ** 2) ** 0.5) < self.threatMinDistance /2:
+                    parent.threatShips.append(i)
+                    planetThreatened = True
+        if planetthreatened:
+            parent.threatenedPlanet.append(j)
+            parent.threatenedPlanet[j].append(parent.threatShips)
+        '''
+
+    def batirVaisseau(self, planete, grandPapa):
+        v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
+        print("Vaisseau AI bati", v.id)
+        self.flotteAI.append(v)
+        grandPapa.creervaisseau()
+
+    def controleFlotteAI(self, parent):
+        #for k in range(len(joueurs)):
+         #   for i in joueurs[i].flotte
+        self.cible = None
+        i = 0
+        for j in self.flotteAI:
+            if j.onAssignment == False:
+
+
+                #x = random.randrange(45, 250)
+                #y = random.randrange(45, 250)
+
+                planeteAuComplet = []
+                planeteAuComplet = self.parent.planetes
+                proxima = []
+                supraproxima = []
+                for L in planeteAuComplet:
+
+                    L.dist = None
+                    L.dist = ((((L.x - j.x) ** 2 + (L.y - j.y) ** 2)) ** 0.5)
+                    if L.dist > 700:
+                        planeteAuComplet.remove(L)
+                        continue
+                    if L.dist > 250:
+                        proxima.append(L)
+                        planeteAuComplet.remove(L)
+                        continue
+
+                supraproxima = planeteAuComplet
+                if len(supraproxima) > 0:
+                    objectPlanet = supraproxima.pop(0)
+                    P = Planete(objectPlanet.x, objectPlanet.y, -1)
+                    j.targetx = P.x
+                    j.targety = P.y
+                    j.onAssignment = True
+                    print("supraprox", len(supraproxima))
+                else:
+                    if len(proxima) > 0:
+                        objectPlanet2 = proxima.pop(0)
+                        #coord = (145 + 5 * i, 75 + 5 * i, j.id)
+                        P = Planete(objectPlanet2.x, objectPlanet2.y, -1)
+                        j.targetx = P.x
+                        j.targety = P.y
+                        j.onAssignment = True
+                        print("prox", len(proxima))
+
+
+
+
+
+                    #if(self.start):
+                     #   x= self.planetemere.x -120
+                      #  y=  self.planetemere.y -25
+                       # P = Planete(x, y, -1)
+                      #  print("over here")
+                       # self.start = False
+            elif j.onAssignment:
+                i+=1
+                print(j.x, j.y, j.targetx, j.targety)
+                ang = hlp.calcAngle(j.x, j.y, j.targetx, j.targety)
+                x1, y1 = hlp.getAngledPoint(ang, j.vitesse, j.x, j.y)
+                j.x, j.y = x1, y1  # int(x1),int(y1)
+                if hlp.calcDistance(j.x, j.y, j.targetx, j.targety) <= j.vitesse:
+                    j.targetx = j.x
+                    j.targety = j.y
+                    j.onAssignment = False
+                    print("on assignment false")
+                                # print("Change cible")
+                        #else:
+                         #   print("PAS DE CIBLE")
+
+                    '''
+
+                                                                                    try:
+                                                                                        P
+                                                                                    except NameError:
+                                                                                        print("NO P")
+                                                                                    else:
+                                                                                        #coord = (P.x, P.y, P.id)
+                                                                                        #self.deplacerVaisseauAI(coord, j)
+                                                                                        print("setting targeting cible")
+                                                                                        j.targetx = P.x
+                                                                                        j.targety = P.y
+
+
+
+
+
+
+                        i+=1
+                        if j.cible == None:
+                            planeteAuComplet = []
+                            planeteAuComplet = self.parent.planetes
+                            for L in planeteAuComplet:
+                                proxima = []
+                                supraproxima = []
+                                L.dist = None
+                                L.dist = (((L.x - j.x) ** 2 + (L.y - j.y) ** 2) ** 0.5)
+                                if L.dist > 1200:
+                                    planeteAuComplet.remove(L)
+                                    continue
+                                if L.dist > 700:
+                                    proxima.append(L)
+                                    planeteAuComplet.remove(L)
+                                    continue
+
+                            supraproxima = planeteAuComplet
+                            if len(supraproxima) > 0:
+                                objectPlanet = supraproxima.pop(0)
+                                coord = (225 + 5 * i, 220 + 5 * i, j.id)       #coordos planet...
+                                self.deplacerVaisseauAI(coord, j)
+
+
+
+                        else:
+                            if len(proxima) > 0:
+                                objectPlanet2 = proxima.pop(0)
+                                coord = (145 + 5 * i, 75 + 5 * i, j.id)
+                                self.deplacerVaisseauAI(coord, j)
+
+                        continue
+
+                        '''
+
+    def deplacerVaisseauAI(self, coord, ship):
+        x, y, idori = coord
+        ship.cible = Planete(x, y, -1)
+        ship.x = x
+        ship.y = y
+        #ship.avancer()
+
+    def analyseMenaces(self):
+        pass
+        # for i in visibleShips
+

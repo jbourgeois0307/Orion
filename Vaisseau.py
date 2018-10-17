@@ -9,6 +9,9 @@ class Vaisseau():
         self.x=x
         self.y=y
         self.cible = None
+        self.targetx = None
+        self.targety = None
+        self.onAssignment = False
  
     def avancer(self):
         if self.cible:
@@ -48,7 +51,9 @@ class VaisseauGuerre(Vaisseau):
         self.attackspeed = 0.5
         self.viewdistance = 100
         self.range = 75
-
+        self.targetx = None
+        self.targety = None
+        self.onAssignment = False
     
     def attack(self):
             

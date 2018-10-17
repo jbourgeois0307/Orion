@@ -19,6 +19,7 @@ class Planete():
         self.hp = 5000
         self.batiment = {}
         self.Canon = {}
+        self.produitVaisseau = False
 
     def recolte(self, joueur):
         if self.metal > 0:
@@ -77,7 +78,8 @@ class PlaneteMere():
         self.taille= 24
         self.metal = (random.randrange(1000, 2000) * self.taille)
         self.gaz = (random.randrange(1000, 2000) * self.taille)
-        self.quantityRess = 9000  
+        self.quantityRess = 9000
+        self.produitVaisseau = True  
 
     def ajoutColon(self,joueur,nb):
         if self.colon != 0:

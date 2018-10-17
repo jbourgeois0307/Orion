@@ -277,8 +277,13 @@ class Vue():
             for j in mod.joueurs[i].planetescontrolees:
                 t=j.taille
                 self.canevas.create_oval(j.x-t,j.y-t,j.x+t,j.y+t,fill=mod.joueurs[i].couleur,
-                                     tags=(j.proprietaire,"planete",str(j
-                                     .id),"possession"))
+                                     tags=(j.proprietaire,"planete",str(j.id),"possession"))
+                
+        for j in mod.AI.planetecontrolees:
+
+            t = j.taille
+            self.canevas.create_oval(j.x - t, j.y - t, j.x + t, j.y + t, fill= mod.AI.couleur,
+                                         tags=(j.proprietaire, "planete", str(j.id), "possession"))
                 
         self.afficherpartie(mod)
                 
@@ -366,6 +371,9 @@ class Vue():
                 if isinstance(j, VaisseauTransport):
                     self.canevas.create_rectangle(j.x-5,j.y-4,j.x+5,j.y+4,fill=i.couleur,
                                                 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
+        for k in mod.AI.flotteAI:
+            self.canevas.create_rectangle(k.x - 3, k.y - 3, k.x + 3, k.y + 3, fill=mod.AI.couleur,
+                                          tags=(k.proprietaire, "flotte", str(k.id), "artefact"))
                     
     def cliqueGaucheCosmos(self,evt):
         self.unpackBtnPlanete()
@@ -384,9 +392,9 @@ class Vue():
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-            else:
-                if self.maselection:
-                    self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
+        else:
+            if self.maselection:
+                self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
                     
     def montreplaneteselection(self):
         t=self.canevas.gettags(CURRENT)
