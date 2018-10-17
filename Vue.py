@@ -1,6 +1,7 @@
 from tkinter import *
 import os,os.path
 import random
+from threading import Thread
 from Vaisseau import *
 
 class Vue():
@@ -145,7 +146,7 @@ class Vue():
 		self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
 		self.canevas.bind("<Button-3>",self.cliqueDroitCosmos)
 		
-		self.cadreinfo=Frame(self.cadrepartie,width=200,height=100,bg="#455571",relief=RAISED)
+		self.cadreinfo=Frame(self.cadrepartie,width=1000,height=100,bg="#455571",relief=RAISED)
 		self.cadreinfo.pack(side=LEFT,fill=Y)
 		
 		self.cadreinfogen=Frame(self.cadreinfo,width=200,height=200,bg="#455571")
@@ -164,31 +165,33 @@ class Vue():
 		self.labid2=Label(self.boiteinfo,text="Gestion Colon\n", font=("Helvetica",15),bg="#455571",fg="#fbbfda")
 		self.labid2.pack()
 		
-		self.labidcolons=Label(self.boiteinfo,text="Colons disponibles: ",font=("Helvetica",10),bg="#455571",fg="#fbbfda")
-		self.labidcolons.pack(side=LEFT)
-		self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
-		self.labidcbcolons.pack(side=RIGHT)
+		self.labidcolons=Label(self.boiteinfo,text="Colons disponibles:  " +str(joueur.totalcolons),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidcolons.pack()
+		self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjgaz.pack()
+		self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjmetal.pack()
+		self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjbouffe.pack()
 		
-		self.labidmetal=Label(self.cadreinfo, text="Metal : ",font=("Helvetica",10),bg="#455571",fg="#77D9D3" )
-		self.labidgaz=Label(self.cadreinfo, text="Gaz : ",font=("Helvetica",10),bg="#455571",fg="#cc98e5" )
+		self.labidmetal=Label(self.cadreinfo, text="Metal sur planete : ",font=("Helvetica",10),bg="#455571",fg="#77D9D3" )
+		self.labidgaz=Label(self.cadreinfo, text="Gaz sur planete: ",font=("Helvetica",10),bg="#455571",fg="#cc98e5" )
 		self.labidvaisseauhp=Label(self.cadreinfo, text="HP : ",font=("Helvetica",10),bg="#455571",fg="#ffffff" )
 		
 		self.labidcolonplanete=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
 		
 		self.labidcolonvaisseau=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
-		self.boutoncolonsajout=Button(self.cadreinfo,text="[LOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.ajoutcolonsmodele)
-		#,command=self.modifcolonsmodele(1,mod)
-		self.boutoncolonsretrait=Button(self.cadreinfo,text="[DELOAD COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.retraitcolonsmodele)
-		#,command=self.modifcolonsmodele(-1,mod)
-		
-		self.cadreinfobtm=Frame(self.cadreapp,width=1800, height=120, bg="#455571")
-		self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
+		self.boutoncolonsajout=Button(self.cadreinfo,text="[EMBARQUER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.ajoutcolonsmodele)
+		self.boutoncolonsretrait=Button(self.cadreinfo,text="[EJECTER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.retraitcolonsmodele)
+		self.boutoncolonsdebarquer=Button(self.cadreinfo,text="[DEBARQUER COLONS]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.debarquercolonsmodele)
+		self.labiddebarquement=Label(self.cadreinfo,text="QUELLE PLANETE?",fg="#ff0000",bg="#455571",font=("Helvetica",15))
+		#self.cadreinfobtm=Frame(self.cadreapp,width=1800, height=120, bg="#455571")
+		#self.cadreinfobtm.pack(side=BOTTOM,fill=Y)
 		
 		self.btncreervaisseauAtt=Button(self.cadreinfo,text="Fregate",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauAtt)
 		self.btncreervaisseauSonde=Button(self.cadreinfo,text="Sonde",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauSonde)
 		self.btncreervaisseauTrans=Button(self.cadreinfo,text="Cargo",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.creervaisseauTrans)
-		self.lbselectecible=Label(self.cadreinfo,text="Choisir cible",bg="#455571",fg="red")
-		
+		self.btnrecolte=Button(self.cadreinfo,text="[RECOLTE]",font=("Helvetica",8),bg="#455565",fg="#fbbfda",relief=RAISED,command=self.recoltemodele)
 		self.afficherdecor(mod)
 		
 		self.changecadre(self.cadrepartie)
@@ -278,6 +281,9 @@ class Vue():
 						t=10
 						self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(2,2),outline=mod.joueurs[self.nom].couleur,
 												 tags=("select","marqueur"))
+						if i.colon>0:
+							self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(2,2),outline=mod.joueurs[self.nom].couleur,
+												 tags=("select","marqueur"))
 			elif self.maselection[1]=="flotte":
 				for i in joueur.flotte:
 					if i.id == int(self.maselection[2]):
@@ -325,12 +331,10 @@ class Vue():
 			if self.maselection:
 				#pass # attribuer cette planete a la cible de la flotte selectionne
 				self.parent.ciblerflotte(self.maselection[2],t[2])
-			self.lbselectecible.pack_forget()
 		
 		else:
 			if self.maselection:
 				self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
-				self.lbselectecible.pack_forget()
 			
 	def montreplaneteselection(self):
 		t=self.canevas.gettags(CURRENT)
@@ -338,34 +342,40 @@ class Vue():
 		for i in joueur.planetescontrolees:
 			if t[2]==str(i.id):
 				temp=joueur.planetescontrolees.index(i)
+				self.tempRecolte=temp
 		self.packBtnPlanete()
 		self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[temp].colon))
 		self.labidcolonplanete.pack()
-		self.labidmetal.config(text="Metal : "+str(joueur.planetescontrolees[temp].metal))
+		self.labidmetal.config(text="Metal sur planete: "+str(joueur.planetescontrolees[temp].metal))
 		self.labidmetal.pack()
-		self.labidgaz.config(text="Gaz : "+str(joueur.planetescontrolees[temp].gaz))
+		self.labidgaz.config(text="Gaz sur planete: "+str(joueur.planetescontrolees[temp].gaz))
 		self.labidgaz.pack()
 		#self.boutoncolonsrretrait.pack()
 		
 	def montreflotteselection(self):
-		self.lbselectecible.pack()
 		t=self.canevas.gettags(CURRENT)
 		joueur=self.modele.joueurs[self.nom]
 		for i in joueur.flotte:
 			if t[2]==str(i.id):
 				temp=joueur.flotte.index(i)
-		self.lbselectecible.pack()
+				self.indexLongTerme=temp
 		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.labidvaisseauhp.config(text="HP : "+str(joueur.flotte[temp].hp))
 		self.labidvaisseauhp.pack()
 		self.boutoncolonsajout.pack()
+		self.boutoncolonsretrait.pack()
+		self.boutoncolonsdebarquer.pack()
 		if joueur.flotte[temp].inventaire==0:
 			self.boutoncolonsretrait.config(state=DISABLED)
 			self.boutoncolonsretrait.pack()
+			self.boutoncolonsdebarquer.config(state=DISABLED)
+			self.boutoncolonsdebarquer.pack()
 		else:
 			self.boutoncolonsretrait.config(state=NORMAL)
 			self.boutoncolonsretrait.pack()
+			self.boutoncolonsdebarquer.config(state=NORMAL)
+			self.boutoncolonsdebarquer.pack()
 
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
@@ -378,18 +388,21 @@ class Vue():
 		self.btncreervaisseauSonde.pack_forget()
 		self.btncreervaisseauTrans.pack_forget()
 		self.boutoncolonsajout.pack_forget()
+		self.btnrecolte.pack_forget()
 		
 	def unpackBtnFlotte(self):
 		self.labidvaisseauhp.pack_forget()
 		self.labidcolonvaisseau.pack_forget()
 		self.boutoncolonsajout.pack_forget()
 		self.boutoncolonsretrait.pack_forget()
+		self.boutoncolonsdebarquer.pack_forget()
 		
 	def packBtnPlanete(self):
 		self.labidcolonplanete.pack()
 		self.btncreervaisseauAtt.pack()
 		self.btncreervaisseauSonde.pack()
 		self.btncreervaisseauTrans.pack()
+		self.btnrecolte.pack()
 		
 	def ajoutcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
@@ -402,6 +415,10 @@ class Vue():
 					joueur.planetescontrolees[0].colon-=1
 					self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 					self.labidcolonvaisseau.pack()
+					self.boutoncolonsretrait.config(state=NORMAL)
+					self.boutoncolonsretrait.pack()
+					self.boutoncolonsdebarquer.config(state=NORMAL)
+					self.boutoncolonsdebarquer.pack()
 			if joueur.flotte[temp].inventaire==joueur.flotte[temp].inventaireMAX:
 				self.boutoncolonsajout.config(state=DISABLED)
 				self.boutoncolonsajout.pack()
@@ -415,10 +432,53 @@ class Vue():
 		for i in joueur.flotte:
 			if self.maselection[2]==str(i.id):
 				temp=joueur.flotte.index(i)
+		joueur.totalcolons-=joueur.flotte[temp].inventaire
 		joueur.flotte[temp].unload()
+		self.labidcolons.config(text="Colons disponibles:  " +str(joueur.totalcolons))
+		self.labidcolons.pack()
 		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsretrait.config(state=DISABLED)
-		self.boutoncolonsretrait.pack()
+		#self.boutoncolonsretrait.pack()
 		self.boutoncolonsajout.config(state=NORMAL)
-		self.boutoncolonsajout.pack()
+		self.boutoncolonsdebarquer.config(state=DISABLED)
+		#self.boutoncolonsajout.pack()
+	
+	def debarquercolonsmodele(self):
+		self.labiddebarquement.pack()
+		self.canevas.bind("<Button-1>",self.cliqueGauchePlanete)
+
+	def cliqueGauchePlanete(self,evt):
+		joueur=self.modele.joueurs[self.nom]
+		self.canevas.bind("<Button-1>",self.cliqueGaucheCosmos)
+		t=self.canevas.gettags(CURRENT)
+		if t and t[0]==self.nom:
+			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
+			if t[1] == "planete":
+				for i in joueur.planetescontrolees:
+					if t[2]==str(i.id):
+						tempPlanete=joueur.planetescontrolees.index(i)
+				joueur.planetescontrolees[tempPlanete].colon+=joueur.flotte[self.indexLongTerme].inventaire
+				joueur.flotte[self.indexLongTerme].inventaire=0
+				self.indexLongTerme=-1
+				self.labiddebarquement.pack_forget()
+				self.unpackBtnFlotte()
+				self.montreplaneteselection()
+		else:
+			self.unpackBtnFlotte()
+			
+	def recoltemodele(self):
+		joueur=self.modele.joueurs[self.nom]
+		joueur.recoltePlaneteJoueur()
+		self.btnrecolte.config(state=DISABLED)
+		self.labidjgaz.pack_forget()
+		self.labidjmetal.pack_forget()
+		self.labidjbouffe.pack_forget()
+		self.labidjgaz=Label(self.boiteinfo,text="Gaz :  " +str(joueur.gaz),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjgaz.pack()
+		self.labidjmetal=Label(self.boiteinfo,text="Metal :  " +str(joueur.metal),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjmetal.pack()
+		self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
+		self.labidjbouffe.pack()
+		self.btnrecolte.config(state=NORMAL)
+		

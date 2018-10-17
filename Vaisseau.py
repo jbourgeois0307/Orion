@@ -106,6 +106,5 @@ class DeathStar():
         self.cible=None
             
     def destroyPlanet(self):
-        
         if self.cible in jeu.planetes:
             self.cible.remove

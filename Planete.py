@@ -22,17 +22,17 @@ class Planete():
 
     def recolte(self, joueur):
         if self.metal > 0:
-            if self.metal - 5 * self.colonMetal > 0:
-                self.metal -= 5 * self.colonMetal
-                joueur.metal += 5 * self.colonMetal
+            if self.metal - 5 * self.colon > 0:
+                self.metal -= 5 * self.colon
+                joueur.metal += 5 * self.colon
             else:
                 joueur.metal += self.metal
                 self.metal = 0
 
         if self.gaz > 0:
-            if self.gaz - 5 * self.colonGaz > 0:
-                self.gaz -= 5 * self.colonGaz
-                joueur.gaz += 5 * self.colonGaz
+            if self.gaz - 5 * self.colon > 0:
+                self.gaz -= 5 * self.colon
+                joueur.gaz += 5 * self.colon
             else:
                 joueur.gaz += self.gaz
                 self.gaz = 0
@@ -83,6 +83,25 @@ class PlaneteMere():
         if self.colon != 0:
             self.proprietaire = joueur.nom
             self.colon+=nb
+            
+    def recolte(self, joueur):
+        if self.metal > 0:
+            if self.metal - 5 * self.colon > 0:
+                self.metal -= 5 * self.colon
+                joueur.metal += 5 * self.colon
+            else:
+                joueur.metal += self.metal
+                self.metal = 0
+
+        if self.gaz > 0:
+            if self.gaz - 5 * self.colon > 0:
+                self.gaz -= 5 * self.colon
+                joueur.gaz += 5 * self.colon
+            else:
+                joueur.gaz += self.gaz
+                self.gaz = 0
+
+            ##self.proprietaire.bouffe+= 10*self.colonBouffe
 
 class Batiment():
     def __init__(self, parent, proprietaire):

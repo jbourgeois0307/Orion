@@ -1,5 +1,6 @@
 import random
 from helper import Helper as hlp
+from time import sleep
 from Vaisseau import *
 from Planete import *
 
