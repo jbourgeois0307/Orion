@@ -75,6 +75,8 @@ class PlaneteMere():
         self.colon = 10
         self.type = 10
         self.taille= 24
+        self.metal = (random.randrange(1000, 2000) * self.taille)
+        self.gaz = (random.randrange(1000, 2000) * self.taille)
         self.quantityRess = 9000  
 
     def ajoutColon(self,joueur,nb):

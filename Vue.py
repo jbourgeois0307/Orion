@@ -169,7 +169,9 @@ class Vue():
 		self.labidcbcolons=Label(self.boiteinfo,text=joueur.totalcolons,font=("Helvetica",10),bg="#455571",fg="#fbbfda")
 		self.labidcbcolons.pack(side=RIGHT)
 		
-		self.labidmetal=Label(self.boiteinfoMETAL, text="Metal : ",font=("Helvetica",10),bg="#455571",fg="#fbbfda" )
+		self.labidmetal=Label(self.cadreinfo, text="Metal : ",font=("Helvetica",10),bg="#455571",fg="#77D9D3" )
+		self.labidgaz=Label(self.cadreinfo, text="Gaz : ",font=("Helvetica",10),bg="#455571",fg="#cc98e5" )
+		self.labidvaisseauhp=Label(self.cadreinfo, text="HP : ",font=("Helvetica",10),bg="#455571",fg="#ffffff" )
 		
 		self.labidcolonplanete=Label(self.cadreinfo,fg="#fbbfda",bg="#455571",font=("Helvetica",10))
 		
@@ -339,6 +341,10 @@ class Vue():
 		self.packBtnPlanete()
 		self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[temp].colon))
 		self.labidcolonplanete.pack()
+		self.labidmetal.config(text="Metal : "+str(joueur.planetescontrolees[temp].metal))
+		self.labidmetal.pack()
+		self.labidgaz.config(text="Gaz : "+str(joueur.planetescontrolees[temp].gaz))
+		self.labidgaz.pack()
 		#self.boutoncolonsrretrait.pack()
 		
 	def montreflotteselection(self):
@@ -351,26 +357,30 @@ class Vue():
 		self.lbselectecible.pack()
 		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
+		self.labidvaisseauhp.config(text="HP : "+str(joueur.flotte[temp].hp))
+		self.labidvaisseauhp.pack()
 		self.boutoncolonsajout.pack()
 		if joueur.flotte[temp].inventaire==0:
 			self.boutoncolonsretrait.config(state=DISABLED)
-		elif joueur.flotte[temp].inventaire==joueur.flotte[temp].inventaireMAX:
-			self.boutoncolonsajout(state=DISABLED)
-		else:
 			self.boutoncolonsretrait.pack()
+		else:
 			self.boutoncolonsretrait.config(state=NORMAL)
+			self.boutoncolonsretrait.pack()
 
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
 	
 	def unpackBtnPlanete(self):
 		self.labidcolonplanete.pack_forget()
+		self.labidmetal.pack_forget()
+		self.labidgaz.pack_forget()
 		self.btncreervaisseauAtt.pack_forget()
 		self.btncreervaisseauSonde.pack_forget()
 		self.btncreervaisseauTrans.pack_forget()
 		self.boutoncolonsajout.pack_forget()
 		
 	def unpackBtnFlotte(self):
+		self.labidvaisseauhp.pack_forget()
 		self.labidcolonvaisseau.pack_forget()
 		self.boutoncolonsajout.pack_forget()
 		self.boutoncolonsretrait.pack_forget()
@@ -384,13 +394,21 @@ class Vue():
 	def ajoutcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
 		t=self.canevas.gettags(CURRENT)
-		for i in joueur.flotte:
-			if self.maselection[2]==str(i.id):
-				temp=joueur.flotte.index(i)
-		joueur.flotte[temp].load(1)
-		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
-		self.labidcolonvaisseau.pack()
-		
+		if joueur.planetescontrolees[0].colon > 0:
+			for i in joueur.flotte:
+				if self.maselection[2]==str(i.id):
+					temp=joueur.flotte.index(i)
+					joueur.flotte[temp].load(1)
+					joueur.planetescontrolees[0].colon-=1
+					self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
+					self.labidcolonvaisseau.pack()
+			if joueur.flotte[temp].inventaire==joueur.flotte[temp].inventaireMAX:
+				self.boutoncolonsajout.config(state=DISABLED)
+				self.boutoncolonsajout.pack()
+		else:
+			self.boutoncolonsajout.config(state=DISABLED)
+			self.boutoncolonsajout.pack()
+			
 	def retraitcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
 		t=self.canevas.gettags(CURRENT)
@@ -401,4 +419,6 @@ class Vue():
 		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsretrait.config(state=DISABLED)
+		self.boutoncolonsretrait.pack()
 		self.boutoncolonsajout.config(state=NORMAL)
+		self.boutoncolonsajout.pack()
