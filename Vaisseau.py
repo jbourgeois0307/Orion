@@ -64,8 +64,7 @@ class VaisseauGuerre(Vaisseau):
     
             self.cible.hp -= self.damage
             if self.cible.hp == 0:
-                del self.cible
-                self.cible = None
+                self.cible.remove
             #tk.after(self.attackspeed, self.attack())
         else:
             self.cible = None
