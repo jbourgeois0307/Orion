@@ -384,12 +384,9 @@ class Vue():
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-<<<<<<< HEAD
         elif "flotte" in t:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])       
-=======
->>>>>>> 1786ef9541387eb935eeea46e015850bfb37b7bf
         else:
             if self.maselection:
                 self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
