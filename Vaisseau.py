@@ -32,8 +32,9 @@ class Vaisseau():
                 nombre = self.inventaireMAX - self.inventaire
                 self.inventaire = self.inventaireMAX
                 return nombre
-    def unload():
-        self.cible.colon += self.inventaire
+            
+    def unload(self):
+        #self.cible.colon += self.inventaire
         self.inventaire = 0
                 
 class VaisseauGuerre(Vaisseau):

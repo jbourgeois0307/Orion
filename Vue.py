@@ -153,7 +153,7 @@ class Vue():
 		
 		self.boiteinfo=Frame(self.cadreinfogen,width=220, height=100,bg="#455571",relief=RAISED)
 		self.boiteinfo.pack(side=BOTTOM)
-		self.boiteinfoMETAL=Frame(self.cadreinfo,width=220, height=100,bg="#455571",relief=RAISED)
+		self.boiteinfoMETAL=Frame(self.cadreinfogen,width=220, height=10,bg="#455571",relief=RAISED)
 		self.boiteinfo.pack(side=BOTTOM)
 		
 		
@@ -343,7 +343,6 @@ class Vue():
 		
 	def montreflotteselection(self):
 		self.lbselectecible.pack()
-		
 		t=self.canevas.gettags(CURRENT)
 		joueur=self.modele.joueurs[self.nom]
 		for i in joueur.flotte:
@@ -353,7 +352,13 @@ class Vue():
 		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsajout.pack()
-		self.boutoncolonsretrait.pack()
+		if joueur.flotte[temp].inventaire==0:
+			self.boutoncolonsretrait.config(state=DISABLED)
+		elif joueur.flotte[temp].inventaire==joueur.flotte[temp].inventaireMAX:
+			self.boutoncolonsajout(state=DISABLED)
+		else:
+			self.boutoncolonsretrait.pack()
+			self.boutoncolonsretrait.config(state=NORMAL)
 
 	def afficherartefacts(self,joueurs):
 		pass #print("ARTEFACTS de ",self.nom)
@@ -379,11 +384,11 @@ class Vue():
 	def ajoutcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
 		t=self.canevas.gettags(CURRENT)
-		print(str(t))
 		for i in joueur.flotte:
 			if self.maselection[2]==str(i.id):
 				temp=joueur.flotte.index(i)
 		joueur.flotte[temp].load(1)
+		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		
 	def retraitcolonsmodele(self):
@@ -392,6 +397,8 @@ class Vue():
 		for i in joueur.flotte:
 			if self.maselection[2]==str(i.id):
 				temp=joueur.flotte.index(i)
-		joueur.flotte[temp].load(-1)
+		joueur.flotte[temp].unload()
+		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsretrait.config(state=DISABLED)
+		self.boutoncolonsajout.config(state=NORMAL)
