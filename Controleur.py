@@ -5,6 +5,7 @@
 from tkinter import *
 import os, os.path
 import sys
+from time import time
 import xmlrpc.client
 import socket
 import random
@@ -98,7 +99,9 @@ class Controleur():
             self.vue.affichelisteparticipants(rep[2])
             self.vue.root.after(1000, self.boucleattente)
 
-    def prochaintour(self):  # la boucle de jeu principale, qui sera appelle par la fonction bouclejeu du timer
+    def prochaintour(self):
+        self.chronoRecolte()
+        self.reproductionColon()  # la boucle de jeu principale, qui sera appelle par la fonction bouclejeu du timer
         if self.serveur:  # s'il existe un serveur
             self.cadre = self.cadre + 1  # increment du compteur de cadre
             if self.attente == 0:
@@ -162,6 +165,26 @@ class Controleur():
     def ciblerflotte(self, idorigine, iddestination):
         self.actions.append([self.monnom, "ciblerflotte", [idorigine, iddestination]])
 
+    def chronoRecolte(self):
+        joueur=self.modele.joueurs[self.monnom]
+        if joueur.start == 0:
+            joueur.recolteActivee=True
+            joueur.start=time.time()
+        if time.time() - joueur.start > 15:
+            joueur.recolteActivee=False
+            joueur.start=0
+            self.vue.recoltemodele()
+    
+    def reproductionColon(self):
+        joueur=self.modele.joueurs[self.monnom]
+        if joueur.startReproduction==0:
+            joueur.startReproduction=time.time()
+        if time.time() - joueur.startReproduction>10:
+            joueur.reproductionColons()
+            self.metAjourVue()
+            
+    def metAjourVue(self):
+        self.vue.metAJourData()
 
 if __name__ == "__main__":
     c = Controleur()

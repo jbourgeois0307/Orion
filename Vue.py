@@ -375,6 +375,7 @@ class Vue():
             self.canevas.create_rectangle(k.x - 3, k.y - 3, k.x + 3, k.y + 3, fill=mod.AI.couleur,
                                           tags=(k.proprietaire, "flotte", str(k.id), "artefact"))
                     
+
     def cliqueGaucheCosmos(self,evt):
         self.unpackBtnPlanete()
         self.unpackBtnFlotte()
@@ -392,12 +393,11 @@ class Vue():
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-
-
         elif "flotte" in t:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])       
             self.lbselectecible.pack_forget()
+
         else:
             if self.maselection:
                 self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
@@ -535,7 +535,12 @@ class Vue():
     def recoltemodele(self):
         joueur=self.modele.joueurs[self.nom]
         joueur.recoltePlaneteJoueur()
-        self.btnrecolte.config(state=DISABLED)
+        joueur.ranOnce=False
+        self.parent.chronoRecolte()
+        if joueur.recolteActivee==True:
+            self.btnrecolte.config(state=DISABLED)
+        elif joueur.recolteActivee==False:
+            self.btnrecolte.config(state=NORMAL)
         self.labidjgaz.pack_forget()
         self.labidjmetal.pack_forget()
         self.labidjbouffe.pack_forget()
@@ -545,7 +550,6 @@ class Vue():
         self.labidjmetal.pack()
         self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#1c4873",fg="white")
         self.labidjbouffe.pack()
-        self.btnrecolte.config(state=NORMAL)
         
     def definircouleur1(self):
         self.varCouleur='#009ee3'
@@ -565,5 +569,10 @@ class Vue():
     def definircouleur6(self):
         self.varCouleur='#a40606'
         print("============++++=========="+self.varCouleur)  
-        
+    def metAJourData(self):
+        joueur=self.modele.joueurs[self.nom]
+        self.labidcolons.config(text="Colons disponibles:  " +str(joueur.totalcolons))
+        self.labidjgaz.config(text="Gaz :  " +str(joueur.gaz))
+        self.labidjmetal.config(text="Metal :  " +str(joueur.metal))
+        self.labidjbouffe.config(text="Bouffe :  " +str(joueur.bouffe))
 

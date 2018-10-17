@@ -1,4 +1,5 @@
 import random
+import time
 from helper import Helper as hlp
 from time import sleep
 from Vaisseau import *
@@ -8,6 +9,10 @@ from Planete import *
 class Joueur():
     def __init__(self, parent, nom, planetemere, id):
         self.parent = parent
+        self.recolteActivee=True
+        self.startReproduction=0
+        self.start=0
+        self.ranOnce=False
         self.id = id
         self.nom = nom
         self.metal = 100
@@ -27,28 +32,31 @@ class Joueur():
                         "deplacerVaisseau": self.deplacerVaisseau}
 
     def creervaisseauAtt(self, planete):
-        if self.metal >= 200:
-            v = VaisseauGuerre(self.nom,self.planetemere.x + 50, self.planetemere.y,
-                               self.parent.parent.idActuel.prochainid())
+        if self.metal>300:
+            v = VaisseauGuerre(self.nom, self.planetemere.x + 50, self.planetemere.y,
+                           self.parent.parent.idActuel.prochainid())
             print("Vaisseau", v.id)
             self.flotte.append(v)
-            self.metal -= 200
+            self.metal-=300
+            self.parent.parent.metAjourVue()
         
     def creervaisseauSonde(self, planete):
-        if self.metal >= 100:
+        if self.metal>200:
             v = Sonde(self.nom, self.planetemere.x + 50, self.planetemere.y,
-                               self.parent.parent.idActuel.prochainid())
+                           self.parent.parent.idActuel.prochainid())
             print("Vaisseau", v.id)
             self.flotte.append(v)
-            self.metal -= 100
+            self.metal-=200
+            self.parent.parent.metAjourVue()
         
     def creervaisseauTrans(self, planete):
-        if self.metal >= 125:
+        if self.metal>500:
             v = VaisseauTransport(self.nom, self.planetemere.x + 50, self.planetemere.y,
-                               self.parent.parent.idActuel.prochainid())
+                           self.parent.parent.idActuel.prochainid())
             print("Vaisseau", v.id)
             self.flotte.append(v)
-            self.metal -= 125
+            self.metal-=500
+            self.parent.parent.metAjourVue()
             
     def ciblerflotte(self, ids):
         idori, iddesti = ids
@@ -72,7 +80,12 @@ class Joueur():
             if i.id == int(idori):
                 i.cible = Planete(x, y, -1)
                 i.avancer()
-
+                
+    def reproductionColons(self):
+        self.planetescontrolees[0].colon+=1
+        self.totalcolons+=1
+        self.startReproduction=0
+    
     def prochaineaction(self):
         for i in self.flotte:
             if i.cible:
@@ -82,6 +95,37 @@ class Joueur():
         for i in self.planetescontrolees:
             i.recolte(self)
 
+        def creervaisseau(self, planete):
+            v = VaisseauGuerre(self.nom, self.planetemere.x + random.randrange(-10, 10),
+                               self.planetemere.y + random.randrange(-10, 10), self.parent.parent.idActuel.prochainid())
+            print("Vaisseau", v.id)
+            self.flotte.append(v)
+
+        def ciblerflotte(self, ids):
+            idori, iddesti = ids
+            for i in self.flotte:
+                if i.id == int(idori):
+                    for j in self.parent.planetes:
+                        if j.id == int(iddesti):
+                            i.cible = j
+                            print("GOT TARGET")
+                            return
+
+        def deplacerVaisseau(self, coord):
+            x, y, idori = coord
+            for i in self.flotte:
+                if i.id == int(idori):
+                    i.cible = Planete(x, y, -1)
+                    i.avancer()
+
+        def prochaineaction(self):
+            for i in self.flotte:
+                if i.cible:
+                    i.avancer()
+
+        def recoltePlaneteJoueur(self):
+            for i in self.planetescontrolees:
+                i.recolte(self)
 
 
 class Modele():
