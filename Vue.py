@@ -390,13 +390,13 @@ class Vue():
     def cliqueDroitCosmos(self,evt):
         self.unpackBtnPlanete()
         t=self.canevas.gettags(CURRENT)
+        
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
         elif "flotte" in t:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])       
-            self.lbselectecible.pack_forget()
 
         else:
             if self.maselection:
