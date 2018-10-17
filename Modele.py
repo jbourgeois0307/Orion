@@ -27,7 +27,7 @@ class Joueur():
                         "deplacerVaisseau": self.deplacerVaisseau}
 
     def creervaisseauAtt(self, planete):
-        v = VaisseauGuerre(self.nom, self.planetemere.x + 50, self.planetemere.y,
+        v = VaisseauGuerre(self.nom,self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
@@ -53,7 +53,13 @@ class Joueur():
                         i.cible = j
                         print("GOT TARGET")
                         return
-
+                for l in self.parent.joueurs:
+                    for k in self.parent.joueurs[l].flotte:
+                        if k.id == int(iddesti):
+                            i.cible = k
+                            print("GOT VAISSEAU")
+                            return
+                        
     def deplacerVaisseau(self, coord):
         x, y, idori = coord
         for i in self.flotte:
@@ -70,37 +76,6 @@ class Joueur():
         for i in self.planetescontrolees:
             i.recolte(self)
 
-        def creervaisseau(self, planete):
-            v = VaisseauGuerre(self.nom, self.planetemere.x + random.randrange(-10, 10),
-                               self.planetemere.y + random.randrange(-10, 10), self.parent.parent.idActuel.prochainid())
-            print("Vaisseau", v.id)
-            self.flotte.append(v)
-
-        def ciblerflotte(self, ids):
-            idori, iddesti = ids
-            for i in self.flotte:
-                if i.id == int(idori):
-                    for j in self.parent.planetes:
-                        if j.id == int(iddesti):
-                            i.cible = j
-                            print("GOT TARGET")
-                            return
-
-        def deplacerVaisseau(self, coord):
-            x, y, idori = coord
-            for i in self.flotte:
-                if i.id == int(idori):
-                    i.cible = Planete(x, y, -1)
-                    i.avancer()
-
-        def prochaineaction(self):
-            for i in self.flotte:
-                if i.cible:
-                    i.avancer()
-
-        def recoltePlaneteJoueur(self):
-            for i in self.planetescontrolees:
-                i.recolte(self)
 
 
 class Modele():
