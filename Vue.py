@@ -384,9 +384,9 @@ class Vue():
         if "planete" in t and t[0]!=self.nom:
             if self.maselection:
                 self.parent.ciblerflotte(self.maselection[2],t[2])
-            else:
-                if self.maselection:
-                    self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
+        else:
+            if self.maselection:
+                self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
                     
     def montreplaneteselection(self):
         t=self.canevas.gettags(CURRENT)
