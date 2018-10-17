@@ -32,22 +32,31 @@ class Joueur():
                         "deplacerVaisseau": self.deplacerVaisseau}
 
     def creervaisseauAtt(self, planete):
-        v = VaisseauGuerre(self.nom, self.planetemere.x + 50, self.planetemere.y,
+        if self.metal>300:
+            v = VaisseauGuerre(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
-        print("Vaisseau", v.id)
-        self.flotte.append(v)
+            print("Vaisseau", v.id)
+            self.flotte.append(v)
+            self.metal-=300
+            self.parent.parent.metAjourVue()
         
     def creervaisseauSonde(self, planete):
-        v = Sonde(self.nom, self.planetemere.x + 50, self.planetemere.y,
+        if self.metal>200:
+            v = Sonde(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
-        print("Vaisseau", v.id)
-        self.flotte.append(v)
+            print("Vaisseau", v.id)
+            self.flotte.append(v)
+            self.metal-=200
+            self.parent.parent.metAjourVue()
         
     def creervaisseauTrans(self, planete):
-        v = VaisseauTransport(self.nom, self.planetemere.x + 50, self.planetemere.y,
+        if self.metal>500:
+            v = VaisseauTransport(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
-        print("Vaisseau", v.id)
-        self.flotte.append(v)
+            print("Vaisseau", v.id)
+            self.flotte.append(v)
+            self.metal-=500
+            self.parent.parent.metAjourVue()
 
     def ciblerflotte(self, ids):
         idori, iddesti = ids

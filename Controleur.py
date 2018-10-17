@@ -167,14 +167,12 @@ class Controleur():
 
     def chronoRecolte(self):
         joueur=self.modele.joueurs[self.monnom]
-        if joueur.start == 0 and joueur.ranOnce==False:
+        if joueur.start == 0:
             joueur.recolteActivee=True
-            joueur.ranOnce==True
             joueur.start=time.time()
-        if time.time() - joueur.start > 20:
+        if time.time() - joueur.start > 15:
             joueur.recolteActivee=False
             joueur.start=0
-            joueur.ranOnce=False
             self.vue.recoltemodele()
     
     def reproductionColon(self):
@@ -183,7 +181,10 @@ class Controleur():
             joueur.startReproduction=time.time()
         if time.time() - joueur.startReproduction>10:
             joueur.reproductionColons()
-            self.vue.metAJourData()
+            self.metAjourVue()
+            
+    def metAjourVue(self):
+        self.vue.metAJourData()
 
 if __name__ == "__main__":
     c = Controleur()

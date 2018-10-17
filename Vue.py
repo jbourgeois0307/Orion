@@ -556,4 +556,6 @@ class Vue():
     def metAJourData(self):
         joueur=self.modele.joueurs[self.nom]
         self.labidcolons.config(text="Colons disponibles:  " +str(joueur.totalcolons))
-
+        self.labidjgaz.config(text="Gaz :  " +str(joueur.gaz))
+        self.labidjmetal.config(text="Metal :  " +str(joueur.metal))
+        self.labidjbouffe.config(text="Bouffe :  " +str(joueur.bouffe))
