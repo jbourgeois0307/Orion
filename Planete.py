@@ -22,17 +22,17 @@ class Planete():
 
     def recolte(self, joueur):
         if self.metal > 0:
-            if self.metal - 5 * self.colonMetal > 0:
-                self.metal -= 5 * self.colonMetal
-                joueur.metal += 5 * self.colonMetal
+            if self.metal - 5 * self.colon > 0:
+                self.metal -= 5 * self.colon
+                joueur.metal += 5 * self.colon
             else:
                 joueur.metal += self.metal
                 self.metal = 0
 
         if self.gaz > 0:
-            if self.gaz - 5 * self.colonGaz > 0:
-                self.gaz -= 5 * self.colonGaz
-                joueur.gaz += 5 * self.colonGaz
+            if self.gaz - 5 * self.colon > 0:
+                self.gaz -= 5 * self.colon
+                joueur.gaz += 5 * self.colon
             else:
                 joueur.gaz += self.gaz
                 self.gaz = 0
@@ -58,7 +58,12 @@ class Planete():
     def priseDePossession(self, joueur):
         self.proprietaire = joueur.nom
         joueur.planetescontrolees.append(self)
-
+    
+    def ajoutColon(self,joueur,nb):
+        if self.colon != 0:
+            self.proprietaire = joueur.nom
+            self.colon+=nb
+        
     # (self.proprietaire).planetescontrolees.append(self)
 
 class PlaneteMere():
@@ -67,11 +72,36 @@ class PlaneteMere():
         self.proprietaire="inconnu"                     #tagger
         self.x=x
         self.y=y
+        self.colon = 10
         self.type = 10
         self.taille= 24
-        self.quantityRess = 9000            #hard coded for now
+        self.metal = (random.randrange(1000, 2000) * self.taille)
+        self.gaz = (random.randrange(1000, 2000) * self.taille)
+        self.quantityRess = 9000  
 
+    def ajoutColon(self,joueur,nb):
+        if self.colon != 0:
+            self.proprietaire = joueur.nom
+            self.colon+=nb
+            
+    def recolte(self, joueur):
+        if self.metal > 0:
+            if self.metal - 5 * self.colon > 0:
+                self.metal -= 5 * self.colon
+                joueur.metal += 5 * self.colon
+            else:
+                joueur.metal += self.metal
+                self.metal = 0
 
+        if self.gaz > 0:
+            if self.gaz - 5 * self.colon > 0:
+                self.gaz -= 5 * self.colon
+                joueur.gaz += 5 * self.colon
+            else:
+                joueur.gaz += self.gaz
+                self.gaz = 0
+
+            ##self.proprietaire.bouffe+= 10*self.colonBouffe
 
 class Batiment():
     def __init__(self, parent, proprietaire):

@@ -1,5 +1,6 @@
 import random
 from helper import Helper as hlp
+from time import sleep
 from Vaisseau import *
 from Planete import *
 
@@ -26,19 +27,19 @@ class Joueur():
                         "deplacerVaisseau": self.deplacerVaisseau}
 
     def creervaisseauAtt(self, planete):
-        v = VaisseauGuerre(self.nom, self.planetemere.x + 10, self.planetemere.y,
+        v = VaisseauGuerre(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
         
     def creervaisseauSonde(self, planete):
-        v = Sonde(self.nom, self.planetemere.x + 10, self.planetemere.y,
+        v = Sonde(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
         
     def creervaisseauTrans(self, planete):
-        v = VaisseauTransport(self.nom, self.planetemere.x + 10, self.planetemere.y,
+        v = VaisseauTransport(self.nom, self.planetemere.x + 50, self.planetemere.y,
                            self.parent.parent.idActuel.prochainid())
         print("Vaisseau", v.id)
         self.flotte.append(v)
