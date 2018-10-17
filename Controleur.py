@@ -92,7 +92,7 @@ class Controleur():
         if rep[0]:
             print("Recu ORDRE de DEMARRER")
             # PATCH pour dico in xmlrpc qui requiert des chaines comme cles
-            # On a recu un cle str qu'on retransforme en int (pour compter les cadres de jeu, servant a distribuer les taches)
+     # On a recu un cle str qu'on retransforme en int (pour compter les cadres de jeu, servant a distribuer les taches)
             cle = list(rep[2].keys())[0]
             rep[2] = {int(cle): rep[2][
                 cle]}  # on transforme la cle de str à int avant le transfert - voir aussi prochaintour (plus bas)

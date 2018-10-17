@@ -9,6 +9,8 @@ class Vaisseau():
         self.x=x
         self.y=y
         self.cible = None
+        self.targetx = None
+        self.targety = None
  
     def avancer(self):
         if self.cible:
@@ -33,8 +35,22 @@ class VaisseauGuerre(Vaisseau):
         self.attackspeed = 0.5
         self.viewdistance = 100
         self.range = 75
+        self.targetx = None
+        self.targety = None
+        self.onAssignment = False
 
-    
+    def avancer(self):
+        if self.cible:
+            x=self.cible.x
+            y=self.cible.y
+            ang=hlp.calcAngle(self.x,self.y,x,y)
+            x1,y1=hlp.getAngledPoint(ang,self.vitesse,self.x,self.y)
+            self.x,self.y=x1,y1 #int(x1),int(y1)
+            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                self.cible=None
+                #print("Change cible")
+        else:
+            print("PAS DE CIBLE")
     def attack(self):
             
         distance = math.sqrt(math.power(self.x-self.cible.x,2)+math.power(self.y-self.cible.y,2))
