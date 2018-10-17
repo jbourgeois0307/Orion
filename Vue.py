@@ -306,13 +306,13 @@ class Vue():
 		self.unpackBtnPlanete()
 		self.unpackBtnFlotte()
 		t=self.canevas.gettags(CURRENT)
-		print(str(t))
+		#print(str(t))
 		if t and t[0]==self.nom:
 			self.maselection=[self.nom,t[1],t[2]]  #self.canevas.find_withtag(CURRENT)#[0]
 			if t[1] == "planete":
-				self.montreplaneteselection(0)
+				self.montreplaneteselection()
 			elif t[1] == "flotte":
-				self.montreflotteselection(0)
+				self.montreflotteselection()
 
 	def cliqueDroitCosmos(self,evt):
 		self.unpackBtnPlanete()
@@ -330,18 +330,27 @@ class Vue():
 				self.parent.deplacerVaisseau(self.canevas.canvasx(evt.x),self.canevas.canvasy(evt.y),self.maselection[2])
 				self.lbselectecible.pack_forget()
 			
-	def montreplaneteselection(self,i):
+	def montreplaneteselection(self):
+		t=self.canevas.gettags(CURRENT)
 		joueur=self.modele.joueurs[self.nom]
+		for i in joueur.planetescontrolees:
+			if t[2]==str(i.id):
+				temp=joueur.planetescontrolees.index(i)
 		self.packBtnPlanete()
-		self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[i].colon))
+		self.labidcolonplanete.config(text="Colons sur la planete : "+str(joueur.planetescontrolees[temp].colon))
 		self.labidcolonplanete.pack()
 		#self.boutoncolonsrretrait.pack()
 		
-	def montreflotteselection(self,i):
+	def montreflotteselection(self):
 		self.lbselectecible.pack()
+		
+		t=self.canevas.gettags(CURRENT)
 		joueur=self.modele.joueurs[self.nom]
+		for i in joueur.flotte:
+			if t[2]==str(i.id):
+				temp=joueur.flotte.index(i)
 		self.lbselectecible.pack()
-		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[i].inventaire))
+		self.labidcolonvaisseau.config(text="Colons dans le vaisseau : "+str(joueur.flotte[temp].inventaire))
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsajout.pack()
 		self.boutoncolonsretrait.pack()
@@ -369,14 +378,20 @@ class Vue():
 		
 	def ajoutcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
-		joueur.flotte[0].load(1)
-		print(joueur.flotte[0].inventaire)
+		t=self.canevas.gettags(CURRENT)
+		print(str(t))
+		for i in joueur.flotte:
+			if self.maselection[2]==str(i.id):
+				temp=joueur.flotte.index(i)
+		joueur.flotte[temp].load(1)
 		self.labidcolonvaisseau.pack()
-		joueur.planete[0].ajoutColon(joueur,-1)
 		
 	def retraitcolonsmodele(self):
 		joueur=self.modele.joueurs[self.nom]
-		joueur.flotte[0].load(-1)
+		t=self.canevas.gettags(CURRENT)
+		for i in joueur.flotte:
+			if self.maselection[2]==str(i.id):
+				temp=joueur.flotte.index(i)
+		joueur.flotte[temp].load(-1)
 		self.labidcolonvaisseau.pack()
 		self.boutoncolonsretrait.config(state=DISABLED)
-		joueur.planete[0].ajoutColon(joueur,1)
