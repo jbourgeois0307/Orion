@@ -366,7 +366,7 @@ class Vue():
                 if isinstance(j, VaisseauTransport):
                     self.canevas.create_rectangle(j.x-5,j.y-4,j.x+5,j.y+4,fill=i.couleur,
                                                 tags=(j.proprietaire,"flotte",str(j.id),"artefact"))
-                    
+        
     def cliqueGaucheCosmos(self,evt):
         self.unpackBtnPlanete()
         self.unpackBtnFlotte()
@@ -521,7 +521,12 @@ class Vue():
     def recoltemodele(self):
         joueur=self.modele.joueurs[self.nom]
         joueur.recoltePlaneteJoueur()
-        self.btnrecolte.config(state=DISABLED)
+        joueur.ranOnce=False
+        self.parent.chronoRecolte()
+        if joueur.recolteActivee==True:
+            self.btnrecolte.config(state=DISABLED)
+        elif joueur.recolteActivee==False:
+            self.btnrecolte.config(state=NORMAL)
         self.labidjgaz.pack_forget()
         self.labidjmetal.pack_forget()
         self.labidjbouffe.pack_forget()
@@ -531,7 +536,6 @@ class Vue():
         self.labidjmetal.pack()
         self.labidjbouffe=Label(self.boiteinfo,text="Bouffe :  " +str(joueur.bouffe),font=("Helvetica",10),bg="#455571",fg="#fbbfda")
         self.labidjbouffe.pack()
-        self.btnrecolte.config(state=NORMAL)
         
     def definircouleur1(self):
         self.varCouleur='#009ee3'
